@@ -5,15 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ucapan Lebaran</title>
     <style>
-        @keyframes rainbow {
-            0% { color: red; }
-            14% { color: orange; }
-            28% { color: yellow; }
-            42% { color: green; }
-            57% { color: blue; }
-            71% { color: indigo; }
-            85% { color: violet; }
-            100% { color: red; }
+        @keyframes move {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         body {
@@ -25,8 +19,8 @@
         .greeting {
             font-size: 1.5em;
             margin-bottom: 20px;
-            animation: rainbow 5s infinite;
-            animation-direction: alternate;
+            color: cyan;
+            animation: move 10s linear infinite;
         }
         .form-group {
             margin-bottom: 15px;
@@ -38,7 +32,7 @@
             box-sizing: border-box;
         }
         input[type="submit"] {
-            background-color: #4caf50;
+            background-color: cyan;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -46,22 +40,22 @@
             transition: background-color 0.3s ease;
         }
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #00bcd4;
         }
     </style>
 </head>
 <body>
-    <h1>Selamat Hari Raya Idul Fitri</h1>
+    <h1 style="color: cyan;">Selamat Hari Raya Idul Fitri</h1>
     <div class="greeting">
         Taqabbalallahu minna wa minkum. Mohon maaf lahir dan batin.
     </div>
     <form id="responseForm">
         <div class="form-group">
-            <label for="name">Nama:</label><br>
+            <label for="name" style="color: cyan;">Nama:</label><br>
             <input type="text" id="name" name="name" required>
         </div>
         <div class="form-group">
-            <label for="message">Pesan Balasan:</label><br>
+            <label for="message" style="color: cyan;">Pesan Balasan:</label><br>
             <textarea id="message" name="message" rows="4" required></textarea>
         </div>
         <input type="submit" value="Kirim ke WhatsApp">
