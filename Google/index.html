@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google-like Home Page</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .google-button {
+            background-color: #4285f4; /* Warna biru Google */
+            color: white; /* Warna teks putih */
+            font-size: 18px; /* Ukuran teks yang lebih besar */
+            padding: 10px 20px; /* Padding yang lebih besar */
+            border: none; /* Hilangkan border */
+            border-radius: 4px; /* Border radius untuk membuat sudut melengkung */
+            cursor: pointer; /* Ubah cursor menjadi pointer saat hover */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan */
+        }
+
+        .google-button:hover {
+            background-color: #357ae8; /* Warna biru lebih gelap saat di-hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -16,8 +32,8 @@
         </div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search Google or type a URL">
-            <button onclick="searchGoogle()">Google Search</button>
-            <button onclick="feelingLucky()">I'm Feeling Lucky</button>
+            <button class="google-button" onclick="searchGoogle()">Google Search</button>
+            <button class="google-button" onclick="feelingLucky()">I'm Feeling Lucky</button>
         </div>
     </div>
     <audio id="backgroundMusic" loop autoplay>
