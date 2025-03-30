@@ -10,6 +10,11 @@
 </head>
 <body class="container">
   <!-- Pembuat code: https://codepen.io/mdusmanansari/pen/BamepLe -->
+    <div class="greeting">
+        <h1>Selamat Hari Raya Idul Fitri</h1>
+        <p>Mohon maaf lahir dan batin</p>
+    </div>
+
     <div class="night"></div>
     <div class="flowers">
       <div class="flower flower--1">
@@ -307,6 +312,18 @@
       </div>
     </div>
     
+    <div class="form-container">
+        <form action="https://api.whatsapp.com/send?phone=+6282228394077&text=Thank%20you%20for%20your%20message" method="post">
+            <label for="name">Nama:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="message">Pesan:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="submit">Kirim</button>
+        </form>
+    </div>
+
     <audio autoplay>
         <source src="music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -314,4 +331,4 @@
     
     <script src="main.js"></script>
   </body>
-                                                </html>
+</html>
