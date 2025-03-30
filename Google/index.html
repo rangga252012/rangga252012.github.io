@@ -42,6 +42,13 @@
             display: none;
         }
     </style>
+    <script>
+        function performSearch() {
+            const query = document.getElementById('search-input').value;
+            const searchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            window.location.href = searchURL;
+        }
+    </script>
 </head>
 <body>
     <div class="top-buttons">
@@ -52,8 +59,8 @@
         <!-- Add more buttons as needed -->
     </div>
     <div class="search-container">
-        <input type="text" placeholder="Search...">
-        <input type="submit" value="Google Search">
+        <input type="text" id="search-input" placeholder="Search...">
+        <input type="submit" value="Google Search" onclick="performSearch()">
     </div>
     <audio autoplay loop>
         <source src="path/to/your/music/file.mp3" type="audio/mp3">
