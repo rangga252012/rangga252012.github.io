@@ -2,7 +2,10 @@ onload = () => {
   const c = setTimeout(() => {
     document.body.classList.remove("not-loaded");
 
-    const titles = ['I LOVE U', 'YOU ARE AMAZING', 'NEVER GIVE UP', 'STAY POSITIVE', 'KEEP SMILING'];
+    const titles = ['I LOVE U'
+                    'YOU ARE AMAZING', 
+      'NEVER GIVE UP'
+      'STAY POSITIVE'KEEP SMILING'];
     const titleElement = document.getElementById('title');
     let index = 0;
     let titleIndex = 0;
