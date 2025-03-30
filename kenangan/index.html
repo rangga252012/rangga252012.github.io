@@ -1,10 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Song on Button Click</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Background color */
+        }
+        #playButton {
+            background-color: #4CAF50; /* Button color */
+            color: white;
+            padding: 20px 40px;
+            font-size: 20px; /* Increase button size */
+            border: none;
+            cursor: pointer;
+            border-radius: 10px; /* Rounded corners */
+        }
+        #playButton:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
 </head>
 <body>
     <button id="playButton">Play Song</button>
