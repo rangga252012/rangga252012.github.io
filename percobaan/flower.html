@@ -307,7 +307,32 @@
         </div>
       </div>
     </div>
-    <script src="main.js"></script>
-  </body>
-    </html>
     
+    <!-- Additional content for ucapan dan balasan -->
+    <div id="ucapan-container" style="text-align: center; margin-top: 20px;">
+        <h2>Selamat Hari Raya Idul Fitri</h2>
+        <p>Mohon Maaf Lahir dan Batin</p>
+        <input type="text" id="nama" placeholder="Masukkan Nama Anda" style="padding: 10px; margin-top: 10px;">
+        <textarea id="balasan" placeholder="Masukkan Balasan Anda" style="padding: 10px; margin-top: 10px;"></textarea>
+        <button onclick="kirimBalasan()" style="padding: 10px; margin-top: 10px;">Kirim Balasan</button>
+    </div>
+
+    <script>
+        function kirimBalasan() {
+            var nama = document.getElementById('nama').value;
+            var balasan = document.getElementById('balasan').value;
+
+            if (nama && balasan) {
+                var pesan = `Nama: ${nama}\nBalasan: ${balasan}`;
+                var nomorWA = '+6282228394077'; // Ganti dengan nomor WhatsApp Anda
+
+                // Mengirim pesan ke WhatsApp
+                var url = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${encodeURIComponent(pesan)}`;
+                window.open(url, '_blank');
+            } else {
+                alert('Harap masukkan nama dan balasan.');
+            }
+        }
+    </script>
+</body>
+    </html>
