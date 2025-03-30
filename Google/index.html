@@ -3,43 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google-like Home Page</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Custom Google-like Page</title>
     <style>
-        .google-button {
-            background-color: #4285f4; /* Warna biru Google */
-            color: white; /* Warna teks putih */
-            font-size: 18px; /* Ukuran teks yang lebih besar */
-            padding: 10px 20px; /* Padding yang lebih besar */
-            border: none; /* Hilangkan border */
-            border-radius: 4px; /* Border radius untuk membuat sudut melengkung */
-            cursor: pointer; /* Ubah cursor menjadi pointer saat hover */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding-top: 50px;
         }
-
-        .google-button:hover {
-            background-color: #357ae8; /* Warna biru lebih gelap saat di-hover */
+        .search-container {
+            margin-top: 100px;
+        }
+        .search-container input[type="text"] {
+            width: 50%;
+            padding: 15px;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .search-container input[type="submit"] {
+            padding: 15px 30px;
+            font-size: 24px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .top-buttons button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        audio {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-text">
-            <h1>Selamat Datang di Halaman Pencarian</h1>
-        </div>
-        <div class="logo">
-            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo">
-        </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search Google or type a URL">
-            <button class="google-button" onclick="searchGoogle()">Google Search</button>
-            <button class="google-button" onclick="feelingLucky()">I'm Feeling Lucky</button>
-        </div>
+    <div class="top-buttons">
+        <button>Search</button>
+        <button>Images</button>
+        <button>Gmail</button>
+        <button>Drive</button>
+        <!-- Add more buttons as needed -->
     </div>
-    <audio id="backgroundMusic" loop autoplay>
-        <source src="music.mp3" type="audio/mpeg">
+    <div class="search-container">
+        <input type="text" placeholder="Search...">
+        <input type="submit" value="Google Search">
+    </div>
+    <audio autoplay loop>
+        <source src="path/to/your/music/file.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-    <script src="script.js"></script>
 </body>
 </html>
