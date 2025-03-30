@@ -2,89 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Idul Fitri</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-        }
-        .container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background: #2c3e50;
-            color: #ffffff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #34495e;
-        }
-        .response {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #16a085;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Selamat Hari Raya Idul Fitri</h1>
-        <p>Mohon Maaf Lahir dan Batin</p>
-        <input type="text" id="name" placeholder="Masukkan nama Anda">
-        <textarea id="message" placeholder="Masukkan pesan balasan Anda"></textarea>
-        <button onclick="sendMessage()">Kirim</button>
-        <div class="response" id="response"></div>
-    </div>
-
-    <script>
-        function sendMessage() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            const responseDiv = document.getElementById('response');
-            const phoneNumber = 'YOUR_WHATSAPP_NUMBER'; // Ganti dengan nomor WhatsApp Anda
-
-            if (name && message) {
-                // Mengirim pesan ke WhatsApp
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=Nama:%20${encodeURIComponent(name)}%0APesan:%20${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-
-                responseDiv.innerHTML = `<p>Terima kasih, ${name}! Pesan Anda telah dikirim.</p>`;
-            } else {
-                responseDiv.innerHTML = `<p>Silakan isi nama dan pesan Anda!</p>`;
-            }
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
@@ -392,4 +309,5 @@
     </div>
     <script src="main.js"></script>
   </body>
-</html>
+          </html>
+              
