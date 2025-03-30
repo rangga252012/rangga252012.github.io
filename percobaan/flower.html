@@ -1,1 +1,25 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucapan Idul Fitri</title>
+    <script>
+        function sendWhatsApp() {
+            var response = document.getElementById('response').value;
+            var phoneNumber = 'YOUR_PHONE_NUMBER'; // Ganti dengan nomor WhatsApp Anda
+            var message = "Selamat Idul Fitri! Mohon maaf lahir dan batin. " + 
+                          "Balasan dari pengguna: " + response;
+            var whatsappUrl = 'https://wa.me/' + phoneNumber + '?text=' + encodeURIComponent(message);
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <h1>Selamat Idul Fitri!</h1>
+    <p>Mohon maaf lahir dan batin.</p>
+    <p>Silakan tuliskan balasan Anda di bawah ini:</p>
+    <textarea id="response" rows="4" cols="50" placeholder="Tulis balasan Anda di sini..."></textarea><br>
+    <button onclick="sendWhatsApp()">Kirim ke WhatsApp</button>
+</body>
+</html>
