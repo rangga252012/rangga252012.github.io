@@ -58,7 +58,7 @@
             event.preventDefault();
             var name = document.getElementById('name').value;
             var message = document.getElementById('message').value;
-            var phoneNumber = '082228394077'; // Ganti dengan nomor Whatsapp Anda
+            var phoneNumber = '+6282228394077'; // Ganti dengan nomor Whatsapp Anda
             var whatsappUrl = 'https://wa.me/' + phoneNumber + '?text=' + encodeURIComponent('Nama: ' + name + '\nPesan: ' + message);
             window.open(whatsappUrl, '_blank');
         });
