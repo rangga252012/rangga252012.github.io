@@ -35,6 +35,19 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        /* Tambahkan gaya untuk tombol media sosial */
+        .social-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .social-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -52,7 +65,8 @@
             <textarea id="message" name="message" rows="4" required></textarea>
         </div>
         <input type="submit" value="Kirim ke WhatsApp">
-        <input type="button" value="media sosial" onclick="window.location.href='flower.html';">
+        <!-- Terapkan kelas social-button ke tombol media sosial -->
+        <input type="button" class="social-button" value="MEDIA SOSIAL" onclick="window.location.href='flower.html';">
     </form>
 
     <script>
