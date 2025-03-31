@@ -15,26 +15,9 @@
             color: white; /* Warna teks putih */
         }
 
-        .container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            margin-right: 20px;
-        }
-
-        .logo img {
-            width: 50px; /* Ukuran logo */
-            height: auto;
-        }
-
         .social-media-menu {
             display: flex;
-            flex-direction: row; /* Arrange items horizontally */
+            flex-direction: column; /* Arrange items vertically */
             gap: 20px;
         }
 
@@ -56,34 +39,28 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="path/to/your/logo.png" alt="Logo"> <!-- Ganti dengan path logo Anda -->
-            <span>Nama Logo</span>
+    <div class="social-media-menu">
+        <div class="social-media-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            <span>WhatsApp</span>
         </div>
-        <div class="social-media-menu">
-            <div class="social-media-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-                <span>WhatsApp</span>
-            </div>
-            <div class="social-media-item">
-                <img src="path/to/your/custom-tiktok-logo.png" alt="TikTok"> <!-- Custom TikTok logo -->
-                <span>TikTok</span>
-            </div>
-            <div class="social-media-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                <span>Instagram</span>
-            </div>
-            <div class="social-media-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Facebook_Logo.png" alt="Facebook">
-                <span>Facebook</span>
-            </div>
-            <div class="social-media-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
-                <span>GitHub</span>
-            </div>
-            <!-- Tambahkan logo media sosial lainnya di sini -->
+        <div class="social-media-item">
+            <img src="path/to/your/custom-tiktok-logo.png" alt="TikTok"> <!-- Custom TikTok logo -->
+            <span>TikTok</span>
         </div>
+        <div class="social-media-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+            <span>Instagram</span>
+        </div>
+        <div class="social-media-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Facebook_Logo.png" alt="Facebook">
+            <span>Facebook</span>
+        </div>
+        <div class="social-media-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
+            <span>GitHub</span>
+        </div>
+        <!-- Tambahkan logo media sosial lainnya di sini -->
     </div>
 </body>
 </html>
