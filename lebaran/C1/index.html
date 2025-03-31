@@ -3,65 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Menu</title>
+    <title>Menu Media Sosial Horizontal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000000; /* Changed to solid black */
+            background-color: #000000; /* Background warna hitam */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: white; /* Added white color for text */
+            color: white; /* Warna teks putih */
         }
-        .social-menu {
+
+        .social-media-menu {
             display: flex;
             gap: 20px;
         }
-        .social-menu a {
-            display: inline-block;
-            width: 150px; /* Changed to rectangle */
-            height: 50px; /* Changed to rectangle */
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .social-media-item {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            transition: transform 0.3s;
-            color: black; /* Added black color for text */
-            text-decoration: none; /* Removed underline from links */
+            margin: 10px; /* Jarak antar item */
         }
-        .social-menu a:hover {
-            transform: scale(1.1);
+
+        .social-media-item img {
+            width: 50px; /* Ukuran logo */
+            height: auto;
         }
-        .social-menu img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px; /* Added margin for spacing */
-        }
-        .social-menu span {
-            font-size: 14px; /* Added font size for text */
+
+        .social-media-item span {
+            margin-top: 5px; /* Jarak antara logo dan teks */
         }
     </style>
 </head>
 <body>
-    <div class="social-menu">
-        <a href="https://www.tiktok.com/@your_username" target="_blank">
-            <img src="path/to/your/custom-tiktok-logo.png" alt="TikTok"> <!-- Custom TikTok logo -->
-            <span>TikTok</span>
-        </a>
-        <a href="https://wa.me/your_phone_number" target="_blank">
+    <div class="social-media-menu">
+        <div class="social-media-item">
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
             <span>WhatsApp</span>
-        </a>
-        <a href="https://t.me/your_username" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-            <span>Telegram</span>
-        </a>
-        <a href="https://github.com/your_username" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
-            <span>GitHub</span>
-        </a>
+        </div>
+        <div class="social-media-item">
+            <img src="path/to/your/custom-tiktok-logo.png" alt="TikTok"> <!-- Custom TikTok logo -->
+            <span>TikTok</span>
+        </div>
+        <!-- Tambahkan logo media sosial lainnya di sini -->
     </div>
 </body>
 </html>
