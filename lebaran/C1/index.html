@@ -7,11 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #000000; /* Changed to solid black */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: white; /* Added white color for text */
         }
         .social-menu {
             display: flex;
@@ -19,15 +20,16 @@
         }
         .social-menu a {
             display: inline-block;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 150px; /* Changed to rectangle */
+            height: 50px; /* Changed to rectangle */
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: center;
             align-items: center;
             transition: transform 0.3s;
+            color: black; /* Added black color for text */
+            text-decoration: none; /* Removed underline from links */
         }
         .social-menu a:hover {
             transform: scale(1.1);
@@ -35,22 +37,30 @@
         .social-menu img {
             width: 30px;
             height: 30px;
+            margin-right: 10px; /* Added margin for spacing */
+        }
+        .social-menu span {
+            font-size: 14px; /* Added font size for text */
         }
     </style>
 </head>
 <body>
     <div class="social-menu">
         <a href="https://www.tiktok.com/@your_username" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Tiktok-icon-black.png" alt="TikTok">
+            <img src="path/to/your/custom-tiktok-logo.png" alt="TikTok"> <!-- Custom TikTok logo -->
+            <span>TikTok</span>
         </a>
         <a href="https://wa.me/your_phone_number" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            <span>WhatsApp</span>
         </a>
         <a href="https://t.me/your_username" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            <span>Telegram</span>
         </a>
         <a href="https://github.com/your_username" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
+            <span>GitHub</span>
         </a>
     </div>
 </body>
