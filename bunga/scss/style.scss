@@ -1391,3 +1391,17 @@ body {
 .not-loaded * {
   animation-play-state: paused !important;
 }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+#title {
+  font-size: 2rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 1s;
+}
