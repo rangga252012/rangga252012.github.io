@@ -3,41 +3,65 @@
 <head>
 <title>Ikon Aplikasi</title>
 <style>
-/* ... CSS tetap sama ... */
+/* Tambahkan CSS tambahan jika diperlukan */
+.icon-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.icon img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
 </style>
 </head>
 <body>
 
   <!-- Gambar Atas (Ganti dengan URL gambar Anda) -->
-  <img src="placeholder.jpg" alt="Gambar Atas" style="width: 300px; height: 200px; margin-bottom: 20px;">
+  <img src="path-to-your-image.jpg" alt="Gambar Atas" style="width: 300px; height: 200px; margin-bottom: 20px;">
 
   <div class="icon-container">
-    <a href="url-profil-tiktok-anda" id="tiktok-link" target="_blank">
+    <a href="https://www.tiktok.com/@your-tiktok-profile" id="tiktok-link" target="_blank">
       <div class="icon" id="tiktok-icon">
-        <img src="tiktok-icon.png" alt="TikTok">
+        <img src="path-to-tiktok-icon.png" alt="TikTok">
       </div>
     </a>
-    <a href="url-profil-telegram-anda" id="telegram-link" target="_blank">
+    <a href="https://t.me/your-telegram-profile" id="telegram-link" target="_blank">
       <div class="icon" id="telegram-icon">
-        <img src="telegram-icon.png" alt="Telegram">
+        <img src="path-to-telegram-icon.png" alt="Telegram">
       </div>
     </a>
-    <a href="url-profil-instagram-anda" id="instagram-link" target="_blank">
+    <a href="https://www.instagram.com/your-instagram-profile" id="instagram-link" target="_blank">
       <div class="icon" id="instagram-icon">
-        <img src="instagram-icon.png" alt="Instagram">
+        <img src="path-to-instagram-icon.png" alt="Instagram">
       </div>
     </a>
-    <a href="url-profil-github-anda" id="github-link" target="_blank">
+    <a href="https://github.com/your-github-profile" id="github-link" target="_blank">
       <div class="icon" id="github-icon">
-        <img src="github-icon.png" alt="GitHub">
+        <img src="path-to-github-icon.png" alt="GitHub">
       </div>
     </a>
   </div>
 
   <script>
-    // Tambahkan JavaScript di sini (lihat langkah selanjutnya)
+    // Tambahkan JavaScript di sini jika diperlukan
   </script>
 
 </body>
 </html>
-
