@@ -3,7 +3,7 @@ onload = () => {
     document.body.classList.remove("not-loaded");
 
     const titles = ['I', 'LOVE', 'U'];
-    const additionalTitles = ['A', 'B', 'C', 'D', 'E'];
+    const additionalTitles = ['B', 'J', 'I', 'R', 'R'];
     const allTitles = titles.concat(additionalTitles);
     const titleElement = document.getElementById('title');
     let index = 0;
