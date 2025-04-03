@@ -1,25 +1,21 @@
+
 onload = () => {
   const c = setTimeout(() => {
     document.body.classList.remove("not-loaded");
 
-    const titles = ['I', 'LOVE', 'U'];
-    const additionalTitles = ['B', 'J', 'I', 'R', 'R'];
-    const allTitles = titles.concat(additionalTitles);
+    const titles = ('I LOVE U').split('')
     const titleElement = document.getElementById('title');
     let index = 0;
 
-    function displayTitle() {
-      if (index < allTitles.length) {
-        titleElement.innerHTML = allTitles[index]; // mengubah isi titleElement
+    function appendTitle() {
+      if (index < titles.length) {
+        titleElement.innerHTML += titles[index];
         index++;
-        setTimeout(() => {
-          titleElement.innerHTML = ''; // menghilangkan isi titleElement
-          setTimeout(displayTitle, 300); // 300ms delay sebelum menampilkan kata berikutnya
-        }, 700); // 700ms delay sebelum menghilangkan kata
+        setTimeout(appendTitle, 300); // 1000ms delay
       }
     }
 
-    displayTitle();
+    appendTitle();
 
     clearTimeout(c);
   }, 1000);
