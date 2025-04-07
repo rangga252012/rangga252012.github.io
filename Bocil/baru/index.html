@@ -46,11 +46,14 @@
 
     <script>
         const messages = [
-            "Pesan 1",
-            "Pesan 2",
-            "Pesan 3",
-            "Pesan 4",
-            "Pesan 5"
+            "pesan sebelumnya di tulisan pada [30 Maret sampai 5 April]",
+            "jadi maaf kalo ada yg salah hehe..",
+            "yaah sekarang ade udah dapet cwo Reall live",
+            "selamat ya, semoga langgeng dan bisa lebih baik dari aku",
+            "kemungkinan aku bakal ngilang deh,biar gak ganggu ade lagi",
+            "jadi pesen aku,hati hati yh,jgn sampe ade ngelakuin hal buruk",
+            "dan jgn terlat makan, sholat, dan jgn sering makan pedes",
+            "pesan ini ditulis pada [7 april]"
         ];
 
         const messageContainer = document.getElementById('message-container');
@@ -69,7 +72,7 @@
 
         function sendMessage() {
             const response = document.getElementById('response').value;
-            const phoneNumber = 'YOUR_WHATSAPP_NUMBER';
+            const phoneNumber = '+6282228394077';
             const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(response)}`;
             window.open(url, '_blank');
         }
