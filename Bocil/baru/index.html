@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Untuk Anda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        #message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .message {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        #response-form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="message-container"></div>
+    <div id="response-form">
+        <label for="response">Pesan untuk saya:</label>
+        <textarea id="response" rows="4" cols="50"></textarea>
+        <button onclick="sendMessage()">Kirim</button>
+    </div>
+
+    <script>
+        const messages = [
+            "Pesan 1",
+            "Pesan 2",
+            "Pesan 3",
+            "Pesan 4",
+            "Pesan 5"
+        ];
+
+        const messageContainer = document.getElementById('message-container');
+
+        messages.forEach((message, index) => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.style.animationDelay = `${index * (15000 / messages.length)}ms`;
+            messageElement.innerText = message;
+            messageContainer.appendChild(messageElement);
+        });
+
+        setTimeout(() => {
+            document.getElementById('response-form').style.display = 'flex';
+        }, 15000);
+
+        function sendMessage() {
+            const response = document.getElementById('response').value;
+            const phoneNumber = 'YOUR_WHATSAPP_NUMBER';
+            const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(response)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
