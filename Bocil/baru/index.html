@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Untuk Anda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        #message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .message {
+            opacity: 1;
+            margin-bottom: 10px;
+        }
+        #response-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        label {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="message-container"></div>
+    <div id="response-form">
+        <label for="response">Pesan untuk saya:</label>
+        <textarea id="response" rows="4" cols="50"></textarea>
+        <label for="dana-number">Nomor Dana:</label>
+        <input type="text" id="dana-number" placeholder="Masukkan nomor Dana">
+        <button onclick="sendMessage()">Kirim</button>
+    </div>
 
+    <script>
+        const messages = [
+            "pesan sebelumnya di tulisan pada [30 Maret sampai 5 April]",
+            "jadi maaf kalo ada yg salah hehe..",
+            "yaah sekarang ade udah dapet cwo Reall live",
+            "selamat ya, semoga langgeng dan bisa lebih baik dari aku",
+            "kemungkinan aku bakal ngilang deh,biar gak ganggu ade lagi",
+            "jadi pesen aku,hati hati yh,jgn sampe ade ngelakuin hal buruk",
+            "dan jgn terlat makan, sholat, dan jgn sering makan pedes",
+            "pesan ini ditulis pada [7 april]"
+        ];
+
+        const messageContainer = document.getElementById('message-container');
+
+        messages.forEach((message) => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.innerText = message;
+            messageContainer.appendChild(messageElement);
+        });
+
+        function sendMessage() {
+            const response = document.getElementById('response').value;
+            const danaNumber = document.getElementById('dana-number').value;
+            const phoneNumber = '+6282228394077'; // Ganti dengan nomor WhatsApp pribadi Anda
+            const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(`Pesan: ${response}\nNomor Dana: ${danaNumber}`)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
