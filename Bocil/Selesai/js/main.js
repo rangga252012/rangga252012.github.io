@@ -1,9 +1,8 @@
-
 onload = () => {
   const c = setTimeout(() => {
     document.body.classList.remove("not-loaded");
 
-    const titles = ('I LOVE U').split('TERAKHIR')
+    const titles = ('I LOVE U').split('TERAKHIR');
     const titleElement = document.getElementById('title');
     let index = 0;
 
@@ -16,6 +15,14 @@ onload = () => {
     }
 
     appendTitle();
+
+    // Membuat dan menambahkan tombol
+    const button = document.createElement('button');
+    button.innerHTML = 'lanjut';
+    button.onclick = () => {
+      window.location.href = 'Bocil/baru/index.html'; // Ubah ini ke path folder yang diinginkan
+    };
+    document.body.appendChild(button);
 
     clearTimeout(c);
   }, 1000);
