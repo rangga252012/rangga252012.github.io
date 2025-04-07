@@ -3,75 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesan Untuk Anda</title>
+    <title>buat wita</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
+            background-color: #000;
+            text-align: center;
+            padding: 50px;
+            color: white;
         }
-        #message-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .greeting {
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
-        .message {
-            opacity: 1;
-            margin-bottom: 10px;
+        .form-group {
+            margin-bottom: 15px;
         }
-        #response-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
+        input[type="text"], textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
         }
-        label {
-            margin-top: 10px;
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div id="message-container"></div>
-    <div id="response-form">
-        <label for="response">Pesan untuk saya:</label>
-        <textarea id="response" rows="4" cols="50"></textarea>
-        <label for="dana-number">Nomor Dana:</label>
-        <input type="text" id="dana-number" placeholder="Masukkan nomor Dana">
-        <button onclick="sendMessage()">Kirim</button>
+    <h1>pesan sebelumnya di tulisan pada [30 Maret sampai 5 April]</h1>
+    <div class="greeting">
+        jadi maaf kalo ada yg salah hehe..
+yaah sekarang ade udah dapet cwo Reall live
+selamat ya, semoga langgeng dan bisa lebih baik dari aku
+kemungkinan aku bakal ngilang deh,biar gak ganggu ade lagi
+jadi pesen aku,hati hati yh,jgn sampe ade ngelakuin hal buruk
+dan jgn terlat makan, sholat, dan jgn sering makan pedes
+pesan ini ditulis pada [7 april]
     </div>
+    <form id="responseForm">
+        <div class="form-group">
+            <label for="name">Nama:</label><br>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="message">Pesan Balasan:</label><br>
+            <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <input type="submit" value="Kirim ke WhatsApp">
+    </form>
 
     <script>
-        const messages = [
-            "pesan sebelumnya di tulisan pada [30 Maret sampai 5 April]",
-            "jadi maaf kalo ada yg salah hehe..",
-            "yaah sekarang ade udah dapet cwo Reall live",
-            "selamat ya, semoga langgeng dan bisa lebih baik dari aku",
-            "kemungkinan aku bakal ngilang deh,biar gak ganggu ade lagi",
-            "jadi pesen aku,hati hati yh,jgn sampe ade ngelakuin hal buruk",
-            "dan jgn terlat makan, sholat, dan jgn sering makan pedes",
-            "pesan ini ditulis pada [7 april]"
-        ];
-
-        const messageContainer = document.getElementById('message-container');
-
-        messages.forEach((message) => {
-            const messageElement = document.createElement('div');
-            messageElement.className = 'message';
-            messageElement.innerText = message;
-            messageContainer.appendChild(messageElement);
+        document.getElementById('responseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var name = document.getElementById('name').value;
+            var message = document.getElementById('message').value;
+            var phoneNumber = '+6282228394077'; // Ganti dengan nomor Whatsapp Anda
+            var whatsappUrl = 'https://wa.me/' + phoneNumber + '?text=' + encodeURIComponent('Nama: ' + name + '\nPesan: ' + message);
+            window.open(whatsappUrl, '_blank');
         });
-
-        function sendMessage() {
-            const response = document.getElementById('response').value;
-            const danaNumber = document.getElementById('dana-number').value;
-            const phoneNumber = '+6282228394077'; // Ganti dengan nomor WhatsApp pribadi Anda
-            const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(`Pesan: ${response}\nNomor Dana: ${danaNumber}`)}`;
-            window.open(url, '_blank');
-        }
     </script>
 </body>
 </html>
