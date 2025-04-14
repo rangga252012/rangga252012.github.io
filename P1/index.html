@@ -123,6 +123,13 @@
             audio.currentTime = 0;
             audio.play();
         }
+
+        // Mencoba memutar musik secara otomatis
+        window.addEventListener('load', () => {
+            audio.play().catch(error => {
+                console.log('Pemutaran otomatis diblokir. Pengguna harus berinteraksi dengan halaman terlebih dahulu.');
+            });
+        });
     </script>
 </body>
 </html>
