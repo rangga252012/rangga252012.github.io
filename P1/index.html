@@ -4,21 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman dengan Musik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .container button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .container button:hover {
+            background-color: #e55d50;
+        }
+    </style>
 </head>
 <body>
-    <!-- Audio dengan kontrol manual -->
-    <audio id="audioPlayer">
-        <source src="music.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
+    <div class="container">
+        <h1>Selamat Datang!</h1>
+        <p>Nikmati musik yang diputar terus menerus.</p>
+        <!-- Audio dengan pengulangan otomatis -->
+        <audio id="audioPlayer" autoplay loop>
+            <source src="music.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung elemen audio.
+        </audio>
 
-    <!-- Tombol Play -->
-    <button onclick="playAudio()">Play Musik</button>
+        <!-- Tombol Play -->
+        <button onclick="playAudio()">Putar Ulang Musik</button>
+    </div>
 
     <script>
         // Fungsi untuk memainkan audio
         function playAudio() {
             const audio = document.getElementById('audioPlayer');
+            audio.currentTime = 0; // Reset waktu audio
             audio.play();
         }
     </script>
