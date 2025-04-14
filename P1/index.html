@@ -14,6 +14,12 @@
             background-position: center;
             height: 100vh;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Arial, sans-serif;
         }
 
         /* Tambahan jika ingin ada overlay */
@@ -25,16 +31,98 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5); /* Warna overlay dengan transparansi */
         }
+
+        /* Kontainer untuk player musik */
+        .music-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Elemen waktu musik */
+        .time-display {
+            margin-top: 10px;
+        }
+
+        /* Tombol kontrol musik */
+        .controls {
+            margin-top: 10px;
+        }
+
+        .controls button {
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: rgba(255, 255, 255, 1);
+        }
     </style>
 </head>
 <body>
     <!-- Overlay opsional -->
     <div class="overlay"></div>
 
-    <!-- Memasukkan audio yang otomatis menyala -->
-    <audio autoplay loop>
-        <source src="music.mp3" type="audio/mpeg"> <!-- Ganti dengan URL musik Anda -->
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Memasukkan audio dan kontrol -->
+    <div class="music-container">
+        <h1>Music Player</h1>
+        <audio id="audioPlayer" autoplay loop>
+            <source src="music.mp3" type="audio/mpeg"> <!-- Ganti dengan URL musik Anda -->
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- Waktu musik -->
+        <div class="time-display">
+            <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
+        </div>
+
+        <!-- Kontrol musik -->
+        <div class="controls">
+            <button onclick="playMusic()">Play</button>
+            <button onclick="pauseMusic()">Pause</button>
+            <button onclick="restartMusic()">Restart</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationTimeSpan = document.getElementById('durationTime');
+
+        // Memperbarui waktu saat audio diputar
+        audio.addEventListener('timeupdate', () => {
+            const currentMinutes = Math.floor(audio.currentTime / 60);
+            const currentSeconds = Math.floor(audio.currentTime % 60);
+            const durationMinutes = Math.floor(audio.duration / 60);
+            const durationSeconds = Math.floor(audio.duration % 60);
+
+            currentTimeSpan.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+            durationTimeSpan.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+        });
+
+        // Fungsi kontrol musik
+        function playMusic() {
+            audio.play();
+        }
+
+        function pauseMusic() {
+            audio.pause();
+        }
+
+        function restartMusic() {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    </script>
 </body>
 </html>
