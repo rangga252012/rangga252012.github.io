@@ -6,10 +6,21 @@
     <title>Halaman dengan Musik</title>
 </head>
 <body>
-    <!-- Audio diputar otomatis dan terus-menerus -->
-    <audio autoplay loop>
+    <!-- Audio dengan kontrol manual -->
+    <audio id="audioPlayer">
         <source src="music.mp3" type="audio/mpeg">
         Browser Anda tidak mendukung elemen audio.
     </audio>
+
+    <!-- Tombol Play -->
+    <button onclick="playAudio()">Play Musik</button>
+
+    <script>
+        // Fungsi untuk memainkan audio
+        function playAudio() {
+            const audio = document.getElementById('audioPlayer');
+            audio.play();
+        }
+    </script>
 </body>
 </html>
