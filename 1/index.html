@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background with Music</title>
+    <style>
+        /* Mengatur latar belakang berupa gambar */
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('C1.jpg'); /* Ganti dengan URL gambar Anda */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
+        /* Tambahan jika ingin ada overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Warna overlay dengan transparansi */
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay opsional -->
+    <div class="overlay"></div>
+
+    <!-- Memasukkan audio yang otomatis menyala -->
+    <audio autoplay loop>
+        <source src="music.mp3" type="audio/mpeg"> <!-- Ganti dengan URL musik Anda -->
+        Your browser does not support the audio element.
+    </audio>
+</body>
+</html>
