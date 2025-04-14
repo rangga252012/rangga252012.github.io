@@ -12,37 +12,41 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #9aefff, #c4fafd); /* Mengganti gradien warna biru muda/cyan */
-            color: #333;
+            background: #000; /* Latar belakang berwarna hitam */
+            color: #fff; /* Warna teks putih */
         }
         .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1); /* Kotakan berwarna hitam keputihan */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 60%; /* Menambah lebar kotakan menjadi lebih besar */
-            max-width: 800px; /* Membatasi ukuran maksimum */
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2); /* Efek bayangan putih */
+            width: 60%;
+            max-width: 800px;
         }
         .container button {
-            background-color: #61eaff; /* Mengganti tombol warna biru muda/cyan */
-            color: white;
+            background-color: #fff; /* Tombol berwarna putih */
+            color: #000; /* Teks tombol hitam */
             border: none;
             padding: 10px 20px;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
         .container button:hover {
-            background-color: #50cce5; /* Mengganti hover tombol warna biru muda/cyan */
+            transform: scale(1.1); /* Efek zoom saat hover */
+            background-color: #e0e0e0; /* Warna tombol saat hover */
+        }
+        h1 {
+            text-shadow: 0 2px 5px rgba(255, 255, 255, 0.5); /* Efek bayangan teks */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>SELAMAT!!</h1>
-        <p>anda dapet melanjutkan link</p>
+        <p>Anda dapat melanjutkan link</p>
         <!-- Audio dengan pengulangan otomatis -->
         <audio id="audioPlayer" autoplay loop>
             <source src="music.mp3" type="audio/mpeg">
