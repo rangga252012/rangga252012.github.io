@@ -1,122 +1,223 @@
-<script>
-    const calendarElement = document.getElementById('calendar');
-    const workdaysCountElement = document.getElementById('workdays-count');
-    const prevMonthButton = document.getElementById('prev-month');
-    const nextMonthButton = document.getElementById('next-month');
-    const monthNameElement = document.getElementById('month-name');
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Absen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin: 20px;
+        }
+        .day {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            position: relative;
+        }
+        .day.workday {
+            background-color: #4caf50;
+            color: #ffffff;
+        }
+        .day.today::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            background-color: #45a049;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+        .day.holiday::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .navigation {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .day-names {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            font-weight: bold;
+            text-align: center;
+            margin: 0 20px;
+        }
+        .month-name {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4caf50;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Kalender Absen</h1>
+        <p id="month-name" class="month-name"></p>
+        <p id="workdays-count">Hari kerja: 0</p>
+    </div>
+    <div class="navigation">
+        <button id="prev-month"><</button>
+        <button id="next-month">></button>
+    </div>
+    <div class="day-names">
+        <div>Minggu</div>
+        <div>Senin</div>
+        <div>Selasa</div>
+        <div>Rabu</div>
+        <div>Kamis</div>
+        <div>Jumat</div>
+        <div>Sabtu</div>
+    </div>
+    <div id="calendar" class="calendar"></div>
 
-    // Memuat tanggal saat ini
-    let currentDate = new Date();
+    <script>
+        const calendarElement = document.getElementById('calendar');
+        const workdaysCountElement = document.getElementById('workdays-count');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
+        const monthNameElement = document.getElementById('month-name');
 
-    // Memuat hari kerja dan hari libur dari localStorage
-    const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
-    const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
+        let currentDate = new Date();
+        const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
+        const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
 
-    const monthNames = [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
+        const monthNames = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
 
-    // Mengecek apakah tanggal tertentu adalah hari libur
-    function isHoliday(year, month, day) {
-        const date = new Date(year, month, day);
-        return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Minggu atau hari libur nasional
-    }
-
-    // Fungsi untuk merender kalender
-    function renderCalendar() {
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const firstDayIndex = new Date(year, month, 1).getDay();
-
-        calendarElement.innerHTML = '';
-        monthNameElement.textContent = `${monthNames[month]} ${year}`;
-
-        const today = new Date();
-        const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
-
-        // Tambahkan kotak kosong untuk hari sebelum tanggal 1
-        for (let i = 0; i < firstDayIndex; i++) {
-            const emptyElement = document.createElement('div');
-            calendarElement.appendChild(emptyElement);
+        // Add predefined holidays (example: Sundays as holidays)
+        function isHoliday(year, month, day) {
+            const date = new Date(year, month, day);
+            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Sunday or national holiday
         }
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.classList.add('day');
-            dayElement.textContent = `${day}`;
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDayIndex = new Date(year, month, 1).getDay();
 
-            const key = `${year}-${month}-${day}`;
+            calendarElement.innerHTML = '';
+            monthNameElement.textContent = `${monthNames[month]} ${year}`;
 
-            // Tambahkan kelas hari libur jika itu adalah hari libur
-            if (isHoliday(year, month, day)) {
-                dayElement.classList.add('holiday');
+            const today = new Date();
+            const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+            // Add empty boxes for days before the first day of the month
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyElement = document.createElement('div');
+                calendarElement.appendChild(emptyElement);
             }
 
-            // Tambahkan kelas hari kerja jika disimpan
-            if (savedWorkdays[key]) {
-                dayElement.classList.add('workday');
-            }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = `${day}`;
 
-            // Tambahkan kelas hari ini jika tanggal adalah hari ini
-            if (isTodayInCurrentMonth && day === today.getDate()) {
-                dayElement.classList.add('today');
-            }
+                const key = `${year}-${month}-${day}`;
 
-            // Toggle hari kerja ketika diklik
-            dayElement.addEventListener('click', () => {
-                if (savedWorkdays[key]) {
-                    delete savedWorkdays[key];
-                    dayElement.classList.remove('workday');
-                } else {
-                    savedWorkdays[key] = true;
-                    dayElement.classList.add('workday');
-                }
-                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                updateWorkdaysCount();
-            });
-
-            // Toggle hari libur ketika klik kanan
-            dayElement.addEventListener('contextmenu', (event) => {
-                event.preventDefault();
-                if (nationalHolidays[key]) {
-                    delete nationalHolidays[key];
-                    dayElement.classList.remove('holiday');
-                } else {
-                    nationalHolidays[key] = true;
+                // Add holiday class if it's a holiday
+                if (isHoliday(year, month, day)) {
                     dayElement.classList.add('holiday');
                 }
-                localStorage.setItem('nationalHolidays', JSON.stringify(nationalHolidays));
-            });
 
-            calendarElement.appendChild(dayElement);
+                // Add workday class if saved
+                if (savedWorkdays[key]) {
+                    dayElement.classList.add('workday');
+                }
+
+                // Add today class if it is today
+                if (isTodayInCurrentMonth && day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+
+                // Toggle workday on click
+                dayElement.addEventListener('click', () => {
+                    if (savedWorkdays[key]) {
+                        delete savedWorkdays[key];
+                        dayElement.classList.remove('workday');
+                    } else {
+                        savedWorkdays[key] = true;
+                        dayElement.classList.add('workday');
+                    }
+                    localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                    updateWorkdaysCount();
+                });
+
+                // Toggle national holiday on right-click
+                dayElement.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
+                    if (nationalHolidays[key]) {
+                        delete nationalHolidays[key];
+                        dayElement.classList.remove('holiday');
+                    } else {
+                        nationalHolidays[key] = true;
+                        dayElement.classList.add('holiday');
+                    }
+                    localStorage.setItem('nationalHolidays', JSON.stringify(nationalHolidays));
+                });
+
+                calendarElement.appendChild(dayElement);
+            }
+
+            updateWorkdaysCount();
         }
 
-        updateWorkdaysCount();
-    }
+        function updateWorkdaysCount() {
+            const count = Object.keys(savedWorkdays).filter(key => {
+                const [year, month] = key.split('-').map(Number);
+                return year === currentDate.getFullYear() && month === currentDate.getMonth();
+            }).length;
+            workdaysCountElement.textContent = `Hari kerja: ${count}`;
+        }
 
-    // Menghitung jumlah hari kerja
-    function updateWorkdaysCount() {
-        const count = Object.keys(savedWorkdays).filter(key => {
-            const [year, month] = key.split('-').map(Number);
-            return year === currentDate.getFullYear() && month === currentDate.getMonth();
-        }).length;
-        workdaysCountElement.textContent = `Hari kerja: ${count}`;
-    }
+        prevMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
 
-    // Event listener untuk tombol bulan sebelumnya
-    prevMonthButton.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
+        nextMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
         renderCalendar();
-    });
-
-    // Event listener untuk tombol bulan berikutnya
-    nextMonthButton.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
-    });
-
-    // Render kalender saat halaman dimuat
-    renderCalendar();
-</script>
+    </script>
+</body>
+</html>
