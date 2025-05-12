@@ -33,9 +33,19 @@
         }
         .day.today::before {
             content: "";
+            width: 5px;
+            height: 5px;
+            background-color: #45a049;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+        .day.holiday::before {
+            content: "";
             width: 8px;
             height: 8px;
-            background-color: #ffffff;
+            background-color: #ff0000;
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -110,6 +120,12 @@
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
 
+        // Add predefined holidays (example: Sundays as holidays)
+        function isHoliday(year, month, day) {
+            const date = new Date(year, month, day);
+            return date.getDay() === 0; // Sunday is considered a holiday
+        }
+
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -133,8 +149,14 @@
                 dayElement.classList.add('day');
                 dayElement.textContent = `${day}`;
 
-                // Add workday class if saved
                 const key = `${year}-${month}-${day}`;
+
+                // Add holiday class if it's a holiday
+                if (isHoliday(year, month, day)) {
+                    dayElement.classList.add('holiday');
+                }
+
+                // Add workday class if saved
                 if (savedWorkdays[key]) {
                     dayElement.classList.add('workday');
                 }
