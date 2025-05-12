@@ -43,8 +43,8 @@
         }
         .day.holiday::before {
             content: "";
-            width: 8px;
-            height: 8px;
+            width: 5px;
+            height: 5px;
             background-color: #ff0000;
             border-radius: 50%;
             position: absolute;
@@ -88,7 +88,7 @@
     <div class="header">
         <h1>Kalender Absen</h1>
         <p id="month-name" class="month-name"></p>
-        <p id="workdays-count">Hari: 0</p>
+        <p id="workdays-count">Hari kerja: 0</p>
     </div>
     <div class="navigation">
         <button id="prev-month"><</button>
@@ -114,6 +114,7 @@
 
         let currentDate = new Date();
         const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
+        const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
 
         const monthNames = [
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -123,7 +124,7 @@
         // Add predefined holidays (example: Sundays as holidays)
         function isHoliday(year, month, day) {
             const date = new Date(year, month, day);
-            return date.getDay() === 0; // Sunday is considered a holiday
+            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Sunday or national holiday
         }
 
         function renderCalendar() {
@@ -177,6 +178,19 @@
                     }
                     localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                     updateWorkdaysCount();
+                });
+
+                // Toggle national holiday on right-click
+                dayElement.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
+                    if (nationalHolidays[key]) {
+                        delete nationalHolidays[key];
+                        dayElement.classList.remove('holiday');
+                    } else {
+                        nationalHolidays[key] = true;
+                        dayElement.classList.add('holiday');
+                    }
+                    localStorage.setItem('nationalHolidays', JSON.stringify(nationalHolidays));
                 });
 
                 calendarElement.appendChild(dayElement);
