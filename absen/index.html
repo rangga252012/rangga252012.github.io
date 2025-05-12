@@ -30,6 +30,10 @@
             background-color: #4caf50;
             color: #ffffff;
         }
+        .day.today {
+            background-color: #ffffff;
+            color: #000000;
+        }
         .header {
             text-align: center;
             margin: 20px 0;
@@ -108,6 +112,9 @@
             calendarElement.innerHTML = '';
             monthNameElement.textContent = `${monthNames[month]} ${year}`;
 
+            const today = new Date();
+            const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
             // Add empty boxes for days before the first day of the month
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyElement = document.createElement('div');
@@ -123,6 +130,11 @@
                 const key = `${year}-${month}-${day}`;
                 if (savedWorkdays[key]) {
                     dayElement.classList.add('workday');
+                }
+
+                // Add today class if it is today
+                if (isTodayInCurrentMonth && day === today.getDate()) {
+                    dayElement.classList.add('today');
                 }
 
                 // Toggle workday on click
