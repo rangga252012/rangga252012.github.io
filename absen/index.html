@@ -112,7 +112,10 @@
         const nextMonthButton = document.getElementById('next-month');
         const monthNameElement = document.getElementById('month-name');
 
-        let currentDate = new Date();
+        // Load saved date or use the current date
+        let savedDate = localStorage.getItem('savedDate');
+        let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
+
         const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
         const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
 
@@ -197,6 +200,7 @@
             }
 
             updateWorkdaysCount();
+            saveCurrentDate(); // Save the current date whenever the calendar is rendered
         }
 
         function updateWorkdaysCount() {
@@ -205,6 +209,10 @@
                 return year === currentDate.getFullYear() && month === currentDate.getMonth();
             }).length;
             workdaysCountElement.textContent = `Hari kerja: ${count}`;
+        }
+
+        function saveCurrentDate() {
+            localStorage.setItem('savedDate', JSON.stringify(currentDate));
         }
 
         prevMonthButton.addEventListener('click', () => {
