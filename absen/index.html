@@ -112,6 +112,19 @@
         const nextMonthButton = document.getElementById('next-month');
         const monthNameElement = document.getElementById('month-name');
 
+        // Prevent refresh
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if ((event.key === 'F5') || (event.ctrlKey && event.key === 'r')) {
+                event.preventDefault();
+                alert('Refresh halaman telah dinonaktifkan.');
+            }
+        });
+
         // Load saved date or use the current date
         let savedDate = localStorage.getItem('savedDate');
         let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
