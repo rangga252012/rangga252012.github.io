@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Absen Kerja</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin: 20px;
+        }
+        .day {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .day.workday {
+            background-color: #90ee90;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Kalender Absen Kerja</h1>
+        <p id="workdays-count">Hari kerja: 0</p>
+    </div>
+    <div id="calendar" class="calendar"></div>
 
+    <script>
+        const calendarElement = document.getElementById('calendar');
+        const workdaysCountElement = document.getElementById('workdays-count');
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Load workdays from local storage
+        const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || [];
+
+        function renderCalendar() {
+            calendarElement.innerHTML = '';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = `${day}`;
+
+                // Add workday class if saved
+                if (savedWorkdays.includes(day)) {
+                    dayElement.classList.add('workday');
+                }
+
+                // Toggle workday on click
+                dayElement.addEventListener('click', () => {
+                    if (savedWorkdays.includes(day)) {
+                        savedWorkdays.splice(savedWorkdays.indexOf(day), 1);
+                        dayElement.classList.remove('workday');
+                    } else {
+                        savedWorkdays.push(day);
+                        dayElement.classList.add('workday');
+                    }
+                    localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                    updateWorkdaysCount();
+                });
+
+                calendarElement.appendChild(dayElement);
+            }
+            updateWorkdaysCount();
+        }
+
+        function updateWorkdaysCount() {
+            workdaysCountElement.textContent = `Hari kerja: ${savedWorkdays.length}`;
+        }
+
+        renderCalendar();
+    </script>
+</body>
+</html>
