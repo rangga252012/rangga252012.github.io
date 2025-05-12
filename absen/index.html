@@ -225,6 +225,11 @@
             renderCalendar();
         });
 
+        // Check if localStorage is working properly
+        if (typeof localStorage === 'undefined') {
+            alert('Browser Anda tidak mendukung localStorage. Data tidak akan disimpan.');
+        }
+
         renderCalendar();
     </script>
 </body>
