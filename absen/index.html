@@ -25,14 +25,21 @@
             cursor: pointer;
             background-color: #1e1e1e;
             color: #ffffff;
+            position: relative;
         }
         .day.workday {
             background-color: #4caf50;
             color: #ffffff;
         }
-        .day.today {
+        .day.today::before {
+            content: "";
+            width: 8px;
+            height: 8px;
             background-color: #ffffff;
-            color: #000000;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
         }
         .header {
             text-align: center;
