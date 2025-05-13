@@ -137,7 +137,6 @@
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
 
-        // Add predefined holidays (example: Sundays as holidays)
         function isHoliday(year, month, day) {
             const date = new Date(year, month, day);
             return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Sunday or national holiday
@@ -155,7 +154,6 @@
             const today = new Date();
             const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
 
-            // Add empty boxes for days before the first day of the month
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyElement = document.createElement('div');
                 calendarElement.appendChild(emptyElement);
@@ -168,35 +166,35 @@
 
                 const key = `${year}-${month}-${day}`;
 
-                // Add holiday class if it's a holiday
                 if (isHoliday(year, month, day)) {
                     dayElement.classList.add('holiday');
                 }
 
-                // Add workday class if saved
                 if (savedWorkdays[key]) {
                     dayElement.classList.add('workday');
                 }
 
-                // Add today class if it is today
                 if (isTodayInCurrentMonth && day === today.getDate()) {
                     dayElement.classList.add('today');
                 }
 
-                // Toggle workday on click
+                // Toggle workday on click with confirmation
                 dayElement.addEventListener('click', () => {
                     if (savedWorkdays[key]) {
-                        delete savedWorkdays[key];
-                        dayElement.classList.remove('workday');
+                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
+                            delete savedWorkdays[key];
+                            dayElement.classList.remove('workday');
+                        }
                     } else {
-                        savedWorkdays[key] = true;
-                        dayElement.classList.add('workday');
+                        if (confirm('Apakah Anda yakin ingin menandai hari ini sebagai absen?')) {
+                            savedWorkdays[key] = true;
+                            dayElement.classList.add('workday');
+                        }
                     }
                     localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                     updateWorkdaysCount();
                 });
 
-                // Toggle national holiday on right-click
                 dayElement.addEventListener('contextmenu', (event) => {
                     event.preventDefault();
                     if (nationalHolidays[key]) {
@@ -213,7 +211,7 @@
             }
 
             updateWorkdaysCount();
-            saveCurrentDate(); // Save the current date whenever the calendar is rendered
+            saveCurrentDate();
         }
 
         function updateWorkdaysCount() {
@@ -238,7 +236,6 @@
             renderCalendar();
         });
 
-        // Check if localStorage is working properly
         if (typeof localStorage === 'undefined') {
             alert('Browser Anda tidak mendukung localStorage. Data tidak akan disimpan.');
         }
