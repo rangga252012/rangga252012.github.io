@@ -82,6 +82,12 @@
         button:hover {
             background-color: #45a049;
         }
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
@@ -104,13 +110,19 @@
         <div>Sabtu</div>
     </div>
     <div id="calendar" class="calendar"></div>
+    <div class="footer">
+        <p id="total-earnings">Total pendapatan: Rp 0</p>
+    </div>
 
     <script>
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
+        const totalEarningsElement = document.getElementById('total-earnings');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
         const monthNameElement = document.getElementById('month-name');
+
+        const dailyEarnings = 98000; // Pendapatan per hari kerja
 
         // Prevent refresh
         window.addEventListener('beforeunload', (event) => {
@@ -220,6 +232,12 @@
                 return year === currentDate.getFullYear() && month === currentDate.getMonth();
             }).length;
             workdaysCountElement.textContent = `Hari kerja: ${count}`;
+            updateTotalEarnings(count);
+        }
+
+        function updateTotalEarnings(count) {
+            const total = count * dailyEarnings;
+            totalEarningsElement.textContent = `Total pendapatan: Rp ${total.toLocaleString('id-ID')}`;
         }
 
         function saveCurrentDate() {
