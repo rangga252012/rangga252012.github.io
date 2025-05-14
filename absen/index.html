@@ -88,6 +88,30 @@
             left: 20px;
             font-size: 1.2em;
         }
+        #absenModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        #absenModal div {
+            background-color: #121212;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        #absenModal div p {
+            color: #ffffff;
+        }
+        #absenModal div button {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +138,16 @@
         <p id="total-earnings">Total pendapatan: Rp 0</p>
     </div>
 
+    <!-- Modal for selecting absen type -->
+    <div id="absenModal">
+        <div>
+            <p>Pilih tipe absen:</p>
+            <button id="normalAbsenButton">Normal</button>
+            <button id="lemburAbsenButton">Lembur</button>
+            <button id="closeModalButton" style="background-color: #ff0000;">Batal</button>
+        </div>
+    </div>
+
     <script>
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
@@ -121,9 +155,13 @@
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
         const monthNameElement = document.getElementById('month-name');
+        const modal = document.getElementById('absenModal');
+        const normalAbsenButton = document.getElementById('normalAbsenButton');
+        const lemburAbsenButton = document.getElementById('lemburAbsenButton');
+        const closeModalButton = document.getElementById('closeModalButton');
 
-        const dailyEarnings = 98431; // Pendapatan per hari kerja
-        const overtimeRate = 20000; // Tarif lembur per jam
+        const dailyEarnings = 98431;
+        const overtimeRate = 20000;
 
         let savedDate = localStorage.getItem('savedDate');
         let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
@@ -136,10 +174,50 @@
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
 
+        let selectedDayElement = null;
+        let selectedDayKey = null;
+
         function isHoliday(year, month, day) {
             const date = new Date(year, month, day);
-            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Sunday or national holiday
+            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`];
         }
+
+        function openAbsenModal(dayElement, key) {
+            selectedDayElement = dayElement;
+            selectedDayKey = key;
+            modal.style.display = 'flex';
+        }
+
+        function closeAbsenModal() {
+            modal.style.display = 'none';
+            selectedDayElement = null;
+            selectedDayKey = null;
+        }
+
+        normalAbsenButton.addEventListener('click', () => {
+            if (selectedDayElement && selectedDayKey) {
+                savedWorkdays[selectedDayKey] = { type: 'normal' };
+                selectedDayElement.classList.add('workday');
+                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                updateWorkdaysCount();
+            }
+            closeAbsenModal();
+        });
+
+        lemburAbsenButton.addEventListener('click', () => {
+            const overtimeHours = prompt('Masukkan jumlah jam lembur:');
+            if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
+                savedWorkdays[selectedDayKey] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
+                selectedDayElement.classList.add('workday');
+                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                updateWorkdaysCount();
+            } else {
+                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.');
+            }
+            closeAbsenModal();
+        });
+
+        closeModalButton.addEventListener('click', closeAbsenModal);
 
         function renderCalendar() {
             const year = currentDate.getFullYear();
@@ -182,29 +260,12 @@
                         if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
                             delete savedWorkdays[key];
                             dayElement.classList.remove('workday');
+                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                            updateWorkdaysCount();
                         }
                     } else {
-                        const absenType = prompt('Pilih tipe absen: "Normal" atau "Lembur"', 'Normal');
-                        if (absenType && (absenType.toLowerCase() === 'normal' || absenType.toLowerCase() === 'lembur')) {
-                            if (absenType.toLowerCase() === 'lembur') {
-                                const overtimeHours = prompt('Masukkan jumlah jam lembur:');
-                                if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
-                                    savedWorkdays[key] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
-                                } else {
-                                    alert('Jumlah jam lembur tidak valid. Absen dibatalkan.');
-                                    return;
-                                }
-                            } else {
-                                savedWorkdays[key] = { type: 'normal' };
-                            }
-                            dayElement.classList.add('workday');
-                        } else {
-                            alert('Pilihan tipe absen tidak valid. Absen dibatalkan.');
-                            return;
-                        }
+                        openAbsenModal(dayElement, key);
                     }
-                    localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                    updateWorkdaysCount();
                 });
 
                 calendarElement.appendChild(dayElement);
