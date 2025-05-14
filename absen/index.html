@@ -35,7 +35,7 @@
             content: "";
             width: 5px;
             height: 5px;
-            background-color: #45a049;
+            background-color: var(--today-marker, #45a049); /* Customizable marker */
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -45,7 +45,7 @@
             content: "";
             width: 5px;
             height: 5px;
-            background-color: #ff0000;
+            background-color: var(--holiday-marker, #ff0000); /* Customizable marker */
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -55,7 +55,7 @@
             content: "";
             width: 5px;
             height: 5px;
-            background-color: #ffff00; /* Yellow for overtime */
+            background-color: var(--overtime-marker, #ffff00); /* Customizable marker */
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -81,13 +81,14 @@
             margin: 10px 0;
         }
         button {
-            padding: 10px 20px;
+            padding: 5px 10px; /* Smaller buttons */
             border: none;
             background-color: #4caf50;
             color: #ffffff;
             cursor: pointer;
             border-radius: 5px;
             margin: 5px;
+            font-size: 0.8em; /* Smaller font */
         }
         button:hover {
             background-color: #45a049;
@@ -122,19 +123,19 @@
         #absenModal div button {
             margin: 5px;
         }
-        /* Additional styles for modal buttons */
         #normalAbsenButton {
             float: right;
         }
-
         #lemburAbsenButton {
             background-color: yellow;
             color: black;
             margin: 0 10px; /* Add spacing between Lembur and other buttons */
         }
-
         #closeModalButton {
             float: left;
+        }
+        .small-text {
+            font-size: 0.8em; /* Smaller text for total earnings */
         }
     </style>
 </head>
@@ -158,7 +159,7 @@
         <div>Sabtu</div>
     </div>
     <div id="calendar" class="calendar"></div>
-    <div class="footer">
+    <div class="footer small-text">
         <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
         <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
         <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
