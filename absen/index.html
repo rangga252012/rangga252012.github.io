@@ -5,110 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalender Absen</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
+        /* Existing styles */
+        .overtime-options {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin: 20px;
-        }
-        .day {
-            border: 1px solid #444;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            position: relative;
-        }
-        .day.workday {
-            background-color: #4caf50;
-            color: #ffffff;
-        }
-        .day.today::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            background-color: #45a049;
-            border-radius: 50%;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-        .day.holiday::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            background-color: #ff0000;
-            border-radius: 50%;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-        .header {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .navigation {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .day-names {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            font-weight: bold;
-            text-align: center;
-            margin: 0 20px;
-        }
-        .month-name {
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #4caf50;
-            color: #ffffff;
-            cursor: pointer;
-            border-radius: 5px;
+        .overtime-options button {
             margin: 5px;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
-        button:hover {
+        .overtime-options button:hover {
             background-color: #45a049;
-        }
-        .footer {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Kalender Absen</h1>
-        <p id="month-name" class="month-name"></p>
-        <p id="workdays-count">Hari kerja: 0</p>
-    </div>
-    <div class="navigation">
-        <button id="prev-month"><</button>
-        <button id="next-month">></button>
-    </div>
-    <div class="day-names">
-        <div>Minggu</div>
-        <div>Senin</div>
-        <div>Selasa</div>
-        <div>Rabu</div>
-        <div>Kamis</div>
-        <div>Jumat</div>
-        <div>Sabtu</div>
-    </div>
+    <!-- Existing HTML -->
     <div id="calendar" class="calendar"></div>
     <div class="footer">
         <p id="total-earnings">Total pendapatan: Rp 0</p>
@@ -123,7 +41,7 @@
         const monthNameElement = document.getElementById('month-name');
 
         const dailyEarnings = 98431; // Pendapatan per hari kerja
-        const overtimeRate = 20000; // Tarif lembur per jam
+        const overtimeRate = 19000; // Tarif lembur per jam
 
         let savedDate = localStorage.getItem('savedDate');
         let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
@@ -135,11 +53,6 @@
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
-
-        function isHoliday(year, month, day) {
-            const date = new Date(year, month, day);
-            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`]; // Sunday or national holiday
-        }
 
         function renderCalendar() {
             const year = currentDate.getFullYear();
@@ -165,16 +78,8 @@
 
                 const key = `${year}-${month}-${day}`;
 
-                if (isHoliday(year, month, day)) {
-                    dayElement.classList.add('holiday');
-                }
-
                 if (savedWorkdays[key]) {
                     dayElement.classList.add('workday');
-                }
-
-                if (isTodayInCurrentMonth && day === today.getDate()) {
-                    dayElement.classList.add('today');
                 }
 
                 dayElement.addEventListener('click', () => {
@@ -184,70 +89,49 @@
                             dayElement.classList.remove('workday');
                         }
                     } else {
-                        const absenType = prompt('Pilih tipe absen: "Normal" atau "Lembur"', 'Normal');
-                        if (absenType && (absenType.toLowerCase() === 'normal' || absenType.toLowerCase() === 'lembur')) {
-                            if (absenType.toLowerCase() === 'lembur') {
-                                const overtimeHours = prompt('Masukkan jumlah jam lembur:');
-                                if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
-                                    savedWorkdays[key] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
-                                } else {
-                                    alert('Jumlah jam lembur tidak valid. Absen dibatalkan.');
-                                    return;
-                                }
-                            } else {
-                                savedWorkdays[key] = { type: 'normal' };
-                            }
+                        const optionsContainer = document.createElement('div');
+                        optionsContainer.classList.add('overtime-options');
+
+                        const normalButton = document.createElement('button');
+                        normalButton.textContent = 'Normal';
+                        normalButton.onclick = () => {
+                            savedWorkdays[key] = { type: 'normal' };
                             dayElement.classList.add('workday');
-                        } else {
-                            alert('Pilihan tipe absen tidak valid. Absen dibatalkan.');
-                            return;
-                        }
+                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                            updateWorkdaysCount();
+                            document.body.removeChild(optionsContainer);
+                        };
+
+                        const lemburButton = document.createElement('button');
+                        lemburButton.textContent = 'Lembur';
+                        lemburButton.onclick = () => {
+                            const hours = parseInt(prompt('Masukkan jumlah jam lembur:'), 10);
+                            if (!isNaN(hours) && hours > 0) {
+                                savedWorkdays[key] = { type: 'lembur', hours: hours };
+                                dayElement.classList.add('workday');
+                                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                                updateWorkdaysCount();
+                            } else {
+                                alert('Masukan jam lembur tidak valid.');
+                            }
+                            document.body.removeChild(optionsContainer);
+                        };
+
+                        optionsContainer.appendChild(normalButton);
+                        optionsContainer.appendChild(lemburButton);
+                        document.body.appendChild(optionsContainer);
                     }
-                    localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                    updateWorkdaysCount();
                 });
 
                 calendarElement.appendChild(dayElement);
             }
-
             updateWorkdaysCount();
-            saveCurrentDate();
         }
 
         function updateWorkdaysCount() {
-            const count = Object.keys(savedWorkdays).filter(key => {
-                const [year, month] = key.split('-').map(Number);
-                return year === currentDate.getFullYear() && month === currentDate.getMonth();
-            }).length;
+            const count = Object.keys(savedWorkdays).length;
             workdaysCountElement.textContent = `Hari kerja: ${count}`;
-            updateTotalEarnings();
         }
-
-        function updateTotalEarnings() {
-            let total = 0;
-            for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    total += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    total += dailyEarnings + (savedWorkdays[key].hours * overtimeRate);
-                }
-            }
-            totalEarningsElement.textContent = `Total pendapatan: Rp ${total.toLocaleString('id-ID')}`;
-        }
-
-        function saveCurrentDate() {
-            localStorage.setItem('savedDate', JSON.stringify(currentDate));
-        }
-
-        prevMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        nextMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
 
         renderCalendar();
     </script>
