@@ -51,6 +51,16 @@
             top: 5px;
             left: 5px;
         }
+        .day.overtime::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            background-color: #ffff00; /* Yellow for overtime */
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
         .header {
             text-align: center;
             margin: 20px 0;
@@ -198,6 +208,7 @@
             if (selectedDayElement && selectedDayKey) {
                 savedWorkdays[selectedDayKey] = { type: 'normal' };
                 selectedDayElement.classList.add('workday');
+                selectedDayElement.classList.remove('overtime');
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                 updateWorkdaysCount();
             }
@@ -208,7 +219,7 @@
             const overtimeHours = prompt('Masukkan jumlah jam lembur:');
             if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
                 savedWorkdays[selectedDayKey] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
-                selectedDayElement.classList.add('workday');
+                selectedDayElement.classList.add('workday', 'overtime');
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                 updateWorkdaysCount();
             } else {
@@ -249,6 +260,9 @@
 
                 if (savedWorkdays[key]) {
                     dayElement.classList.add('workday');
+                    if (savedWorkdays[key].type === 'lembur') {
+                        dayElement.classList.add('overtime');
+                    }
                 }
 
                 if (isTodayInCurrentMonth && day === today.getDate()) {
@@ -259,7 +273,7 @@
                     if (savedWorkdays[key]) {
                         if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
                             delete savedWorkdays[key];
-                            dayElement.classList.remove('workday');
+                            dayElement.classList.remove('workday', 'overtime');
                             localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                             updateWorkdaysCount();
                         }
