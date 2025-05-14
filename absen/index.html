@@ -122,6 +122,20 @@
         #absenModal div button {
             margin: 5px;
         }
+        /* Additional styles for modal buttons */
+        #normalAbsenButton {
+            float: right;
+        }
+
+        #lemburAbsenButton {
+            background-color: yellow;
+            color: black;
+            margin: 0 10px; /* Add spacing between Lembur and other buttons */
+        }
+
+        #closeModalButton {
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -152,9 +166,9 @@
     <div id="absenModal">
         <div>
             <p>Pilih tipe absen:</p>
-            <button id="normalAbsenButton">Normal</button>
-            <button id="lemburAbsenButton">Lembur</button>
             <button id="closeModalButton" style="background-color: #ff0000;">Batal</button>
+            <button id="lemburAbsenButton">Lembur</button>
+            <button id="normalAbsenButton">Normal</button>
         </div>
     </div>
 
