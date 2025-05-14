@@ -159,7 +159,9 @@
     </div>
     <div id="calendar" class="calendar"></div>
     <div class="footer">
-        <p id="total-earnings">Total pendapatan: Rp 0</p>
+        <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
+        <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
+        <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
     </div>
 
     <!-- Modal for selecting absen type -->
@@ -176,6 +178,8 @@
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
         const totalEarningsElement = document.getElementById('total-earnings');
+        const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
+        const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
         const monthNameElement = document.getElementById('month-name');
@@ -313,15 +317,22 @@
         }
 
         function updateTotalEarnings() {
-            let total = 0;
+            let dailyTotal = 0;
+            let overtimeTotal = 0;
+            
             for (const key in savedWorkdays) {
                 if (savedWorkdays[key].type === 'normal') {
-                    total += dailyEarnings;
+                    dailyTotal += dailyEarnings;
                 } else if (savedWorkdays[key].type === 'lembur') {
-                    total += dailyEarnings + (savedWorkdays[key].hours * overtimeRate);
+                    overtimeTotal += (savedWorkdays[key].hours * overtimeRate);
                 }
             }
-            totalEarningsElement.textContent = `Total pendapatan: Rp ${total.toLocaleString('id-ID')}`;
+
+            const overallTotal = dailyTotal + overtimeTotal;
+
+            dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
+            overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
+            totalEarningsElement.textContent = `Total pendapatan keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
         }
 
         function saveCurrentDate() {
