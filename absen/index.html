@@ -138,8 +138,9 @@
             font-size: 0.8em; /* Smaller text for total earnings */
         }
         #total-earnings {
-            font-size: 1.5em; /* Enlarged font size */
-            font-weight: bold; /* Bold text */
+            font-size: 1.2em; /* Ukuran lebih kecil dari sebelumnya */
+            font-weight: bold; /* Tetap tebal */
+            margin-top: 10px; /* Tambahkan sedikit jarak untuk tampilan */
         }
     </style>
 </head>
@@ -335,9 +336,9 @@
 
             const overallTotal = dailyTotal + overtimeTotal;
 
-            dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-            totalEarningsElement.textContent = `Total pendapatan keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
+            dailyEarningsTotalElement.textContent = `harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
+            overtimeEarningsTotalElement.textContent = `lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
+            totalEarningsElement.textContent = `Total keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
         }
 
         function saveCurrentDate() {
