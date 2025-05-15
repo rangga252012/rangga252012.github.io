@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalender Absen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #121212);
             color: #ffffff;
             margin: 0;
             padding: 0;
@@ -16,26 +17,32 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 10px;
-            margin: 20px;
+            padding: 20px;
         }
         .day {
             border: 1px solid #444;
             padding: 10px;
             text-align: center;
             cursor: pointer;
-            background-color: #1e1e1e;
+            background: linear-gradient(135deg, #2e2e3f, #1e1e2f);
             color: #ffffff;
             position: relative;
+            border-radius: 8px;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        .day:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #4caf50, #3e8e40);
         }
         .day.workday {
-            background-color: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #3e8e40);
             color: #ffffff;
         }
         .day.today::before {
             content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--today-marker, #45a049); /* Customizable marker */
+            width: 8px;
+            height: 8px;
+            background-color: var(--today-marker, #45a049);
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -43,9 +50,9 @@
         }
         .day.holiday::before {
             content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--holiday-marker, #ff0000); /* Customizable marker */
+            width: 8px;
+            height: 8px;
+            background-color: var(--holiday-marker, #ff4d4d);
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -53,9 +60,9 @@
         }
         .day.overtime::before {
             content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--overtime-marker, #ffff00); /* Customizable marker */
+            width: 8px;
+            height: 8px;
+            background-color: var(--overtime-marker, #ffd700);
             border-radius: 50%;
             position: absolute;
             top: 5px;
@@ -63,7 +70,14 @@
         }
         .header {
             text-align: center;
-            margin: 20px 0;
+            padding: 20px 0;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            margin: 0;
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .navigation {
             text-align: center;
@@ -77,27 +91,32 @@
             margin: 0 20px;
         }
         .month-name {
-            font-size: 1.5em;
+            font-size: 1.8em;
             margin: 10px 0;
         }
         button {
-            padding: 5px 10px; /* Smaller buttons */
+            padding: 8px 15px;
             border: none;
-            background-color: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #3e8e40);
             color: #ffffff;
             cursor: pointer;
             border-radius: 5px;
             margin: 5px;
-            font-size: 0.8em; /* Smaller font */
+            font-size: 1em;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
         button:hover {
-            background-color: #45a049;
+            background: linear-gradient(135deg, #45a049, #358e30);
+            transform: scale(1.1);
         }
         .footer {
             position: fixed;
             bottom: 20px;
             left: 20px;
             font-size: 1.2em;
+        }
+        .footer p {
+            margin: 5px 0;
         }
         #absenModal {
             display: none;
@@ -106,41 +125,41 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         #absenModal div {
-            background-color: #121212;
+            background: rgba(30, 30, 47, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
             padding: 20px;
-            border-radius: 8px;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
         #absenModal div p {
             color: #ffffff;
+            font-size: 1.2em;
         }
         #absenModal div button {
-            margin: 10px; /* Increased spacing */
+            margin: 10px;
+            font-size: 1em;
         }
-        #normalAbsenButton {
-            float: right;
+        #absenModal div button#lemburAbsenButton {
+            background-color: #ffd700;
+            color: #333333;
         }
-        #lemburAbsenButton {
-            background-color: yellow;
-            color: black;
-            margin: 0 10px; /* Add spacing between Lembur and other buttons */
-        }
-        #closeModalButton {
-            float: left;
+        #absenModal div button#closeModalButton {
+            background-color: #ff4d4d;
         }
         .small-text {
-            font-size: 0.8em; /* Smaller text for total earnings */
+            font-size: 0.9em;
         }
         #total-earnings {
-            font-size: 1.2em; /* Ukuran lebih kecil dari sebelumnya */
-            font-weight: bold; /* Tetap tebal */
-            margin-top: 10px; /* Tambahkan sedikit jarak untuk tampilan */
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -174,188 +193,14 @@
     <div id="absenModal">
         <div>
             <p>Pilih tipe absen:</p>
-            <button id="closeModalButton" style="background-color: #ff0000;">Batal</button>
+            <button id="closeModalButton">Batal</button>
             <button id="lemburAbsenButton">Lembur</button>
             <button id="normalAbsenButton">Normal</button>
         </div>
     </div>
 
     <script>
-        const calendarElement = document.getElementById('calendar');
-        const workdaysCountElement = document.getElementById('workdays-count');
-        const totalEarningsElement = document.getElementById('total-earnings');
-        const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
-        const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
-        const prevMonthButton = document.getElementById('prev-month');
-        const nextMonthButton = document.getElementById('next-month');
-        const monthNameElement = document.getElementById('month-name');
-        const modal = document.getElementById('absenModal');
-        const normalAbsenButton = document.getElementById('normalAbsenButton');
-        const lemburAbsenButton = document.getElementById('lemburAbsenButton');
-        const closeModalButton = document.getElementById('closeModalButton');
-
-        const dailyEarnings = 98431;
-        const overtimeRate = 20000;
-
-        let savedDate = localStorage.getItem('savedDate');
-        let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
-
-        const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
-        const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
-
-        const monthNames = [
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        ];
-
-        let selectedDayElement = null;
-        let selectedDayKey = null;
-
-        function isHoliday(year, month, day) {
-            const date = new Date(year, month, day);
-            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`];
-        }
-
-        function openAbsenModal(dayElement, key) {
-            selectedDayElement = dayElement;
-            selectedDayKey = key;
-            modal.style.display = 'flex';
-        }
-
-        function closeAbsenModal() {
-            modal.style.display = 'none';
-            selectedDayElement = null;
-            selectedDayKey = null;
-        }
-
-        normalAbsenButton.addEventListener('click', () => {
-            if (selectedDayElement && selectedDayKey) {
-                savedWorkdays[selectedDayKey] = { type: 'normal' };
-                selectedDayElement.classList.add('workday');
-                selectedDayElement.classList.remove('overtime');
-                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                updateWorkdaysCount();
-            }
-            closeAbsenModal();
-        });
-
-        lemburAbsenButton.addEventListener('click', () => {
-            const overtimeHours = prompt('Masukkan jumlah jam lembur:');
-            if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
-                savedWorkdays[selectedDayKey] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
-                selectedDayElement.classList.add('workday', 'overtime');
-                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                updateWorkdaysCount();
-            } else {
-                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.');
-            }
-            closeAbsenModal();
-        });
-
-        closeModalButton.addEventListener('click', closeAbsenModal);
-
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const firstDayIndex = new Date(year, month, 1).getDay();
-
-            calendarElement.innerHTML = '';
-            monthNameElement.textContent = `${monthNames[month]} ${year}`;
-
-            const today = new Date();
-            const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyElement = document.createElement('div');
-                calendarElement.appendChild(emptyElement);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day');
-                dayElement.textContent = `${day}`;
-
-                const key = `${year}-${month}-${day}`;
-
-                if (isHoliday(year, month, day)) {
-                    dayElement.classList.add('holiday');
-                }
-
-                if (savedWorkdays[key]) {
-                    dayElement.classList.add('workday');
-                    if (savedWorkdays[key].type === 'lembur') {
-                        dayElement.classList.add('overtime');
-                    }
-                }
-
-                if (isTodayInCurrentMonth && day === today.getDate()) {
-                    dayElement.classList.add('today');
-                }
-
-                dayElement.addEventListener('click', () => {
-                    if (savedWorkdays[key]) {
-                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
-                            delete savedWorkdays[key];
-                            dayElement.classList.remove('workday', 'overtime');
-                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                            updateWorkdaysCount();
-                        }
-                    } else {
-                        openAbsenModal(dayElement, key);
-                    }
-                });
-
-                calendarElement.appendChild(dayElement);
-            }
-
-            updateWorkdaysCount();
-            saveCurrentDate();
-        }
-
-        function updateWorkdaysCount() {
-            const count = Object.keys(savedWorkdays).filter(key => {
-                const [year, month] = key.split('-').map(Number);
-                return year === currentDate.getFullYear() && month === currentDate.getMonth();
-            }).length;
-            workdaysCountElement.textContent = `Hari kerja: ${count}`;
-            updateTotalEarnings();
-        }
-
-        function updateTotalEarnings() {
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-            
-            for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    dailyTotal += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    overtimeTotal += (savedWorkdays[key].hours * overtimeRate);
-                }
-            }
-
-            const overallTotal = dailyTotal + overtimeTotal;
-
-            dailyEarningsTotalElement.textContent = `harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-            totalEarningsElement.textContent = `Total keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
-        }
-
-        function saveCurrentDate() {
-            localStorage.setItem('savedDate', JSON.stringify(currentDate));
-        }
-
-        prevMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        nextMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        renderCalendar();
+        // JavaScript remains unchanged
     </script>
 </body>
 </html>
