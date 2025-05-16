@@ -330,6 +330,7 @@
                 if (savedWorkdays[key].type === 'normal') {
                     dailyTotal += dailyEarnings;
                 } else if (savedWorkdays[key].type === 'lembur') {
+                    dailyTotal += dailyEarnings; // Tambahkan gaji harian untuk hari lembur
                     overtimeTotal += (savedWorkdays[key].hours * overtimeRate);
                 }
             }
