@@ -195,7 +195,8 @@
         const closeModalButton = document.getElementById('closeModalButton');
 
         const dailyEarnings = 98431;
-        const overtimeRate = 20000;
+        const overtimeRatePerHour = 20000;
+        const overtimeRatePerHalfHour = 10000;
 
         let savedDate = localStorage.getItem('savedDate');
         let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
@@ -240,14 +241,22 @@
         });
 
         lemburAbsenButton.addEventListener('click', () => {
-            const overtimeHours = prompt('Masukkan jumlah jam lembur:');
-            if (overtimeHours && !isNaN(overtimeHours) && overtimeHours > 0) {
-                savedWorkdays[selectedDayKey] = { type: 'lembur', hours: parseInt(overtimeHours, 10) };
+            // Prompt user for overtime hours, allow decimals like 0.5
+            const overtimeHoursStr = prompt('Masukkan jumlah jam lembur (boleh setengah, misal: 0.5):');
+            const overtimeHours = parseFloat(overtimeHoursStr.replace(",", ".")); // Accept comma or dot
+
+            if (
+                overtimeHoursStr &&
+                !isNaN(overtimeHours) &&
+                (overtimeHours === 0.5 || Number.isInteger(overtimeHours)) &&
+                overtimeHours > 0
+            ) {
+                savedWorkdays[selectedDayKey] = { type: 'lembur', hours: overtimeHours };
                 selectedDayElement.classList.add('workday', 'overtime');
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                 updateWorkdaysCount();
             } else {
-                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.');
+                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh 0.5 atau bilangan bulat positif (1, 2, dst)');
             }
             closeAbsenModal();
         });
@@ -331,7 +340,13 @@
                     dailyTotal += dailyEarnings;
                 } else if (savedWorkdays[key].type === 'lembur') {
                     dailyTotal += dailyEarnings; // Tambahkan gaji harian untuk hari lembur
-                    overtimeTotal += (savedWorkdays[key].hours * overtimeRate);
+                    // Overtime calculation: 0.5 jam = 10.000, >=1 jam = 20.000/jam
+                    const jam = savedWorkdays[key].hours;
+                    if (jam === 0.5) {
+                        overtimeTotal += overtimeRatePerHalfHour;
+                    } else if (Number.isInteger(jam) && jam > 0) {
+                        overtimeTotal += jam * overtimeRatePerHour;
+                    }
                 }
             }
 
