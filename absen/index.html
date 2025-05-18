@@ -6,156 +6,242 @@
     <title>Kalender Absen</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #181C20;
+            color: #f3f3f3;
             margin: 0;
             padding: 0;
         }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin: 20px;
-        }
-        .day {
-            border: 1px solid #444;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            position: relative;
-        }
-        .day.workday {
-            background-color: #4caf50;
-            color: #ffffff;
-        }
-        .day.today::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--today-marker, #45a049); /* Customizable marker */
-            border-radius: 50%;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-        .day.holiday::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--holiday-marker, #ff0000); /* Customizable marker */
-            border-radius: 50%;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-        .day.overtime::before {
-            content: "";
-            width: 5px;
-            height: 5px;
-            background-color: var(--overtime-marker, #ffff00); /* Customizable marker */
-            border-radius: 50%;
-            position: absolute;
-            top: 5px;
-            left: 5px;
+        .container {
+            max-width: 480px;
+            margin: 32px auto 0 auto;
+            background: #21252b;
+            border-radius: 15px;
+            box-shadow: 0 3px 24px 0 #0007;
+            padding-bottom: 24px;
+            overflow: hidden;
         }
         .header {
             text-align: center;
-            margin: 20px 0;
+            padding: 30px 0 0 0;
+            background: linear-gradient(90deg, #263238 0%, #1e272e 100%);
+            border-bottom: 1px solid #2e3a44;
             position: relative;
         }
         .factory-name {
-            font-size: 1.1em;
+            font-size: 1.05em;
             color: #b3e5fc;
             margin-bottom: 0.5em;
+            letter-spacing: 1px;
+        }
+        .month-name {
+            font-size: 1.7em;
+            margin: 12px 0 4px 0;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        #workdays-count {
+            margin: 0 0 14px 0;
+            font-size: 1em;
+            color: #aed581;
         }
         .navigation {
             text-align: center;
-            margin: 10px 0;
+            margin: 20px 0 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .navigation button {
+            padding: 8px 16px;
+            border: none;
+            background: #388e3c;
+            color: #fafafa;
+            border-radius: 6px;
+            font-size: 1em;
+            box-shadow: 0 1px 4px #1113;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .navigation button:hover {
+            background: #43a047;
+            transform: translateY(-2px) scale(1.06);
         }
         .day-names {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             font-weight: bold;
             text-align: center;
-            margin: 0 20px;
+            margin: 0 20px 0 20px;
+            background: #232c33;
+            border-radius: 8px 8px 0 0;
+            padding: 6px 0 4px 0;
         }
-        .month-name {
-            font-size: 1.5em;
-            margin: 10px 0;
+        .day-names div {
+            color: #90caf9;
+            font-size: 0.98em;
+            letter-spacing: 1px;
         }
-        button {
-            padding: 5px 10px; /* Smaller buttons */
-            border: none;
-            background-color: #4caf50;
-            color: #ffffff;
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin: 12px 20px 0 20px;
+            min-height: 240px;
+        }
+        .day {
+            border: 1px solid #353c42;
+            padding: 10px 0;
+            text-align: center;
             cursor: pointer;
-            border-radius: 5px;
-            margin: 5px;
-            font-size: 0.8em; /* Smaller font */
+            background: #24292f;
+            color: #fff;
+            position: relative;
+            font-size: 1.08em;
+            border-radius: 8px;
+            box-shadow: 0 0.5px 2.5px #0002;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
         }
-        button:hover {
-            background-color: #45a049;
+        .day:hover {
+            background: #2e7d32;
+            color: #fff;
+        }
+        .day.workday {
+            background: linear-gradient(90deg, #388e3c 0%, #43a047 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+        .day.today::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--today-marker, #45a049);
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            left: 7px;
+        }
+        .day.holiday::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--holiday-marker, #ff5252);
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            left: 7px;
+        }
+        .day.overtime::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--overtime-marker, #ffe082);
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            left: 7px;
+        }
+        .day.overtime {
+            box-shadow: 0 0 0 2px #ffe082aa;
+            background: linear-gradient(90deg, #388e3c 60%, #fff176 100%);
         }
         .footer {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 1.2em;
+            margin: 30px 24px 0 24px;
+            background: #232c33;
+            border-radius: 10px;
+            box-shadow: 0 1.5px 4px #0002;
+            padding: 17px 24px 14px 24px;
+            font-size: 1.06em;
         }
+        .footer p {
+            margin: 0 0 10px 0;
+            line-height: 1.55;
+        }
+        #monthly-earnings {
+            font-size: 1.15em;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .footer hr {
+            border: none;
+            height: 1.5px;
+            background: linear-gradient(90deg, #2e3a44 0%, #43a04788 50%, #2e3a44 100%);
+            margin: 18px 0 12px 0;
+        }
+        #total-earnings {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #ffd54f;
+            letter-spacing: 1px;
+            margin-top: 0px;
+        }
+        .small-text {
+            font-size: 0.98em;
+            opacity: 0.85;
+        }
+        /* Modal Styling */
         #absenModal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.82);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         #absenModal div {
-            background-color: #121212;
-            padding: 20px;
-            border-radius: 8px;
+            background: #222f3e;
+            padding: 28px 28px 22px 28px;
+            border-radius: 13px;
             text-align: center;
+            min-width: 200px;
+            box-shadow: 0 3px 18px #0006;
         }
         #absenModal div p {
-            color: #ffffff;
+            color: #fafafa;
+            font-size: 1.13em;
+            margin-bottom: 16px;
         }
         #absenModal div button {
-            margin: 10px; /* Increased spacing */
+            margin: 0 7px;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 7px;
+            font-size: 1em;
+            background: #388e3c;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 1px 3px #0002;
+            transition: background 0.16s, color 0.16s;
+        }
+        #absenModal div button:hover {
+            background: #43a047;
         }
         #normalAbsenButton {
             float: right;
         }
         #lemburAbsenButton {
-            background-color: yellow;
-            color: black;
-            margin: 0 10px; /* Add spacing between Lembur and other buttons */
+            background: #ffe082;
+            color: #222;
+            margin: 0 10px;
+        }
+        #lemburAbsenButton:hover {
+            background: #fff176;
         }
         #closeModalButton {
             float: left;
+            background: #ff5252;
+            color: #fff;
         }
-        .small-text {
-            font-size: 0.8em; /* Smaller text for total earnings */
+        #closeModalButton:hover {
+            background: #e53935;
         }
-        #total-earnings,
-        #monthly-earnings {
-            font-size: 1.2em; /* Ukuran lebih besar */
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        /* Tambahan: Style untuk link kanan atas */
+        /* Top right link */
         .top-right-link {
             position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 0.20em; /* DIPERKECIL dari 1.1em */
-            color: #4FC3F7; /* biru muda */
+            top: 13px;
+            right: 23px;
+            font-size: 0.85em;
+            color: #4FC3F7;
             text-decoration: none;
             font-weight: bold;
             letter-spacing: 2px;
@@ -166,53 +252,67 @@
             color: #81d4fa;
             text-decoration: underline;
         }
-        /* Penanda kustom untuk edit link RNG_SF */
-        /* == RNG_SF LINK CUSTOM START == */
-        /* Ubah href di elemen #rngsf-link untuk merubah tujuan! */
-        /* == RNG_SF LINK CUSTOM END == */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 99vw;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                padding-bottom: 16px;
+            }
+            .footer {
+                padding: 13px 7vw 13px 7vw;
+                margin: 18px 3vw 0 3vw;
+            }
+            .calendar, .day-names {
+                margin-left: 2vw;
+                margin-right: 2vw;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <!-- == RNG_SF LINK CUSTOM START == -->
-        <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
-        <!-- == RNG_SF LINK CUSTOM END == -->
-        <h1>Kalender Absen</h1>
-        <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
-        <p id="month-name" class="month-name"></p>
-        <p id="workdays-count">Hari kerja: 0</p>
+    <div class="container">
+        <div class="header">
+            <!-- == RNG_SF LINK CUSTOM START == -->
+            <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
+            <!-- == RNG_SF LINK CUSTOM END == -->
+            <h1 style="margin-bottom: 7px; margin-top: 0; font-size: 2.1em; color: #e3e3e3; letter-spacing: 2px;">Kalender Absen</h1>
+            <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
+            <p id="month-name" class="month-name"></p>
+            <p id="workdays-count">Hari kerja: 0</p>
+        </div>
+        <div class="navigation">
+            <button id="prev-month">&larr; Bulan Sebelumnya</button>
+            <button id="next-month">Bulan Berikutnya &rarr;</button>
+        </div>
+        <div class="day-names">
+            <div>Minggu</div>
+            <div>Senin</div>
+            <div>Selasa</div>
+            <div>Rabu</div>
+            <div>Kamis</div>
+            <div>Jumat</div>
+            <div>Sabtu</div>
+        </div>
+        <div id="calendar" class="calendar"></div>
+        <div class="footer small-text">
+            <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
+            <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
+            <p id="monthly-earnings">Total pendapatan per bulan: Rp 0</p>
+            <hr>
+            <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
+        </div>
     </div>
-    <div class="navigation">
-        <button id="prev-month"><</button>
-        <button id="next-month">></button>
-    </div>
-    <div class="day-names">
-        <div>Minggu</div>
-        <div>Senin</div>
-        <div>Selasa</div>
-        <div>Rabu</div>
-        <div>Kamis</div>
-        <div>Jumat</div>
-        <div>Sabtu</div>
-    </div>
-    <div id="calendar" class="calendar"></div>
-    <div class="footer small-text">
-        <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
-        <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
-        <p id="monthly-earnings">Total pendapatan per bulan: Rp 0</p>
-        <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
-    </div>
-
     <!-- Modal for selecting absen type -->
     <div id="absenModal">
         <div>
             <p>Pilih tipe absen:</p>
-            <button id="closeModalButton" style="background-color: #ff0000;">Batal</button>
+            <button id="closeModalButton">Batal</button>
             <button id="lemburAbsenButton">Lembur</button>
             <button id="normalAbsenButton">Normal</button>
         </div>
     </div>
-
     <script>
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
@@ -292,7 +392,7 @@
                 closeAbsenModal();
                 return;
             }
-            const overtimeHours = parseFloat(overtimeHoursStr.replace(",", ".")); // Accept comma or dot
+            const overtimeHours = parseFloat(overtimeHoursStr.replace(",", "."));
 
             if (
                 !isNaN(overtimeHours) &&
@@ -406,7 +506,6 @@
                 }
             }
 
-            // Update tampilan harian & lembur: hanya per bulan berjalan
             dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
             overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
 
