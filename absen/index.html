@@ -1,511 +1,261 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalender Absen</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #15171a; /* Ubah ke gelap */
-            color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f8fafc;
+        color: #23272f;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 430px;
+        margin: 48px auto 0 auto;
+        background: #fff;
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 4px 24px #0001, 0 1.5px 3.5px #32c1c610;
+        padding-bottom: 24px;
+        overflow: hidden;
+    }
+    .header {
+        text-align: center;
+        padding: 32px 0 0 0;
+        background: linear-gradient(90deg, #32c1c6 0%, #6bbcf7 100%);
+        border-bottom: none;
+        position: relative;
+        color: #fff;
+        border-radius: 0 0 32px 32px;
+    }
+    .factory-name {
+        font-size: 1em;
+        color: #e6f8fa;
+        margin-bottom: 0.5em;
+        letter-spacing: 0.2px;
+        font-weight: 500;
+    }
+    .month-name {
+        font-size: 1.3em;
+        margin: 12px 0 8px 0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #fff;
+    }
+    #workdays-count {
+        margin: 0 0 10px 0;
+        font-size: 1em;
+        color: #dfffe0;
+        font-weight: 500;
+    }
+    .navigation {
+        text-align: center;
+        margin: 24px 0 10px 0;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+    }
+    .navigation button {
+        padding: 9px 17px;
+        border: none;
+        background: #e6f8fa;
+        color: #32c1c6;
+        border-radius: 12px;
+        font-size: 1em;
+        font-weight: 600;
+        box-shadow: 0 1px 3px #32c1c620;
+        cursor: pointer;
+        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+    .navigation button:hover {
+        background: #32c1c6;
+        color: #fff;
+        box-shadow: 0 2px 8px #32c1c660;
+    }
+    .day-names {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        font-weight: 600;
+        text-align: center;
+        margin: 0 18px 0 18px;
+        background: none;
+        border-radius: 0;
+        padding: 10px 0 5px 0;
+        letter-spacing: 1px;
+        color: #97b4c0;
+        font-size: 1em;
+    }
+    .day-names div {
+        font-size: 1em;
+    }
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin: 14px 18px 0 18px;
+        min-height: 210px;
+    }
+    .day {
+        border: none;
+        padding: 13px 0;
+        text-align: center;
+        cursor: pointer;
+        background: #f0f6ff;
+        color: #23272f;
+        font-size: 1.05em;
+        border-radius: 14px;
+        font-weight: 500;
+        box-shadow: 0 1px 4px #32c1c610;
+        transition: background 0.15s, color 0.15s, box-shadow 0.15s, border 0.15s;
+        position: relative;
+    }
+    .day:hover {
+        background: #e6f8fa;
+        color: #32c1c6;
+    }
+    .day.workday {
+        background: #e0ffe6;
+        color: #2db057;
+        box-shadow: 0 2px 6px #2db05722;
+    }
+    .day.today {
+        border: 2px solid #32c1c6;
+        background: #faffd6;
+        color: #32c1c6;
+        box-shadow: 0 2px 8px #32c1c640;
+        z-index: 2;
+    }
+    .day.holiday {
+        background: #fff0f3;
+        color: #f1556b;
+        font-weight: 600;
+    }
+    .day.overtime {
+        background: #fffbe0;
+        color: #ffd600;
+        border: 1.5px solid #ffe082;
+        box-shadow: 0 2px 8px #ffd60018;
+    }
+    .footer {
+        margin: 22px 18px 0 18px;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 9px 0 0 0;
+        font-size: 1.01em;
+        color: #4d5c6b;
+        letter-spacing: 0.1px;
+    }
+    .footer p {
+        margin: 0 0 9px 0;
+        line-height: 1.4;
+    }
+    #monthly-earnings {
+        font-weight: 700;
+        color: #32c1c6;
+    }
+    #total-earnings {
+        font-weight: 700;
+        color: #2db057;
+    }
+    .small-text {
+        font-size: 1em;
+        opacity: 0.96;
+    }
+    /* Modal Styling */
+    #absenModal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(50,193,198,0.10);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    #absenModal div {
+        background: #fff;
+        padding: 26px 24px 18px 24px;
+        border-radius: 16px;
+        text-align: center;
+        min-width: 200px;
+        box-shadow: 0 2px 24px #32c1c670;
+    }
+    #absenModal div p {
+        color: #23272f;
+        font-size: 1.07em;
+        margin-bottom: 18px;
+        font-weight: 600;
+    }
+    #absenModal div button {
+        margin: 0 7px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        background: #f8fafc;
+        color: #32c1c6;
+        cursor: pointer;
+        box-shadow: 0 1px 3px #32c1c620;
+        transition: background 0.13s, color 0.13s;
+    }
+    #absenModal div button:hover {
+        background: #32c1c6;
+        color: #fff;
+    }
+    #lemburAbsenButton {
+        background: #fffbe0;
+        color: #ffd600;
+        border: 1.5px solid #ffe082;
+    }
+    #lemburAbsenButton:hover {
+        background: #ffd600;
+        color: #fff;
+        border: 1.5px solid #ffd600;
+    }
+    #closeModalButton {
+        background: #fff0f3;
+        color: #f1556b;
+        border: 1.5px solid #ffb3b3;
+    }
+    #closeModalButton:hover {
+        background: #f1556b;
+        color: #fff;
+        border: 1.5px solid #f1556b;
+    }
+    /* Top right link */
+    .top-right-link {
+        position: absolute;
+        top: 18px;
+        right: 28px;
+        font-size: 1em;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        letter-spacing: 1px;
+        z-index: 10;
+        background: #32c1c6;
+        padding: 5px 13px;
+        border-radius: 9px;
+        transition: background 0.18s, color 0.18s;
+        box-shadow: 0 2px 8px #32c1c640;
+    }
+    .top-right-link:hover {
+        background: #fff;
+        color: #32c1c6;
+        text-decoration: underline;
+    }
+    @media (max-width: 600px) {
         .container {
-            max-width: 420px;
-            margin: 32px auto 0 auto;
-            background: #23272f; /* Ubah ke gelap */
-            border-radius: 8px;
-            border: 1px solid #23242a;
-            box-shadow: none;
-            padding-bottom: 18px;
-        }
-        .header {
-            text-align: center;
-            padding: 22px 0 0 0;
-            background: none;
-            border-bottom: 1px solid #22242a;
-            position: relative;
-        }
-        .factory-name {
-            font-size: 1em;
-            color: #b0b0b0;
-            margin-bottom: 0.4em;
-            letter-spacing: 0;
-        }
-        .month-name {
-            font-size: 1.2em;
-            margin: 8px 0 4px 0;
-            font-weight: 500;
-            letter-spacing: 0;
-        }
-        #workdays-count {
-            margin: 0 0 10px 0;
-            font-size: 1em;
-            color: #8ee38e;
-            font-weight: 500;
-        }
-        .navigation {
-            text-align: center;
-            margin: 18px 0 8px 0;
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-        }
-        .navigation button {
-            padding: 6px 13px;
-            border: 1px solid #353940;
-            background: #181b1f;
-            color: #f2f2f2;
-            border-radius: 5px;
-            font-size: 1em;
-            box-shadow: none;
-            cursor: pointer;
-            transition: background 0.16s, border 0.16s;
-        }
-        .navigation button:hover {
-            background: #2a2e35;
-            border: 1px solid #656a75;
-        }
-        .day-names {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            font-weight: 500;
-            text-align: center;
-            margin: 0 14px 0 14px;
-            background: none;
+            max-width: 99vw;
+            margin: 0;
             border-radius: 0;
-            padding: 4px 0 3px 0;
-        }
-        .day-names div {
-            color: #90a4ae;
-            font-size: 0.98em;
-        }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 7px;
-            margin: 10px 14px 0 14px;
-            min-height: 210px;
-        }
-        .day {
-            border: 1px solid #23242a;
-            padding: 7px 0;
-            text-align: center;
-            cursor: pointer;
-            background: #181b1f;
-            color: #f2f2f2;
-            font-size: 1em;
-            border-radius: 5px;
             box-shadow: none;
-            transition: background 0.13s, color 0.13s;
-        }
-        .day:hover {
-            background: #23272f;
-            color: #6bbcf7;
-        }
-        .day.workday {
-            background: #1d2d22;
-            color: #8ee38e;
-        }
-        .day.today {
-            border: 1.5px solid #58a6ff;
-        }
-        .day.holiday {
-            background: #3a2323;
-            color: #ff8383;
-        }
-        .day.overtime {
-            background: #35310c;
-            color: #ffe082;
+            padding-bottom: 10px;
         }
         .footer {
-            margin: 20px 14px 0 14px;
-            background: none;
-            border-radius: 0;
-            box-shadow: none;
-            padding: 7px 0 0 0;
-            font-size: 0.98em;
-            color: #b5b5b5;
+            margin: 13px 2vw 0 2vw;
         }
-        .footer p {
-            margin: 0 0 7px 0;
-            line-height: 1.4;
+        .calendar, .day-names {
+            margin-left: 2vw;
+            margin-right: 2vw;
         }
-        #monthly-earnings {
-            font-weight: 600;
-            color: #6bbcf7;
-        }
-        #total-earnings {
-            font-weight: 600;
-            color: #8ee38e;
-        }
-        .small-text {
-            font-size: 0.98em;
-            opacity: 0.92;
-        }
-        /* Modal Styling */
-        #absenModal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 10, 0.27);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        #absenModal div {
-            background: #282c34;
-            padding: 18px 20px 14px 20px;
-            border-radius: 7px;
-            text-align: center;
-            min-width: 170px;
-            box-shadow: 0 2px 8px #000b;
-        }
-        #absenModal div p {
-            color: #f2f2f2;
-            font-size: 1em;
-            margin-bottom: 13px;
-        }
-        #absenModal div button {
-            margin: 0 5px;
-            padding: 7px 15px;
-            border: 1px solid #353940;
-            border-radius: 5px;
-            font-size: 1em;
-            background: #181b1f;
-            color: #f2f2f2;
-            cursor: pointer;
-            box-shadow: none;
-            transition: background 0.13s;
-        }
-        #absenModal div button:hover {
-            background: #23272f;
-        }
-        #lemburAbsenButton {
-            background: #35310c;
-            color: #ffe082;
-            border-color: #ffe082;
-        }
-        #lemburAbsenButton:hover {
-            background: #483e1f;
-        }
-        #closeModalButton {
-            background: #3a2323;
-            color: #ff8383;
-            border-color: #ffb3b3;
-        }
-        #closeModalButton:hover {
-            background: #5a3030;
-        }
-        /* Top right link */
-        .top-right-link {
-            position: absolute;
-            top: 13px;
-            right: 20px;
-            font-size: 0.86em;
-            color: #6bbcf7;
-            text-decoration: none;
-            font-weight: normal;
-            letter-spacing: 1px;
-            z-index: 10;
-        }
-        .top-right-link:hover {
-            color: #8ed6fb;
-            text-decoration: underline;
-        }
-        @media (max-width: 600px) {
-            .container {
-                max-width: 99vw;
-                margin: 0;
-                border-radius: 0;
-                box-shadow: none;
-                padding-bottom: 10px;
-            }
-            .footer {
-                margin: 13px 2vw 0 2vw;
-            }
-            .calendar, .day-names {
-                margin-left: 2vw;
-                margin-right: 2vw;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
-            <h1 style="margin-bottom: 5px; margin-top: 0; font-size: 1.5em; color: #f2f2f2; font-weight: 600; letter-spacing: 0;">Kalender Absen</h1>
-            <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
-            <p id="month-name" class="month-name"></p>
-            <p id="workdays-count">Hari kerja: 0</p>
-        </div>
-        <div class="navigation">
-            <button id="prev-month">&larr; Sebelumnya</button>
-            <button id="next-month">Berikutnya &rarr;</button>
-        </div>
-        <div class="day-names">
-            <div>Min</div>
-            <div>Sen</div>
-            <div>Sel</div>
-            <div>Rab</div>
-            <div>Kam</div>
-            <div>Jum</div>
-            <div>Sab</div>
-        </div>
-        <div id="calendar" class="calendar"></div>
-        <div class="footer small-text">
-            <p id="daily-earnings-total">Harian: Rp 0</p>
-            <p id="overtime-earnings-total">Lembur: Rp 0</p>
-            <p id="monthly-earnings">Bulan ini: Rp 0</p>
-            <p id="total-earnings">Total: Rp 0</p>
-        </div>
-    </div>
-    <!-- Modal for selecting absen type -->
-    <div id="absenModal">
-        <div>
-            <p>Pilih tipe absen:</p>
-            <button id="closeModalButton">Batal</button>
-            <button id="lemburAbsenButton">Lembur</button>
-            <button id="normalAbsenButton">Normal</button>
-        </div>
-    </div>
-    <script>
-        // (Script JS tetap, tidak perlu diubah.)
-        const calendarElement = document.getElementById('calendar');
-        const workdaysCountElement = document.getElementById('workdays-count');
-        const totalEarningsElement = document.getElementById('total-earnings');
-        const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
-        const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
-        const monthlyEarningsElement = document.getElementById('monthly-earnings');
-        const prevMonthButton = document.getElementById('prev-month');
-        const nextMonthButton = document.getElementById('next-month');
-        const monthNameElement = document.getElementById('month-name');
-        const modal = document.getElementById('absenModal');
-        const normalAbsenButton = document.getElementById('normalAbsenButton');
-        const lemburAbsenButton = document.getElementById('lemburAbsenButton');
-        const closeModalButton = document.getElementById('closeModalButton');
-        const rngsfLink = document.getElementById('rngsf-link');
-
-        if (rngsfLink) {
-            rngsfLink.addEventListener('click', function(e) {
-                const lanjut = confirm('Peringatan: Anda akan diarahkan ke media sosial saya.  Apakah Anda yakin ingin melanjutkan?');
-                if (!lanjut) {
-                    e.preventDefault();
-                }
-            });
-        }
-
-        const dailyEarnings = 98431;
-        const overtimeRatePerHour = 20000;
-        const overtimeRatePerHalfHour = 10000;
-
-        let savedDate = localStorage.getItem('savedDate');
-        let currentDate = savedDate ? new Date(JSON.parse(savedDate)) : new Date();
-
-        const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
-        const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
-
-        const monthNames = [
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        ];
-
-        let selectedDayElement = null;
-        let selectedDayKey = null;
-
-        function isHoliday(year, month, day) {
-            const date = new Date(year, month, day);
-            return date.getDay() === 0 || nationalHolidays[`${year}-${month}-${day}`];
-        }
-
-        function openAbsenModal(dayElement, key) {
-            selectedDayElement = dayElement;
-            selectedDayKey = key;
-            modal.style.display = 'flex';
-        }
-
-        function closeAbsenModal() {
-            modal.style.display = 'none';
-            selectedDayElement = null;
-            selectedDayKey = null;
-        }
-
-        normalAbsenButton.addEventListener('click', () => {
-            if (selectedDayElement && selectedDayKey) {
-                savedWorkdays[selectedDayKey] = { type: 'normal' };
-                selectedDayElement.classList.add('workday');
-                selectedDayElement.classList.remove('overtime');
-                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                updateWorkdaysCount();
-            }
-            closeAbsenModal();
-        });
-
-        lemburAbsenButton.addEventListener('click', () => {
-            const overtimeHoursStr = prompt('Masukkan jumlah jam lembur (boleh setengah, misal: 0.5):');
-            if (!overtimeHoursStr) {
-                closeAbsenModal();
-                return;
-            }
-            const overtimeHours = parseFloat(overtimeHoursStr.replace(",", "."));
-
-            if (
-                !isNaN(overtimeHours) &&
-                (overtimeHours === 0.5 || Number.isInteger(overtimeHours)) &&
-                overtimeHours > 0
-            ) {
-                savedWorkdays[selectedDayKey] = { type: 'lembur', hours: overtimeHours };
-                selectedDayElement.classList.add('workday', 'overtime');
-                localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                updateWorkdaysCount();
-            } else {
-                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh 0.5 atau bilangan bulat positif (1, 2, dst)');
-            }
-            closeAbsenModal();
-        });
-
-        closeModalButton.addEventListener('click', closeAbsenModal);
-
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const firstDayIndex = new Date(year, month, 1).getDay();
-
-            calendarElement.innerHTML = '';
-            monthNameElement.textContent = `${monthNames[month]} ${year}`;
-
-            const today = new Date();
-            const isTodayInCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyElement = document.createElement('div');
-                calendarElement.appendChild(emptyElement);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day');
-                dayElement.textContent = `${day}`;
-
-                const key = `${year}-${month}-${day}`;
-
-                if (isHoliday(year, month, day)) {
-                    dayElement.classList.add('holiday');
-                }
-
-                if (savedWorkdays[key]) {
-                    dayElement.classList.add('workday');
-                    if (savedWorkdays[key].type === 'lembur') {
-                        dayElement.classList.add('overtime');
-                    }
-                }
-
-                if (isTodayInCurrentMonth && day === today.getDate()) {
-                    dayElement.classList.add('today');
-                }
-
-                dayElement.addEventListener('click', () => {
-                    if (savedWorkdays[key]) {
-                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
-                            delete savedWorkdays[key];
-                            dayElement.classList.remove('workday', 'overtime');
-                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                            updateWorkdaysCount();
-                        }
-                    } else {
-                        openAbsenModal(dayElement, key);
-                    }
-                });
-
-                calendarElement.appendChild(dayElement);
-            }
-
-            updateWorkdaysCount();
-            updateMonthlyEarnings();
-            saveCurrentDate();
-        }
-
-        function updateWorkdaysCount() {
-            const count = Object.keys(savedWorkdays).filter(key => {
-                const [year, month] = key.split('-').map(Number);
-                return year === currentDate.getFullYear() && month === currentDate.getMonth();
-            }).length;
-            workdaysCountElement.textContent = `Hari kerja: ${count}`;
-            updateTotalEarnings();
-            updateMonthlyEarnings();
-        }
-
-        function updateMonthlyEarnings() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-
-            for (const key in savedWorkdays) {
-                const [y, m] = key.split('-').map(Number);
-                if (y === year && m === month) {
-                    if (savedWorkdays[key].type === 'normal') {
-                        dailyTotal += dailyEarnings;
-                    } else if (savedWorkdays[key].type === 'lembur') {
-                        dailyTotal += dailyEarnings;
-                        const jam = savedWorkdays[key].hours;
-                        if (jam === 0.5) {
-                            overtimeTotal += 10000;
-                        } else if (Number.isInteger(jam) && jam > 0) {
-                            overtimeTotal += jam * 20000;
-                        }
-                    }
-                }
-            }
-
-            dailyEarningsTotalElement.textContent = `Harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `Lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-            const overallTotal = dailyTotal + overtimeTotal;
-            monthlyEarningsElement.textContent = `Bulan ini: Rp ${overallTotal.toLocaleString('id-ID')}`;
-        }
-
-        function updateTotalEarnings() {
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-
-            for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    dailyTotal += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    dailyTotal += dailyEarnings;
-                    const jam = savedWorkdays[key].hours;
-                    if (jam === 0.5) {
-                        overtimeTotal += 10000;
-                    } else if (Number.isInteger(jam) && jam > 0) {
-                        overtimeTotal += jam * 20000;
-                    }
-                }
-            }
-
-            const overallTotal = dailyTotal + overtimeTotal;
-            totalEarningsElement.textContent = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
-        }
-
-        function saveCurrentDate() {
-            localStorage.setItem('savedDate', JSON.stringify(currentDate));
-        }
-
-        prevMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        nextMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        renderCalendar();
-    </script>
-</body>
-</html>
+    }
+</style>
