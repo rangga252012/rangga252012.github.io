@@ -64,6 +64,7 @@
         .header {
             text-align: center;
             margin: 20px 0;
+            position: relative;
         }
         .factory-name {
             font-size: 1.1em;
@@ -147,10 +148,34 @@
             font-weight: bold; /* Tetap tebal */
             margin-top: 10px; /* Tambahkan sedikit jarak untuk tampilan */
         }
+        /* Tambahan: Style untuk link kanan atas */
+        .top-right-link {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.1em;
+            color: #4FC3F7; /* biru muda */
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+        .top-right-link:hover {
+            color: #81d4fa;
+            text-decoration: underline;
+        }
+        /* Penanda kustom untuk edit link RNG_SF */
+        /* == RNG_SF LINK CUSTOM START == */
+        /* Ubah href di elemen #rngsf-link untuk merubah tujuan! */
+        /* == RNG_SF LINK CUSTOM END == */
     </style>
 </head>
 <body>
     <div class="header">
+        <!-- == RNG_SF LINK CUSTOM START == -->
+        <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
+        <!-- == RNG_SF LINK CUSTOM END == -->
         <h1>Kalender Absen</h1>
         <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
         <p id="month-name" class="month-name"></p>
