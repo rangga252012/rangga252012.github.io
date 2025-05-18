@@ -143,10 +143,11 @@
         .small-text {
             font-size: 0.8em; /* Smaller text for total earnings */
         }
-        #total-earnings {
-            font-size: 1.2em; /* Ukuran lebih kecil dari sebelumnya */
-            font-weight: bold; /* Tetap tebal */
-            margin-top: 10px; /* Tambahkan sedikit jarak untuk tampilan */
+        #total-earnings,
+        #monthly-earnings {
+            font-size: 1.2em; /* Ukuran lebih besar */
+            font-weight: bold;
+            margin-top: 10px;
         }
         /* Tambahan: Style untuk link kanan atas */
         .top-right-link {
@@ -198,7 +199,7 @@
     <div class="footer small-text">
         <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
         <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
-        <p id="monthly-earnings" class="small-text">Total pendapatan per bulan: Rp 0</p>
+        <p id="monthly-earnings">Total pendapatan per bulan: Rp 0</p>
         <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
     </div>
 
@@ -380,33 +381,7 @@
             updateMonthlyEarnings();
         }
 
-        function updateTotalEarnings() {
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-            
-            for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    dailyTotal += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    dailyTotal += dailyEarnings; // Tambahkan gaji harian untuk hari lembur
-                    // Overtime calculation: 0.5 jam = 10.000, >=1 jam = 20.000/jam
-                    const jam = savedWorkdays[key].hours;
-                    if (jam === 0.5) {
-                        overtimeTotal += 10000;
-                    } else if (Number.isInteger(jam) && jam > 0) {
-                        overtimeTotal += jam * 20000;
-                    }
-                }
-            }
-
-            const overallTotal = dailyTotal + overtimeTotal;
-
-            dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-            totalEarningsElement.textContent = `Total pendapatan keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
-        }
-
-        // Fungsi baru untuk total pendapatan per bulan
+        // MODIFIKASI: total harian & lembur sekarang hanya per bulan (reset tiap bulan)
         function updateMonthlyEarnings() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -431,8 +406,35 @@
                 }
             }
 
+            // Update tampilan harian & lembur: hanya per bulan berjalan
+            dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
+            overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
+
             const overallTotal = dailyTotal + overtimeTotal;
             monthlyEarningsElement.textContent = `Total pendapatan per bulan: Rp ${overallTotal.toLocaleString('id-ID')}`;
+        }
+
+        // MODIFIKASI: total keseluruhan tetap semua bulan
+        function updateTotalEarnings() {
+            let dailyTotal = 0;
+            let overtimeTotal = 0;
+
+            for (const key in savedWorkdays) {
+                if (savedWorkdays[key].type === 'normal') {
+                    dailyTotal += dailyEarnings;
+                } else if (savedWorkdays[key].type === 'lembur') {
+                    dailyTotal += dailyEarnings;
+                    const jam = savedWorkdays[key].hours;
+                    if (jam === 0.5) {
+                        overtimeTotal += 10000;
+                    } else if (Number.isInteger(jam) && jam > 0) {
+                        overtimeTotal += jam * 20000;
+                    }
+                }
+            }
+
+            const overallTotal = dailyTotal + overtimeTotal;
+            totalEarningsElement.textContent = `Total pendapatan keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
         }
 
         function saveCurrentDate() {
