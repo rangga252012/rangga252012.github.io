@@ -7,17 +7,17 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f6f7fa;
-            color: #212121;
+            background-color: #15171a; /* Ubah ke gelap */
+            color: #f2f2f2;
             margin: 0;
             padding: 0;
         }
         .container {
             max-width: 420px;
             margin: 32px auto 0 auto;
-            background: #fff;
+            background: #23272f; /* Ubah ke gelap */
             border-radius: 8px;
-            border: 1px solid #ececec;
+            border: 1px solid #23242a;
             box-shadow: none;
             padding-bottom: 18px;
         }
@@ -25,12 +25,12 @@
             text-align: center;
             padding: 22px 0 0 0;
             background: none;
-            border-bottom: 1px solid #ececec;
+            border-bottom: 1px solid #22242a;
             position: relative;
         }
         .factory-name {
             font-size: 1em;
-            color: #757575;
+            color: #b0b0b0;
             margin-bottom: 0.4em;
             letter-spacing: 0;
         }
@@ -43,7 +43,7 @@
         #workdays-count {
             margin: 0 0 10px 0;
             font-size: 1em;
-            color: #388e3c;
+            color: #8ee38e;
             font-weight: 500;
         }
         .navigation {
@@ -55,9 +55,9 @@
         }
         .navigation button {
             padding: 6px 13px;
-            border: 1px solid #bdbdbd;
-            background: #f7f7f7;
-            color: #333;
+            border: 1px solid #353940;
+            background: #181b1f;
+            color: #f2f2f2;
             border-radius: 5px;
             font-size: 1em;
             box-shadow: none;
@@ -65,8 +65,8 @@
             transition: background 0.16s, border 0.16s;
         }
         .navigation button:hover {
-            background: #e0e0e0;
-            border: 1px solid #888;
+            background: #2a2e35;
+            border: 1px solid #656a75;
         }
         .day-names {
             display: grid;
@@ -79,7 +79,7 @@
             padding: 4px 0 3px 0;
         }
         .day-names div {
-            color: #607d8b;
+            color: #90a4ae;
             font-size: 0.98em;
         }
         .calendar {
@@ -90,35 +90,35 @@
             min-height: 210px;
         }
         .day {
-            border: 1px solid #e0e0e0;
+            border: 1px solid #23242a;
             padding: 7px 0;
             text-align: center;
             cursor: pointer;
-            background: #fafbfc;
-            color: #212121;
+            background: #181b1f;
+            color: #f2f2f2;
             font-size: 1em;
             border-radius: 5px;
             box-shadow: none;
             transition: background 0.13s, color 0.13s;
         }
         .day:hover {
-            background: #e3eaf1;
-            color: #1976d2;
+            background: #23272f;
+            color: #6bbcf7;
         }
         .day.workday {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: #1d2d22;
+            color: #8ee38e;
         }
         .day.today {
-            border: 1.5px solid #1976d2;
+            border: 1.5px solid #58a6ff;
         }
         .day.holiday {
-            background: #ffecec;
-            color: #c62828;
+            background: #3a2323;
+            color: #ff8383;
         }
         .day.overtime {
-            background: #fffde7;
-            color: #b59d0b;
+            background: #35310c;
+            color: #ffe082;
         }
         .footer {
             margin: 20px 14px 0 14px;
@@ -127,7 +127,7 @@
             box-shadow: none;
             padding: 7px 0 0 0;
             font-size: 0.98em;
-            color: #555;
+            color: #b5b5b5;
         }
         .footer p {
             margin: 0 0 7px 0;
@@ -135,11 +135,11 @@
         }
         #monthly-earnings {
             font-weight: 600;
-            color: #1976d2;
+            color: #6bbcf7;
         }
         #total-earnings {
             font-weight: 600;
-            color: #388e3c;
+            color: #8ee38e;
         }
         .small-text {
             font-size: 0.98em;
@@ -150,54 +150,54 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(10, 10, 10, 0.27);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         #absenModal div {
-            background: #fff;
+            background: #282c34;
             padding: 18px 20px 14px 20px;
             border-radius: 7px;
             text-align: center;
             min-width: 170px;
-            box-shadow: 0 2px 8px #0002;
+            box-shadow: 0 2px 8px #000b;
         }
         #absenModal div p {
-            color: #1a1a1a;
+            color: #f2f2f2;
             font-size: 1em;
             margin-bottom: 13px;
         }
         #absenModal div button {
             margin: 0 5px;
             padding: 7px 15px;
-            border: 1px solid #bdbdbd;
+            border: 1px solid #353940;
             border-radius: 5px;
             font-size: 1em;
-            background: #f5f5f5;
-            color: #333;
+            background: #181b1f;
+            color: #f2f2f2;
             cursor: pointer;
             box-shadow: none;
             transition: background 0.13s;
         }
         #absenModal div button:hover {
-            background: #e0e0e0;
+            background: #23272f;
         }
         #lemburAbsenButton {
-            background: #fffde7;
-            color: #b59d0b;
+            background: #35310c;
+            color: #ffe082;
             border-color: #ffe082;
         }
         #lemburAbsenButton:hover {
-            background: #fff9c4;
+            background: #483e1f;
         }
         #closeModalButton {
-            background: #ffecec;
-            color: #c62828;
-            border-color: #ffcdd2;
+            background: #3a2323;
+            color: #ff8383;
+            border-color: #ffb3b3;
         }
         #closeModalButton:hover {
-            background: #ffcdd2;
+            background: #5a3030;
         }
         /* Top right link */
         .top-right-link {
@@ -205,14 +205,14 @@
             top: 13px;
             right: 20px;
             font-size: 0.86em;
-            color: #1976d2;
+            color: #6bbcf7;
             text-decoration: none;
             font-weight: normal;
             letter-spacing: 1px;
             z-index: 10;
         }
         .top-right-link:hover {
-            color: #1976d2;
+            color: #8ed6fb;
             text-decoration: underline;
         }
         @media (max-width: 600px) {
@@ -237,7 +237,7 @@
     <div class="container">
         <div class="header">
             <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
-            <h1 style="margin-bottom: 5px; margin-top: 0; font-size: 1.5em; color: #222; font-weight: 600; letter-spacing: 0;">Kalender Absen</h1>
+            <h1 style="margin-bottom: 5px; margin-top: 0; font-size: 1.5em; color: #f2f2f2; font-weight: 600; letter-spacing: 0;">Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
             <p id="month-name" class="month-name"></p>
             <p id="workdays-count">Hari kerja: 0</p>
