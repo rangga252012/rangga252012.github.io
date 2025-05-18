@@ -7,249 +7,212 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #181C20;
-            color: #f3f3f3;
+            background-color: #f6f7fa;
+            color: #212121;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 480px;
+            max-width: 420px;
             margin: 32px auto 0 auto;
-            background: #21252b;
-            border-radius: 15px;
-            box-shadow: 0 3px 24px 0 #0007;
-            padding-bottom: 24px;
-            overflow: hidden;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ececec;
+            box-shadow: none;
+            padding-bottom: 18px;
         }
         .header {
             text-align: center;
-            padding: 30px 0 0 0;
-            background: linear-gradient(90deg, #263238 0%, #1e272e 100%);
-            border-bottom: 1px solid #2e3a44;
+            padding: 22px 0 0 0;
+            background: none;
+            border-bottom: 1px solid #ececec;
             position: relative;
         }
         .factory-name {
-            font-size: 1.05em;
-            color: #b3e5fc;
-            margin-bottom: 0.5em;
-            letter-spacing: 1px;
+            font-size: 1em;
+            color: #757575;
+            margin-bottom: 0.4em;
+            letter-spacing: 0;
         }
         .month-name {
-            font-size: 1.7em;
-            margin: 12px 0 4px 0;
-            font-weight: 600;
-            letter-spacing: 2px;
+            font-size: 1.2em;
+            margin: 8px 0 4px 0;
+            font-weight: 500;
+            letter-spacing: 0;
         }
         #workdays-count {
-            margin: 0 0 14px 0;
+            margin: 0 0 10px 0;
             font-size: 1em;
-            color: #aed581;
+            color: #388e3c;
+            font-weight: 500;
         }
         .navigation {
             text-align: center;
-            margin: 20px 0 10px 0;
+            margin: 18px 0 8px 0;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 14px;
         }
         .navigation button {
-            padding: 8px 16px;
-            border: none;
-            background: #388e3c;
-            color: #fafafa;
-            border-radius: 6px;
+            padding: 6px 13px;
+            border: 1px solid #bdbdbd;
+            background: #f7f7f7;
+            color: #333;
+            border-radius: 5px;
             font-size: 1em;
-            box-shadow: 0 1px 4px #1113;
-            transition: background 0.2s, transform 0.1s;
+            box-shadow: none;
+            cursor: pointer;
+            transition: background 0.16s, border 0.16s;
         }
         .navigation button:hover {
-            background: #43a047;
-            transform: translateY(-2px) scale(1.06);
+            background: #e0e0e0;
+            border: 1px solid #888;
         }
         .day-names {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            font-weight: bold;
+            font-weight: 500;
             text-align: center;
-            margin: 0 20px 0 20px;
-            background: #232c33;
-            border-radius: 8px 8px 0 0;
-            padding: 6px 0 4px 0;
+            margin: 0 14px 0 14px;
+            background: none;
+            border-radius: 0;
+            padding: 4px 0 3px 0;
         }
         .day-names div {
-            color: #90caf9;
+            color: #607d8b;
             font-size: 0.98em;
-            letter-spacing: 1px;
         }
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin: 12px 20px 0 20px;
-            min-height: 240px;
+            gap: 7px;
+            margin: 10px 14px 0 14px;
+            min-height: 210px;
         }
         .day {
-            border: 1px solid #353c42;
-            padding: 10px 0;
+            border: 1px solid #e0e0e0;
+            padding: 7px 0;
             text-align: center;
             cursor: pointer;
-            background: #24292f;
-            color: #fff;
-            position: relative;
-            font-size: 1.08em;
-            border-radius: 8px;
-            box-shadow: 0 0.5px 2.5px #0002;
-            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            background: #fafbfc;
+            color: #212121;
+            font-size: 1em;
+            border-radius: 5px;
+            box-shadow: none;
+            transition: background 0.13s, color 0.13s;
         }
         .day:hover {
-            background: #2e7d32;
-            color: #fff;
+            background: #e3eaf1;
+            color: #1976d2;
         }
         .day.workday {
-            background: linear-gradient(90deg, #388e3c 0%, #43a047 100%);
-            color: #fff;
-            font-weight: 600;
+            background: #e8f5e9;
+            color: #2e7d32;
         }
-        .day.today::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            background: var(--today-marker, #45a049);
-            border-radius: 50%;
-            position: absolute;
-            top: 6px;
-            left: 7px;
+        .day.today {
+            border: 1.5px solid #1976d2;
         }
-        .day.holiday::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            background: var(--holiday-marker, #ff5252);
-            border-radius: 50%;
-            position: absolute;
-            top: 6px;
-            left: 7px;
-        }
-        .day.overtime::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            background: var(--overtime-marker, #ffe082);
-            border-radius: 50%;
-            position: absolute;
-            top: 6px;
-            left: 7px;
+        .day.holiday {
+            background: #ffecec;
+            color: #c62828;
         }
         .day.overtime {
-            box-shadow: 0 0 0 2px #ffe082aa;
-            background: linear-gradient(90deg, #388e3c 60%, #fff176 100%);
+            background: #fffde7;
+            color: #b59d0b;
         }
         .footer {
-            margin: 30px 24px 0 24px;
-            background: #232c33;
-            border-radius: 10px;
-            box-shadow: 0 1.5px 4px #0002;
-            padding: 17px 24px 14px 24px;
-            font-size: 1.06em;
+            margin: 20px 14px 0 14px;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 7px 0 0 0;
+            font-size: 0.98em;
+            color: #555;
         }
         .footer p {
-            margin: 0 0 10px 0;
-            line-height: 1.55;
+            margin: 0 0 7px 0;
+            line-height: 1.4;
         }
         #monthly-earnings {
-            font-size: 1.15em;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-        .footer hr {
-            border: none;
-            height: 1.5px;
-            background: linear-gradient(90deg, #2e3a44 0%, #43a04788 50%, #2e3a44 100%);
-            margin: 18px 0 12px 0;
+            font-weight: 600;
+            color: #1976d2;
         }
         #total-earnings {
-            font-size: 1.15em;
-            font-weight: bold;
-            color: #ffd54f;
-            letter-spacing: 1px;
-            margin-top: 0px;
+            font-weight: 600;
+            color: #388e3c;
         }
         .small-text {
             font-size: 0.98em;
-            opacity: 0.85;
+            opacity: 0.92;
         }
         /* Modal Styling */
         #absenModal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.82);
+            background: rgba(0, 0, 0, 0.15);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         #absenModal div {
-            background: #222f3e;
-            padding: 28px 28px 22px 28px;
-            border-radius: 13px;
+            background: #fff;
+            padding: 18px 20px 14px 20px;
+            border-radius: 7px;
             text-align: center;
-            min-width: 200px;
-            box-shadow: 0 3px 18px #0006;
+            min-width: 170px;
+            box-shadow: 0 2px 8px #0002;
         }
         #absenModal div p {
-            color: #fafafa;
-            font-size: 1.13em;
-            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-size: 1em;
+            margin-bottom: 13px;
         }
         #absenModal div button {
-            margin: 0 7px;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 7px;
+            margin: 0 5px;
+            padding: 7px 15px;
+            border: 1px solid #bdbdbd;
+            border-radius: 5px;
             font-size: 1em;
-            background: #388e3c;
-            color: #fff;
+            background: #f5f5f5;
+            color: #333;
             cursor: pointer;
-            box-shadow: 0 1px 3px #0002;
-            transition: background 0.16s, color 0.16s;
+            box-shadow: none;
+            transition: background 0.13s;
         }
         #absenModal div button:hover {
-            background: #43a047;
-        }
-        #normalAbsenButton {
-            float: right;
+            background: #e0e0e0;
         }
         #lemburAbsenButton {
-            background: #ffe082;
-            color: #222;
-            margin: 0 10px;
+            background: #fffde7;
+            color: #b59d0b;
+            border-color: #ffe082;
         }
         #lemburAbsenButton:hover {
-            background: #fff176;
+            background: #fff9c4;
         }
         #closeModalButton {
-            float: left;
-            background: #ff5252;
-            color: #fff;
+            background: #ffecec;
+            color: #c62828;
+            border-color: #ffcdd2;
         }
         #closeModalButton:hover {
-            background: #e53935;
+            background: #ffcdd2;
         }
         /* Top right link */
         .top-right-link {
             position: absolute;
             top: 13px;
-            right: 23px;
-            font-size: 0.85em;
-            color: #4FC3F7;
+            right: 20px;
+            font-size: 0.86em;
+            color: #1976d2;
             text-decoration: none;
-            font-weight: bold;
-            letter-spacing: 2px;
-            transition: color 0.2s;
+            font-weight: normal;
+            letter-spacing: 1px;
             z-index: 10;
         }
         .top-right-link:hover {
-            color: #81d4fa;
+            color: #1976d2;
             text-decoration: underline;
         }
         @media (max-width: 600px) {
@@ -258,11 +221,10 @@
                 margin: 0;
                 border-radius: 0;
                 box-shadow: none;
-                padding-bottom: 16px;
+                padding-bottom: 10px;
             }
             .footer {
-                padding: 13px 7vw 13px 7vw;
-                margin: 18px 3vw 0 3vw;
+                margin: 13px 2vw 0 2vw;
             }
             .calendar, .day-names {
                 margin-left: 2vw;
@@ -274,34 +236,31 @@
 <body>
     <div class="container">
         <div class="header">
-            <!-- == RNG_SF LINK CUSTOM START == -->
             <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
-            <!-- == RNG_SF LINK CUSTOM END == -->
-            <h1 style="margin-bottom: 7px; margin-top: 0; font-size: 2.1em; color: #e3e3e3; letter-spacing: 2px;">Kalender Absen</h1>
+            <h1 style="margin-bottom: 5px; margin-top: 0; font-size: 1.5em; color: #222; font-weight: 600; letter-spacing: 0;">Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
             <p id="month-name" class="month-name"></p>
             <p id="workdays-count">Hari kerja: 0</p>
         </div>
         <div class="navigation">
-            <button id="prev-month">&larr; Bulan Sebelumnya</button>
-            <button id="next-month">Bulan Berikutnya &rarr;</button>
+            <button id="prev-month">&larr; Sebelumnya</button>
+            <button id="next-month">Berikutnya &rarr;</button>
         </div>
         <div class="day-names">
-            <div>Minggu</div>
-            <div>Senin</div>
-            <div>Selasa</div>
-            <div>Rabu</div>
-            <div>Kamis</div>
-            <div>Jumat</div>
-            <div>Sabtu</div>
+            <div>Min</div>
+            <div>Sen</div>
+            <div>Sel</div>
+            <div>Rab</div>
+            <div>Kam</div>
+            <div>Jum</div>
+            <div>Sab</div>
         </div>
         <div id="calendar" class="calendar"></div>
         <div class="footer small-text">
-            <p id="daily-earnings-total">Total pendapatan harian: Rp 0</p>
-            <p id="overtime-earnings-total">Total pendapatan lembur: Rp 0</p>
-            <p id="monthly-earnings">Total pendapatan per bulan: Rp 0</p>
-            <hr>
-            <p id="total-earnings">Total pendapatan keseluruhan: Rp 0</p>
+            <p id="daily-earnings-total">Harian: Rp 0</p>
+            <p id="overtime-earnings-total">Lembur: Rp 0</p>
+            <p id="monthly-earnings">Bulan ini: Rp 0</p>
+            <p id="total-earnings">Total: Rp 0</p>
         </div>
     </div>
     <!-- Modal for selecting absen type -->
@@ -314,6 +273,7 @@
         </div>
     </div>
     <script>
+        // (Script JS tetap, tidak perlu diubah.)
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
         const totalEarningsElement = document.getElementById('total-earnings');
@@ -327,7 +287,6 @@
         const normalAbsenButton = document.getElementById('normalAbsenButton');
         const lemburAbsenButton = document.getElementById('lemburAbsenButton');
         const closeModalButton = document.getElementById('closeModalButton');
-        // Handle RNG_SF link peringatan
         const rngsfLink = document.getElementById('rngsf-link');
 
         if (rngsfLink) {
@@ -386,7 +345,6 @@
         });
 
         lemburAbsenButton.addEventListener('click', () => {
-            // Prompt user for overtime hours, allow decimals like 0.5
             const overtimeHoursStr = prompt('Masukkan jumlah jam lembur (boleh setengah, misal: 0.5):');
             if (!overtimeHoursStr) {
                 closeAbsenModal();
@@ -481,7 +439,6 @@
             updateMonthlyEarnings();
         }
 
-        // MODIFIKASI: total harian & lembur sekarang hanya per bulan (reset tiap bulan)
         function updateMonthlyEarnings() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -506,14 +463,12 @@
                 }
             }
 
-            dailyEarningsTotalElement.textContent = `Total pendapatan harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `Total pendapatan lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-
+            dailyEarningsTotalElement.textContent = `Harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
+            overtimeEarningsTotalElement.textContent = `Lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
             const overallTotal = dailyTotal + overtimeTotal;
-            monthlyEarningsElement.textContent = `Total pendapatan per bulan: Rp ${overallTotal.toLocaleString('id-ID')}`;
+            monthlyEarningsElement.textContent = `Bulan ini: Rp ${overallTotal.toLocaleString('id-ID')}`;
         }
 
-        // MODIFIKASI: total keseluruhan tetap semua bulan
         function updateTotalEarnings() {
             let dailyTotal = 0;
             let overtimeTotal = 0;
@@ -533,7 +488,7 @@
             }
 
             const overallTotal = dailyTotal + overtimeTotal;
-            totalEarningsElement.textContent = `Total pendapatan keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}`;
+            totalEarningsElement.textContent = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
         }
 
         function saveCurrentDate() {
