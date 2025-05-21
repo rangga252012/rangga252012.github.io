@@ -144,7 +144,6 @@
             position: relative;
             outline: none;
         }
-        /* Hari ini efek glowing */
         .day.today {
             border: 2.2px solid var(--primary);
             box-shadow: var(--today-glow);
@@ -175,19 +174,19 @@
             z-index: 5;
         }
         .footer {
-            margin: 26px 18px 0 18px;
+            margin: 16px 12px 0 12px;
             background: none;
             border-radius: 0;
             box-shadow: none;
-            padding: 9px 0 0 0;
-            font-size: 1.04em;
+            padding: 6px 0 0 0;
+            font-size: 0.95em;
             color: #b5b5b5;
             text-align: left;
             font-weight: 500;
         }
         .footer p {
-            margin: 0 0 8px 0;
-            line-height: 1.5;
+            margin: 0 0 5px 0;
+            line-height: 1.4;
             letter-spacing: 0.1px;
         }
         #monthly-earnings {
@@ -201,10 +200,9 @@
             letter-spacing: 1px;
         }
         .small-text {
-            font-size: 0.97em;
-            opacity: 0.93;
+            font-size: 0.94em;
+            opacity: 0.92;
         }
-        /* Modal Styling */
         #absenModal {
             display: none;
             position: fixed;
@@ -282,7 +280,6 @@
             color: #fff;
             border-color: var(--danger);
         }
-        /* Top right link */
         .top-right-link {
             position: absolute;
             top: 18px;
@@ -311,17 +308,28 @@
             font-weight: 700;
             letter-spacing: 0.5px;
         }
-        /* Tambahan untuk daftar lembur */
+        /* Daftar lembur singkat */
         .lembur-list {
-            margin: 2px 0 0 0;
-            padding: 0 0 0 18px;
-            list-style: disc;
-            font-size: 0.97em;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            list-style: none;
+            font-size: 0.95em;
             color: var(--warning);
             font-weight: 600;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px 10px;
         }
         .lembur-list li {
-            margin-bottom: 2px;
+            margin: 0;
+            padding: 1px 6px;
+            border-radius: 8px;
+            background: #22232a;
+            color: #ffe082;
+            font-size: 0.96em;
+            white-space: nowrap;
+            line-height: 1.7;
+            letter-spacing: 0.5px;
         }
         @media (max-width: 600px) {
             .container {
@@ -332,7 +340,7 @@
                 padding-bottom: 13px;
             }
             .footer {
-                margin: 15px 2vw 0 2vw;
+                margin: 10px 2vw 0 2vw;
             }
             .calendar, .day-names {
                 margin-left: 2vw;
@@ -340,6 +348,10 @@
             }
             #absenModal div {
                 padding: 19px 3vw 15px 3vw;
+            }
+            .lembur-list {
+                font-size: 0.94em;
+                gap: 4px 6px;
             }
         }
     </style>
@@ -368,9 +380,9 @@
         </div>
         <div id="calendar" class="calendar"></div>
         <div class="footer small-text">
+            <ul id="lembur-days-list" class="lembur-list"></ul>
             <p id="daily-earnings-total">Harian: Rp 0</p>
             <p id="overtime-earnings-total">Lembur: Rp 0</p>
-            <ul id="lembur-days-list" class="lembur-list"></ul>
             <p id="monthly-earnings">Bulan ini: Rp 0</p>
             <p id="total-earnings">Total: Rp 0</p>
         </div>
@@ -553,6 +565,17 @@
             updateMonthlyEarnings();
         }
 
+        // Helper singkat: format lembur misal "1j:20K"
+        function formatShortLembur(hours) {
+            let jam = hours;
+            let uang = hours * 20000;
+            let uangStr = uang >= 1000000 ? Math.round(uang/1000)+'K' : uang.toLocaleString('id-ID', {maximumFractionDigits:0});
+            if(uang % 1000 === 0 && uang >= 1000) uangStr = (uang/1000)+'K';
+            let jamStr = jam % 1 === 0.5 ? (Math.floor(jam) ? Math.floor(jam)+'½' : '½') : jam;
+            if (typeof jamStr === 'number') jamStr = jamStr + '';
+            return jamStr+'j:'+uangStr;
+        }
+
         function updateMonthlyEarnings() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -569,8 +592,7 @@
                     } else if (savedWorkdays[key].type === 'lembur') {
                         dailyTotal += dailyEarnings;
                         const jam = savedWorkdays[key].hours;
-                        overtimeTotal += jam * 20000; // 1 jam = 20.000, 0.5 jam = 10.000
-                        // Tambahkan ke daftar lembur
+                        overtimeTotal += jam * 20000;
                         let dateObj = new Date(year, month, d);
                         lemburDays.push({
                             tanggal: dateObj,
@@ -580,12 +602,6 @@
                 }
             }
 
-            dailyEarningsTotalElement.textContent = `Harian: Rp ${dailyTotal.toLocaleString('id-ID')}`;
-            overtimeEarningsTotalElement.textContent = `Lembur: Rp ${overtimeTotal.toLocaleString('id-ID')}`;
-            const overallTotal = dailyTotal + overtimeTotal;
-            monthlyEarningsElement.textContent = `Bulan ini: Rp ${overallTotal.toLocaleString('id-ID')}`;
-
-            // Tampilkan daftar lembur
             lemburDaysList.innerHTML = "";
             if (lemburDays.length > 0) {
                 lemburDays
@@ -593,9 +609,16 @@
                     .forEach(item => {
                         const tgl = item.tanggal.getDate().toString().padStart(2, '0');
                         const bln = (item.tanggal.getMonth() + 1).toString().padStart(2, '0');
-                        lemburDaysList.innerHTML += `<li>${tgl}/${bln} - ${item.jam} jam</li>`;
+                        let singkat = formatShortLembur(item.jam);
+                        lemburDaysList.innerHTML += `<li>${tgl}/${bln}:${singkat}</li>`;
                     });
             }
+
+            // Tanda ·>
+            dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
+            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lembur: <b>Rp ${overtimeTotal.toLocaleString('id-ID')}</b>`;
+            const overallTotal = dailyTotal + overtimeTotal;
+            monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
         }
 
         function updateTotalEarnings() {
@@ -613,7 +636,7 @@
             }
 
             const overallTotal = dailyTotal + overtimeTotal;
-            totalEarningsElement.textContent = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
+            totalEarningsElement.innerHTML = `&middot;&gt; Total: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
         }
 
         function saveCurrentDate() {
