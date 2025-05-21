@@ -311,56 +311,17 @@
             font-weight: 700;
             letter-spacing: 0.5px;
         }
-
-        /* LEMBUR BADGE BARU */
-        .lembur-badge-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px 7px;
-            margin: 6px 0 0 0;
-            padding: 0;
-            min-height: 26px;
-        }
-        .lembur-badge {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: linear-gradient(90deg, #252c1f 60%, #2d2b1e 100%);
-            border: 1.2px solid #ffe08255;
+        /* Tambahan untuk daftar lembur */
+        .lembur-list {
+            margin: 2px 0 0 0;
+            padding: 0 0 0 18px;
+            list-style: disc;
+            font-size: 0.97em;
             color: var(--warning);
-            font-size: 0.93em;
-            font-weight: 700;
-            border-radius: 8px;
-            padding: 3px 10px 3px 7px;
-            box-shadow: 0 1px 7px #ffe08212;
-            letter-spacing: 0.5px;
-            transition: background 0.18s, border 0.18s, color 0.18s;
-            position: relative;
-            user-select: none;
-        }
-        .lembur-badge::before {
-            content: "⏱️";
-            font-size: 1em;
-            margin-right: 4px;
-        }
-        .lembur-badge-date {
-            color: #fffbe7;
             font-weight: 600;
-            font-size: 0.95em;
-            letter-spacing: 0.2px;
-            margin-right: 2px;
         }
-        .lembur-badge-jam {
-            color: var(--warning);
-            font-weight: 700;
-            font-size: 0.94em;
-        }
-        /* Tambahan efek hover */
-        .lembur-badge:hover, .lembur-badge:focus {
-            background: linear-gradient(90deg, #232c47 0%, #2b4c7e 100%);
-            color: #fff;
-            border-color: var(--primary);
-            box-shadow: 0 0 6px 2px #41d1ff22;
+        .lembur-list li {
+            margin-bottom: 2px;
         }
         @media (max-width: 600px) {
             .container {
@@ -379,9 +340,6 @@
             }
             #absenModal div {
                 padding: 19px 3vw 15px 3vw;
-            }
-            .lembur-badge-bar {
-                gap: 6px 3px;
             }
         }
     </style>
@@ -412,7 +370,7 @@
         <div class="footer small-text">
             <p id="daily-earnings-total">Harian: Rp 0</p>
             <p id="overtime-earnings-total">Lembur: Rp 0</p>
-            <div id="lembur-badge-bar" class="lembur-badge-bar"></div>
+            <ul id="lembur-days-list" class="lembur-list"></ul>
             <p id="monthly-earnings">Bulan ini: Rp 0</p>
             <p id="total-earnings">Total: Rp 0</p>
         </div>
@@ -442,7 +400,7 @@
         const lemburAbsenButton = document.getElementById('lemburAbsenButton');
         const closeModalButton = document.getElementById('closeModalButton');
         const rngsfLink = document.getElementById('rngsf-link');
-        const lemburBadgeBar = document.getElementById('lembur-badge-bar');
+        const lemburDaysList = document.getElementById('lembur-days-list');
 
         if (rngsfLink) {
             rngsfLink.addEventListener('click', function(e) {
@@ -557,3 +515,37 @@
                     dayElement.classList.add('workday');
                     if (savedWorkdays[key].type === 'lembur') {
                         dayElement.classList.add('overtime');
+                    }
+                }
+
+                if (isTodayInCurrentMonth && day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+
+                dayElement.addEventListener('click', () => {
+                    if (savedWorkdays[key]) {
+                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
+                            delete savedWorkdays[key];
+                            dayElement.classList.remove('workday', 'overtime');
+                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+                            updateWorkdaysCount();
+                        }
+                    } else {
+                        openAbsenModal(dayElement, key);
+                    }
+                });
+
+                calendarElement.appendChild(dayElement);
+            }
+
+            updateWorkdaysCount();
+            updateMonthlyEarnings();
+            saveCurrentDate();
+        }
+
+        function updateWorkdaysCount() {
+            const count = Object.keys(savedWorkdays).filter(key => {
+                const [year, month] = key.split('-').map(Number);
+                return year === currentDate.getFullYear() && month === currentDate.getMonth();
+            }).length;
+            workdaysCountElemen    
