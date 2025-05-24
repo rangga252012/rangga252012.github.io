@@ -280,26 +280,33 @@
             color: #fff;
             border-color: var(--danger);
         }
-        /* --- LOGO STYLE --- */
-        .top-right-logo {
+        .top-right-link {
             position: absolute;
-            top: 12px;
-            right: 16px;
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-            background: #181a1e;
-            box-shadow: 0 2px 10px #0e101422;
-            transition: box-shadow var(--transition), border-color var(--transition);
+            top: 18px;
+            right: 22px;
+            font-size: 0.98em;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 400;
+            letter-spacing: 1.7px;
             z-index: 10;
-            cursor: pointer;
+            background: none;
+            padding: 4px 11px;
+            border-radius: 6px;
+            transition: color var(--transition), background var(--transition);
         }
-        .top-right-logo:hover,
-        .top-right-logo:focus {
-            border-color: #fff;
-            box-shadow: 0 0 0 4px #41d1ff33;
+        .top-right-link:hover, .top-right-link:focus {
+            color: #fff;
+            background: #41d1ff33;
+            text-decoration: underline;
+        }
+        h1 {
+            margin-bottom: 7px;
+            margin-top: 0;
+            font-size: 1.65em;
+            color: var(--text);
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         /* Daftar lembur singkat */
         .lembur-list {
@@ -346,22 +353,13 @@
                 font-size: 0.94em;
                 gap: 4px 6px;
             }
-            .top-right-logo {
-                width: 38px;
-                height: 38px;
-                top: 10px;
-                right: 12px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <!-- LOGO IMAGE REPLACEMENT -->
-            <a href="info/index.html" id="logo-link">
-                <img src="LOGO" alt="Logo" class="top-right-logo" id="top-right-logo">
-            </a>
+            <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
             <h1>Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
             <p id="month-name" class="month-name"></p>
@@ -413,13 +411,11 @@
         const normalAbsenButton = document.getElementById('normalAbsenButton');
         const lemburAbsenButton = document.getElementById('lemburAbsenButton');
         const closeModalButton = document.getElementById('closeModalButton');
-        const logoLink = document.getElementById('logo-link');
-        const logoImg = document.getElementById('top-right-logo');
+        const rngsfLink = document.getElementById('rngsf-link');
         const lemburDaysList = document.getElementById('lembur-days-list');
 
-        // Logo click confirmation like previous text link
-        if (logoLink) {
-            logoLink.addEventListener('click', function(e) {
+        if (rngsfLink) {
+            rngsfLink.addEventListener('click', function(e) {
                 const lanjut = confirm('Peringatan: Anda akan diarahkan ke media sosial saya.  Apakah Anda yakin ingin melanjutkan?');
                 if (!lanjut) {
                     e.preventDefault();
@@ -549,4 +545,7 @@
 
                 dayElement.addEventListener('click', () => {
                     if (savedWorkdays[key]) {
-                        if (confirm('Apakah Anda yakin ingin membatalkan absen untu
+                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
+                            delete savedWorkdays[key];
+                            dayElement.classList.remove('workday', 'overtime');
+                            localStorage.setItem('workdays', JSON.s
