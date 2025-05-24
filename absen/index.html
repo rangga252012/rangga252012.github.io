@@ -281,10 +281,10 @@
             border-color: var(--danger);
         }
         /* --- LOGO STYLE --- */
-        .top-right-logo {
+        .top-left-logo {
             position: absolute;
             top: 12px;
-            right: 16px;
+            left: 16px;
             width: 46px;
             height: 46px;
             border-radius: 50%;
@@ -296,8 +296,8 @@
             z-index: 10;
             cursor: pointer;
         }
-        .top-right-logo:hover,
-        .top-right-logo:focus {
+        .top-left-logo:hover,
+        .top-left-logo:focus {
             border-color: #fff;
             box-shadow: 0 0 0 4px #41d1ff33;
         }
@@ -346,11 +346,11 @@
                 font-size: 0.94em;
                 gap: 4px 6px;
             }
-            .top-right-logo {
+            .top-left-logo {
                 width: 38px;
                 height: 38px;
                 top: 10px;
-                right: 12px;
+                left: 12px;
             }
         }
     </style>
@@ -358,9 +358,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <!-- LOGO IMAGE REPLACEMENT -->
+            <!-- LOGO IMAGE REPLACEMENT: pindah ke kiri atas -->
             <a href="info/index.html" id="logo-link">
-                <img src="LOGO" alt="Logo" class="top-right-logo" id="top-right-logo">
+                <img src="LOGO" alt="Logo" class="top-left-logo" id="top-left-logo">
             </a>
             <h1>Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
@@ -414,7 +414,8 @@
         const lemburAbsenButton = document.getElementById('lemburAbsenButton');
         const closeModalButton = document.getElementById('closeModalButton');
         const logoLink = document.getElementById('logo-link');
-        const logoImg = document.getElementById('top-right-logo');
+        // Ganti ID logo
+        const logoImg = document.getElementById('top-left-logo');
         const lemburDaysList = document.getElementById('lembur-days-list');
 
         // Logo click confirmation like previous text link
@@ -549,124 +550,4 @@
 
                 dayElement.addEventListener('click', () => {
                     if (savedWorkdays[key]) {
-                        if (confirm('Apakah Anda yakin ingin membatalkan absen untuk hari ini?')) {
-                            delete savedWorkdays[key];
-                            dayElement.classList.remove('workday', 'overtime');
-                            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
-                            updateWorkdaysCount();
-                        }
-                    } else {
-                        openAbsenModal(dayElement, key);
-                    }
-                });
-
-                calendarElement.appendChild(dayElement);
-            }
-
-            updateWorkdaysCount();
-            updateMonthlyEarnings();
-            saveCurrentDate();
-        }
-
-        function updateWorkdaysCount() {
-            const count = Object.keys(savedWorkdays).filter(key => {
-                const [year, month] = key.split('-').map(Number);
-                return year === currentDate.getFullYear() && month === currentDate.getMonth();
-            }).length;
-            workdaysCountElement.textContent = `Hari kerja: ${count}`;
-            updateTotalEarnings();
-            updateMonthlyEarnings();
-        }
-
-        // Helper singkat: format lembur misal "1j:20K"
-        function formatShortLembur(hours) {
-            let jam = hours;
-            let uang = hours * overtimeRatePerHalfHour * 2; // 0.5 jam = 10.000
-            let uangStr = uang >= 1000000 ? Math.round(uang/1000)+'K' : uang.toLocaleString('id-ID', {maximumFractionDigits:0});
-            if(uang % 1000 === 0 && uang >= 1000) uangStr = (uang/1000)+'K';
-            let jamStr = jam % 1 === 0.5 ? (Math.floor(jam) ? Math.floor(jam)+'½' : '½') : jam;
-            if (typeof jamStr === 'number') jamStr = jamStr + '';
-            return jamStr+'j:'+uangStr;
-        }
-
-        function updateMonthlyEarnings() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-            let lemburDays = [];
-
-            for (const key in savedWorkdays) {
-                const [y, m, d] = key.split('-').map(Number);
-                if (y === year && m === month) {
-                    if (savedWorkdays[key].type === 'normal') {
-                        dailyTotal += dailyEarnings;
-                    } else if (savedWorkdays[key].type === 'lembur') {
-                        dailyTotal += dailyEarnings;
-                        const jam = savedWorkdays[key].hours;
-                        overtimeTotal += jam * overtimeRatePerHalfHour * 2;
-                        let dateObj = new Date(year, month, d);
-                        lemburDays.push({
-                            tanggal: dateObj,
-                            jam: jam
-                        });
-                    }
-                }
-            }
-
-            lemburDaysList.innerHTML = "";
-            if (lemburDays.length > 0) {
-                lemburDays
-                    .sort((a, b) => a.tanggal - b.tanggal)
-                    .forEach(item => {
-                        const tgl = item.tanggal.getDate().toString().padStart(2, '0');
-                        const bln = (item.tanggal.getMonth() + 1).toString().padStart(2, '0');
-                        let singkat = formatShortLembur(item.jam);
-                        lemburDaysList.innerHTML += `<li>${tgl}/${bln}:${singkat}</li>`;
-                    });
-            }
-
-            // Tanda ·>
-            dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
-            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lembur: <b>Rp ${overtimeTotal.toLocaleString('id-ID')}</b>`;
-            const overallTotal = dailyTotal + overtimeTotal;
-            monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
-        }
-
-        function updateTotalEarnings() {
-            let dailyTotal = 0;
-            let overtimeTotal = 0;
-
-            for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    dailyTotal += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    dailyTotal += dailyEarnings;
-                    const jam = savedWorkdays[key].hours;
-                    overtimeTotal += jam * overtimeRatePerHalfHour * 2;
-                }
-            }
-
-            const overallTotal = dailyTotal + overtimeTotal;
-            totalEarningsElement.innerHTML = `&middot;&gt; Total: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
-        }
-
-        function saveCurrentDate() {
-            localStorage.setItem('savedDate', JSON.stringify(currentDate));
-        }
-
-        prevMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        nextMonthButton.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        renderCalendar();
-    </script>
-</body>
-</html>
+                        if (confirm('Apakah An
