@@ -280,33 +280,26 @@
             color: #fff;
             border-color: var(--danger);
         }
-        .top-right-link {
+        /* --- LOGO STYLE --- */
+        .top-right-logo {
             position: absolute;
-            top: 18px;
-            right: 22px;
-            font-size: 0.98em;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 400;
-            letter-spacing: 1.7px;
+            top: 12px;
+            right: 16px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            background: #181a1e;
+            box-shadow: 0 2px 10px #0e101422;
+            transition: box-shadow var(--transition), border-color var(--transition);
             z-index: 10;
-            background: none;
-            padding: 4px 11px;
-            border-radius: 6px;
-            transition: color var(--transition), background var(--transition);
+            cursor: pointer;
         }
-        .top-right-link:hover, .top-right-link:focus {
-            color: #fff;
-            background: #41d1ff33;
-            text-decoration: underline;
-        }
-        h1 {
-            margin-bottom: 7px;
-            margin-top: 0;
-            font-size: 1.65em;
-            color: var(--text);
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .top-right-logo:hover,
+        .top-right-logo:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 4px #41d1ff33;
         }
         /* Daftar lembur singkat */
         .lembur-list {
@@ -353,13 +346,22 @@
                 font-size: 0.94em;
                 gap: 4px 6px;
             }
+            .top-right-logo {
+                width: 38px;
+                height: 38px;
+                top: 10px;
+                right: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <a href="info/index.html" class="top-right-link" id="rngsf-link">RNG_SF</a>
+            <!-- LOGO IMAGE REPLACEMENT -->
+            <a href="info/index.html" id="logo-link">
+                <img src="LOGO" alt="Logo" class="top-right-logo" id="top-right-logo">
+            </a>
             <h1>Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
             <p id="month-name" class="month-name"></p>
@@ -411,11 +413,13 @@
         const normalAbsenButton = document.getElementById('normalAbsenButton');
         const lemburAbsenButton = document.getElementById('lemburAbsenButton');
         const closeModalButton = document.getElementById('closeModalButton');
-        const rngsfLink = document.getElementById('rngsf-link');
+        const logoLink = document.getElementById('logo-link');
+        const logoImg = document.getElementById('top-right-logo');
         const lemburDaysList = document.getElementById('lembur-days-list');
 
-        if (rngsfLink) {
-            rngsfLink.addEventListener('click', function(e) {
+        // Logo click confirmation like previous text link
+        if (logoLink) {
+            logoLink.addEventListener('click', function(e) {
                 const lanjut = confirm('Peringatan: Anda akan diarahkan ke media sosial saya.  Apakah Anda yakin ingin melanjutkan?');
                 if (!lanjut) {
                     e.preventDefault();
@@ -468,8 +472,17 @@
             closeAbsenModal();
         });
 
+        // --- MODIFIKASI LEMBUR PILIHAN OTOMATIS 0.5, 1, 1.5, 2, 2.5, dst ---
         lemburAbsenButton.addEventListener('click', () => {
-            const overtimeHoursStr = prompt('Masukkan jumlah jam lembur (boleh setengah, misal: 0.5, 1, 1.5, 2, dst):');
+            // Show a simple prompt with quick options (dropdown or prompt with validation)
+            let options = [];
+            for(let i=0.5; i<=12; i+=0.5) { // Up to 12 hours, adjust as needed
+                options.push(i);
+            }
+            // Hapus contoh dan daftar jam pada prompt, hanya tampilkan pesan input sederhana
+            let msg = "Masukkan jumlah jam lembur (gunakan titik/desimal untuk setengah jam):";
+            let overtimeHoursStr = prompt(msg);
+
             if (!overtimeHoursStr) {
                 closeAbsenModal();
                 return;
@@ -488,7 +501,7 @@
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                 updateWorkdaysCount();
             } else {
-                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh kelipatan 0.5 (contoh: 0.5, 1, 1.5, 2, dst)');
+                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh kelipatan 0.5');
             }
             closeAbsenModal();
         });
@@ -568,7 +581,7 @@
         // Helper singkat: format lembur misal "1j:20K"
         function formatShortLembur(hours) {
             let jam = hours;
-            let uang = hours * 20000;
+            let uang = hours * overtimeRatePerHalfHour * 2; // 0.5 jam = 10.000
             let uangStr = uang >= 1000000 ? Math.round(uang/1000)+'K' : uang.toLocaleString('id-ID', {maximumFractionDigits:0});
             if(uang % 1000 === 0 && uang >= 1000) uangStr = (uang/1000)+'K';
             let jamStr = jam % 1 === 0.5 ? (Math.floor(jam) ? Math.floor(jam)+'½' : '½') : jam;
@@ -592,7 +605,7 @@
                     } else if (savedWorkdays[key].type === 'lembur') {
                         dailyTotal += dailyEarnings;
                         const jam = savedWorkdays[key].hours;
-                        overtimeTotal += jam * 20000;
+                        overtimeTotal += jam * overtimeRatePerHalfHour * 2;
                         let dateObj = new Date(year, month, d);
                         lemburDays.push({
                             tanggal: dateObj,
@@ -631,7 +644,7 @@
                 } else if (savedWorkdays[key].type === 'lembur') {
                     dailyTotal += dailyEarnings;
                     const jam = savedWorkdays[key].hours;
-                    overtimeTotal += jam * 20000;
+                    overtimeTotal += jam * overtimeRatePerHalfHour * 2;
                 }
             }
 
