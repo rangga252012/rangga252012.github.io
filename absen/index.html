@@ -475,9 +475,8 @@
             for(let i=0.5; i<=12; i+=0.5) { // Up to 12 hours, adjust as needed
                 options.push(i);
             }
-            let msg = "Pilih jumlah jam lembur (boleh desimal setengah, contoh: 0.5, 1, 1.5, 2, dst):\n";
-            msg += options.map(opt => opt % 1 === 0 ? opt + " jam" : opt + " jam").join(", ");
-            msg += "\nAtau ketik jumlah jam (misal: 2.5)";
+            // Hapus contoh dan daftar jam pada prompt, hanya tampilkan pesan input sederhana
+            let msg = "Masukkan jumlah jam lembur (gunakan titik/desimal untuk setengah jam):";
             let overtimeHoursStr = prompt(msg);
 
             if (!overtimeHoursStr) {
@@ -498,7 +497,7 @@
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
                 updateWorkdaysCount();
             } else {
-                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh kelipatan 0.5 (contoh: 0.5, 1, 1.5, 2, 2.5, dst)');
+                alert('Jumlah jam lembur tidak valid. Absen dibatalkan.\nCatatan: Hanya boleh kelipatan 0.5');
             }
             closeAbsenModal();
         });
