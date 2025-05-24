@@ -71,6 +71,13 @@
             color: var(--accent);
             font-weight: 600;
         }
+        #workdays-overtime {
+            display: inline-block;
+            margin-left: 10px;
+            color: #ffe082;
+            font-weight: 600;
+            font-size: 0.97em;
+        }
         .navigation {
             display: flex;
             justify-content: center;
@@ -280,7 +287,6 @@
             color: #fff;
             border-color: var(--danger);
         }
-        /* --- LOGO STYLE --- */
         .top-right-logo {
             position: absolute;
             top: 12px;
@@ -301,7 +307,6 @@
             border-color: #fff;
             box-shadow: 0 0 0 4px #41d1ff33;
         }
-        /* Daftar lembur singkat, desain baru lebih menarik */
         .lembur-list {
             margin: 0;
             padding: 0;
@@ -408,11 +413,9 @@
                 right: 12px;
             }
         }
-        /* Hide lembur and total section by default */
         .hidden-lembur {
             display: none !important;
         }
-        /* Show button styling */
         #toggle-lembur-btn {
             margin-bottom: 10px;
             margin-top: 5px;
@@ -442,14 +445,16 @@
 <body>
     <div class="container">
         <div class="header">
-            <!-- LOGO IMAGE REPLACEMENT -->
             <a href="info/index.html" id="logo-link">
                 <img src="logo.png" alt="Logo" class="top-right-logo" id="top-right-logo">
             </a>
             <h1>Kalender Absen</h1>
             <div class="factory-name">PT Charoen Pokphand Indonesia - Madiun</div>
             <p id="month-name" class="month-name"></p>
-            <p id="workdays-count">Hari kerja: 0</p>
+            <p id="workdays-count">
+                Hari kerja: 0
+                <span id="workdays-overtime"></span>
+            </p>
         </div>
         <div class="navigation">
             <button id="prev-month">&larr; Sebelumnya</button>
@@ -476,7 +481,6 @@
             </div>
         </div>
     </div>
-    <!-- Modal for selecting absen type -->
     <div id="absenModal">
         <div>
             <p>Pilih tipe absen:</p>
@@ -486,9 +490,9 @@
         </div>
     </div>
     <script>
-        // (Script JS tetap, dengan beberapa perubahan di bagian lembur)
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
+        const workdaysOvertimeElement = document.getElementById('workdays-overtime');
         const totalEarningsElement = document.getElementById('total-earnings');
         const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
         const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
@@ -506,7 +510,6 @@
         const toggleLemburBtn = document.getElementById('toggle-lembur-btn');
         const lemburSection = document.getElementById('lembur-section');
 
-        // Logo click confirmation like previous text link
         if (logoLink) {
             logoLink.addEventListener('click', function(e) {
                 const lanjut = confirm('Peringatan: Anda akan diarahkan ke media sosial saya.  Apakah Anda yakin ingin melanjutkan?');
@@ -516,7 +519,6 @@
             });
         }
 
-        // Toggle lembur & total section
         let isLemburShown = false;
         toggleLemburBtn.addEventListener('click', function() {
             isLemburShown = !isLemburShown;
@@ -578,30 +580,19 @@
             closeAbsenModal();
         });
 
-        // --- MODIFIKASI LEMBUR PILIHAN OTOMATIS 0.5, 1, 1.5, 2, 2.5, dst ---
         lemburAbsenButton.addEventListener('click', () => {
-            // Show a simple prompt with quick options (dropdown or prompt with validation)
-            let options = [];
-            for(let i=0.5; i<=12; i+=0.5) { // Up to 12 hours, adjust as needed
-                options.push(i);
-            }
-            // Hapus contoh dan daftar jam pada prompt, hanya tampilkan pesan input sederhana
             let msg = "Masukkan jumlah jam lembur (gunakan titik/desimal untuk setengah jam):";
             let overtimeHoursStr = prompt(msg);
-
             if (!overtimeHoursStr) {
                 closeAbsenModal();
                 return;
             }
             let overtimeHours = parseFloat(overtimeHoursStr.replace(",", "."));
-
-            // Validasi: hanya kelipatan 0.5 dan > 0
             if (
                 !isNaN(overtimeHours) &&
                 overtimeHours > 0 &&
-                Math.abs(overtimeHours * 2 - Math.round(overtimeHours * 2)) < 0.01 // kelipatan 0.5
+                Math.abs(overtimeHours * 2 - Math.round(overtimeHours * 2)) < 0.01
             ) {
-                // Simpan lembur dengan jam desimal
                 savedWorkdays[selectedDayKey] = { type: 'lembur', hours: overtimeHours };
                 selectedDayElement.classList.add('workday', 'overtime');
                 localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
@@ -674,23 +665,54 @@
             saveCurrentDate();
         }
 
-        function updateWorkdaysCount() {
-            const count = Object.keys(savedWorkdays).filter(key => {
-                const [year, month] = key.split('-').map(Number);
-                return year === currentDate.getFullYear() && month === currentDate.getMonth();
-            }).length;
-            workdaysCountElement.textContent = `Hari kerja: ${count}`;
-            updateTotalEarnings();
-            updateMonthlyEarnings();
-        }
-
-        // Helper format lembur untuk tampilan baru
         function formatShortLembur(hours) {
-            // e.g. 0.5 -> "½", 1.5 -> "1½", 2 -> "2"
+            if (typeof hours !== "number") return "";
             if (hours % 1 === 0.5) {
                 return (Math.floor(hours) ? Math.floor(hours)+'½' : '½');
             }
             return hours;
+        }
+
+        function formatJamMenit(hours) {
+            if (typeof hours !== "number" || isNaN(hours)) return "";
+            const jam = Math.floor(hours);
+            const menit = (hours % 1 === 0.5) ? 30 : 0;
+            if (menit > 0 && jam > 0) {
+                return `${jam}j ${menit}mnt`;
+            }
+            if (jam > 0) {
+                return `${jam}j`;
+            }
+            if (menit > 0) {
+                return `${menit}mnt`;
+            }
+            return "";
+        }
+
+        function updateWorkdaysCount() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            let count = 0;
+            let totalOvertime = 0;
+            for (const key in savedWorkdays) {
+                const [y, m] = key.split('-').map(Number);
+                if (y === year && m === month) {
+                    count++;
+                    if (savedWorkdays[key].type === 'lembur') {
+                        totalOvertime += Number(savedWorkdays[key].hours) || 0;
+                    }
+                }
+            }
+            workdaysCountElement.childNodes[0].textContent = `Hari kerja: ${count} `;
+            if (totalOvertime > 0) {
+                workdaysOvertimeElement.textContent = `Lembur: ${formatJamMenit(totalOvertime)}`;
+                workdaysOvertimeElement.style.display = 'inline-block';
+            } else {
+                workdaysOvertimeElement.textContent = '';
+                workdaysOvertimeElement.style.display = 'none';
+            }
+            updateTotalEarnings();
+            updateMonthlyEarnings();
         }
 
         function updateMonthlyEarnings() {
@@ -719,7 +741,6 @@
                 }
             }
 
-            // Tampilkan lembur dengan tampilan baru yang simpel & menarik
             lemburDaysList.innerHTML = "";
             if (lemburDays.length > 0) {
                 lemburDays
@@ -729,7 +750,6 @@
                         const hari = dayNamesIndo[item.tanggal.getDay()];
                         const jamStr = formatShortLembur(item.jam);
                         const uang = item.jam * overtimeRatePerHalfHour * 2;
-                        // Tampilan: Senin,5: 3j: Rp xxx.xxx
                         lemburDaysList.innerHTML += `
                             <li>
                                 <span class="lembur-hari">${hari}, ${tgl}</span>
@@ -739,7 +759,6 @@
                     });
             }
 
-            // Tanda ·>
             dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
             overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lembur: <b>Rp ${overtimeTotal.toLocaleString('id-ID')}</b>`;
             const overallTotal = dailyTotal + overtimeTotal;
@@ -778,7 +797,6 @@
             renderCalendar();
         });
 
-        // Hide lembur & total section on load
         lemburSection.classList.add('hidden-lembur');
         toggleLemburBtn.textContent = 'Tampilkan Lembur & Total';
 
