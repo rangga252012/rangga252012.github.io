@@ -201,10 +201,50 @@
             color: var(--primary);
             letter-spacing: 1px;
         }
-        #total-earnings {
+        #salary-received-section {
+            margin-top: 16px;
+            background: #181c1b;
+            padding: 12px 14px 9px 14px;
+            border-radius: 13px;
+            box-shadow: 0 2px 9px #1a3a2a14;
+            border: 1.2px solid #22232a;
+        }
+        #salary-received-label {
+            font-weight: 600;
+            color: #7fff99;
+            font-size: 1.01em;
+        }
+        #salary-received-amount {
+            font-size: 1.13em;
+            color: #41d1ff;
             font-weight: 700;
-            color: var(--accent);
-            letter-spacing: 1px;
+            margin: 0 8px;
+        }
+        #salary-difference {
+            margin-top: 7px;
+            font-size: 1.06em;
+            color: #ff9f43;
+            font-weight: 600;
+        }
+        #edit-salary-btn {
+            background: linear-gradient(90deg, #232c47 10%, #2b4c7e 90%);
+            color: #ffe082;
+            border: 1px solid #232c47;
+            border-radius: 7px;
+            font-size: 0.96em;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1.5px 7px #41d1ff12;
+            outline: none;
+            padding: 7px 13px;
+            margin-left: 6px;
+            transition: background 0.18s, color 0.18s, border-color 0.18s;
+        }
+        #edit-salary-btn:hover, #edit-salary-btn:focus {
+            background: linear-gradient(90deg, #41d1ff 0%, #232c47 100%);
+            color: #fff;
+            border-color: #41d1ff;
         }
         .small-text {
             font-size: 0.94em;
@@ -412,6 +452,9 @@
                 top: 10px;
                 right: 12px;
             }
+            #salary-received-section {
+                padding: 8px 2vw 7px 2vw;
+            }
         }
         .hidden-lembur {
             display: none !important;
@@ -477,7 +520,14 @@
                 <p id="daily-earnings-total">Harian: Rp 0</p>
                 <p id="overtime-earnings-total">Lembur: Rp 0</p>
                 <p id="monthly-earnings">Bulan ini: Rp 0</p>
-                <p id="total-earnings">Total: Rp 0</p>
+            </div>
+            <div id="salary-received-section">
+                <div>
+                    <span id="salary-received-label">Penerimaan Gajian Bulan Ini:</span>
+                    <span id="salary-received-amount">Rp 0</span>
+                    <button id="edit-salary-btn">Edit</button>
+                </div>
+                <div id="salary-difference"></div>
             </div>
         </div>
     </div>
@@ -510,6 +560,12 @@
         const toggleLemburBtn = document.getElementById('toggle-lembur-btn');
         const lemburSection = document.getElementById('lembur-section');
 
+        // Salary input & comparison elements
+        const salaryReceivedSection = document.getElementById('salary-received-section');
+        const salaryReceivedAmount = document.getElementById('salary-received-amount');
+        const salaryDifference = document.getElementById('salary-difference');
+        const editSalaryBtn = document.getElementById('edit-salary-btn');
+
         if (logoLink) {
             logoLink.addEventListener('click', function(e) {
                 const lanjut = confirm('Peringatan: Anda akan diarahkan ke media sosial saya.  Apakah Anda yakin ingin melanjutkan?');
@@ -539,6 +595,18 @@
 
         const savedWorkdays = JSON.parse(localStorage.getItem('workdays')) || {};
         const nationalHolidays = JSON.parse(localStorage.getItem('nationalHolidays')) || {};
+
+        // Salary received data, per month
+        function salaryKey(year, month) {
+            return `salary-${year}-${month}`;
+        }
+        function getSalaryReceived(year, month) {
+            const data = JSON.parse(localStorage.getItem(salaryKey(year, month)));
+            return typeof data === "number" ? data : 0;
+        }
+        function setSalaryReceived(year, month, amount) {
+            localStorage.setItem(salaryKey(year, month), JSON.stringify(amount));
+        }
 
         const monthNames = [
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -662,6 +730,7 @@
 
             updateWorkdaysCount();
             updateMonthlyEarnings();
+            updateSalaryReceivedSection();
             saveCurrentDate();
         }
 
@@ -711,8 +780,8 @@
                 workdaysOvertimeElement.textContent = '';
                 workdaysOvertimeElement.style.display = 'none';
             }
-            updateTotalEarnings();
             updateMonthlyEarnings();
+            updateSalaryReceivedSection();
         }
 
         function updateMonthlyEarnings() {
@@ -763,25 +832,73 @@
             overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lembur: <b>Rp ${overtimeTotal.toLocaleString('id-ID')}</b>`;
             const overallTotal = dailyTotal + overtimeTotal;
             monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
+
+            // Also update salary difference section
+            updateSalaryReceivedSection();
         }
 
-        function updateTotalEarnings() {
+        // Remove totalEarningsElement and updateTotalEarnings! (no longer needed)
+
+        function updateSalaryReceivedSection() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Hitung total penghasilan bulan ini (harian + lembur)
             let dailyTotal = 0;
             let overtimeTotal = 0;
-
             for (const key in savedWorkdays) {
-                if (savedWorkdays[key].type === 'normal') {
-                    dailyTotal += dailyEarnings;
-                } else if (savedWorkdays[key].type === 'lembur') {
-                    dailyTotal += dailyEarnings;
-                    const jam = savedWorkdays[key].hours;
-                    overtimeTotal += jam * overtimeRatePerHalfHour * 2;
+                const [y, m] = key.split('-').map(Number);
+                if (y === year && m === month) {
+                    if (savedWorkdays[key].type === 'normal') {
+                        dailyTotal += dailyEarnings;
+                    } else if (savedWorkdays[key].type === 'lembur') {
+                        dailyTotal += dailyEarnings;
+                        const jam = savedWorkdays[key].hours;
+                        overtimeTotal += jam * overtimeRatePerHalfHour * 2;
+                    }
                 }
             }
+            const expectedTotal = dailyTotal + overtimeTotal;
 
-            const overallTotal = dailyTotal + overtimeTotal;
-            totalEarningsElement.innerHTML = `&middot;&gt; Total: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
+            // Ambil dari localStorage
+            let received = getSalaryReceived(year, month);
+            salaryReceivedAmount.textContent = "Rp " + received.toLocaleString('id-ID');
+
+            // Hitung selisih
+            let difference = received - expectedTotal;
+            if (expectedTotal === 0 && received === 0) {
+                salaryDifference.textContent = "";
+            } else if (difference === 0) {
+                salaryDifference.textContent = "✔️ Sudah dibayar penuh!";
+                salaryDifference.style.color = "#7fff99";
+            } else if (difference > 0) {
+                salaryDifference.textContent = `+Rp ${Math.abs(difference).toLocaleString('id-ID')} (Lebih)`;
+                salaryDifference.style.color = "#7fff99";
+            } else {
+                salaryDifference.textContent = `-Rp ${Math.abs(difference).toLocaleString('id-ID')} (Kurang)`;
+                salaryDifference.style.color = "#ff9f43";
+            }
         }
+
+        editSalaryBtn.addEventListener('click', function() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            let received = getSalaryReceived(year, month);
+            let input = prompt(
+                `Masukkan nominal gaji yang DITERIMA untuk ${monthNames[month]} ${year}:\nContoh: 1500000`,
+                received > 0 ? received : ""
+            );
+            if (input === null) return; // dibatalkan
+            // Bersihkan input
+            input = input.replace(/[^\d]/g, "");
+            let newVal = parseInt(input, 10);
+            if (isNaN(newVal) || newVal < 0) {
+                alert("Nominal tidak valid.");
+                return;
+            }
+            setSalaryReceived(year, month, newVal);
+            updateSalaryReceivedSection();
+        });
 
         function saveCurrentDate() {
             localStorage.setItem('savedDate', JSON.stringify(currentDate));
