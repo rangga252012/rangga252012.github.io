@@ -518,7 +518,7 @@
             <div id="lembur-section" class="hidden-lembur">
                 <ul id="lembur-days-list" class="lembur-list"></ul>
                 <p id="daily-earnings-total">Harian: Rp 0</p>
-                <p id="overtime-earnings-total">Lembur: Rp 0</p>
+                <p id="overtime-earnings-total">Lambur: Rp 0</p>
                 <p id="monthly-earnings">Bulan ini: Rp 0</p>
             </div>
             <div id="salary-received-section">
@@ -784,6 +784,26 @@
             updateSalaryReceivedSection();
         }
 
+        // --- LEMBUR KHUSUS: KONVERSI LEMBURAN JADI HARI/HARI + JAM ---
+        /**
+         * Konversi lembur total (jam per hari) menjadi jumlah hari (5jam = 1 hari, 10jam = 2 hari, dst, sisa jadi jam).
+         * @param {number} totalJam - Total jam lembur dalam sebulan.
+         * @returns {{hari: number, jam: number}} - { hari, jam }
+         */
+        function konversiLemburKeHari(totalJam) {
+            // 5 jam = 1 hari lembur, 10 jam = 2 hari, dst
+            const hari = Math.floor(totalJam / 5);
+            const jam = +(totalJam - hari * 5).toFixed(2); // Sisa jam, bisa 0.5
+            return { hari, jam };
+        }
+
+        function formatHariJam(hari, jam) {
+            if (hari > 0 && jam > 0) return `${hari} hari + ${jam} jam`;
+            if (hari > 0) return `${hari} hari`;
+            if (jam > 0) return `${jam} jam`;
+            return '0 jam';
+        }
+
         function updateMonthlyEarnings() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -791,6 +811,9 @@
             let dailyTotal = 0;
             let overtimeTotal = 0;
             let lemburDays = [];
+
+            // Untuk total jam lemburan per bulan
+            let totalLemburJam = 0;
 
             for (const key in savedWorkdays) {
                 const [y, m, d] = key.split('-').map(Number);
@@ -800,6 +823,7 @@
                     } else if (savedWorkdays[key].type === 'lembur') {
                         dailyTotal += dailyEarnings;
                         const jam = savedWorkdays[key].hours;
+                        totalLemburJam += jam;
                         overtimeTotal += jam * overtimeRatePerHalfHour * 2;
                         let dateObj = new Date(year, month, d);
                         lemburDays.push({
@@ -829,7 +853,20 @@
             }
 
             dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
-            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lembur: <b>Rp ${overtimeTotal.toLocaleString('id-ID')}</b>`;
+
+            // --- GANTI LABEL DAN LOGIKA OVERTIME ---
+            // totalLemburJam dikonversi ke hari/jam
+            const { hari: lemburHari, jam: lemburJam } = konversiLemburKeHari(totalLemburJam);
+            let lamburString = '';
+            if (lemburHari > 0 && lemburJam > 0) {
+                lamburString = `${lemburHari} hari + ${lemburJam} jam`;
+            } else if (lemburHari > 0) {
+                lamburString = `${lemburHari} hari`;
+            } else {
+                lamburString = `${lemburJam} jam`;
+            }
+            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lambur: <b>${lamburString}</b>`;
+
             const overallTotal = dailyTotal + overtimeTotal;
             monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
 
