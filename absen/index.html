@@ -78,6 +78,13 @@
             font-weight: 600;
             font-size: 0.97em;
         }
+        #workdays-lembur-days {
+            display: inline-block;
+            margin-left: 10px;
+            color: #7fff99;
+            font-weight: 600;
+            font-size: 0.97em;
+        }
         .navigation {
             display: flex;
             justify-content: center;
@@ -200,6 +207,12 @@
             font-weight: 700;
             color: var(--primary);
             letter-spacing: 1px;
+        }
+        #overtime-harian-total {
+            font-weight: 700;
+            color: #ffe082;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
         }
         #salary-received-section {
             margin-top: 16px;
@@ -497,6 +510,7 @@
             <p id="workdays-count">
                 Hari kerja: 0
                 <span id="workdays-overtime"></span>
+                <span id="workdays-lembur-days"></span>
             </p>
         </div>
         <div class="navigation">
@@ -517,6 +531,7 @@
             <button id="toggle-lembur-btn">Tampilkan Lembur & Total</button>
             <div id="lembur-section" class="hidden-lembur">
                 <ul id="lembur-days-list" class="lembur-list"></ul>
+                <p id="overtime-harian-total"></p>
                 <p id="daily-earnings-total">Harian: Rp 0</p>
                 <p id="overtime-earnings-total">Lambur: Rp 0</p>
                 <p id="monthly-earnings">Bulan ini: Rp 0</p>
@@ -543,9 +558,11 @@
         const calendarElement = document.getElementById('calendar');
         const workdaysCountElement = document.getElementById('workdays-count');
         const workdaysOvertimeElement = document.getElementById('workdays-overtime');
+        const workdaysLemburDaysElement = document.getElementById('workdays-lembur-days');
         const totalEarningsElement = document.getElementById('total-earnings');
         const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
         const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
+        const overtimeHarianTotalElement = document.getElementById('overtime-harian-total');
         const monthlyEarningsElement = document.getElementById('monthly-earnings');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
@@ -758,33 +775,6 @@
             return "";
         }
 
-        function updateWorkdaysCount() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            let count = 0;
-            let totalOvertime = 0;
-            for (const key in savedWorkdays) {
-                const [y, m] = key.split('-').map(Number);
-                if (y === year && m === month) {
-                    count++;
-                    if (savedWorkdays[key].type === 'lembur') {
-                        totalOvertime += Number(savedWorkdays[key].hours) || 0;
-                    }
-                }
-            }
-            workdaysCountElement.childNodes[0].textContent = `Hari kerja: ${count} `;
-            if (totalOvertime > 0) {
-                workdaysOvertimeElement.textContent = `Lembur: ${formatJamMenit(totalOvertime)}`;
-                workdaysOvertimeElement.style.display = 'inline-block';
-            } else {
-                workdaysOvertimeElement.textContent = '';
-                workdaysOvertimeElement.style.display = 'none';
-            }
-            updateMonthlyEarnings();
-            updateSalaryReceivedSection();
-        }
-
-        // --- LEMBUR KHUSUS: KONVERSI LEMBURAN JADI HARI/HARI + JAM ---
         /**
          * Konversi lembur total (jam per hari) menjadi jumlah hari (5jam = 1 hari, 10jam = 2 hari, dst, sisa jadi jam).
          * @param {number} totalJam - Total jam lembur dalam sebulan.
@@ -795,6 +785,52 @@
             const hari = Math.floor(totalJam / 5);
             const jam = +(totalJam - hari * 5).toFixed(2); // Sisa jam, bisa 0.5
             return { hari, jam };
+        }
+
+        function updateWorkdaysCount() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            let count = 0;
+            let totalOvertime = 0;
+            let totalLemburJam = 0;
+
+            for (const key in savedWorkdays) {
+                const [y, m] = key.split('-').map(Number);
+                if (y === year && m === month) {
+                    count++;
+                    if (savedWorkdays[key].type === 'lembur') {
+                        totalOvertime += Number(savedWorkdays[key].hours) || 0;
+                        totalLemburJam += Number(savedWorkdays[key].hours) || 0;
+                    }
+                }
+            }
+            workdaysCountElement.childNodes[0].textContent = `Hari kerja: ${count} `;
+
+            // Info lembur: konversi jam ke hari + jam di atas
+            const { hari: lemburHari, jam: lemburJam } = konversiLemburKeHari(totalLemburJam);
+            let lemburText = '';
+            if (lemburHari > 0 && lemburJam > 0) {
+                lemburText = `Lembur: ${lemburHari} hari + ${lemburJam} jam`;
+            } else if (lemburHari > 0) {
+                lemburText = `Lembur: ${lemburHari} hari`;
+            } else if (lemburJam > 0) {
+                lemburText = `Lembur: ${lemburJam} jam`;
+            } else {
+                lemburText = '';
+            }
+            workdaysLemburDaysElement.textContent = lemburText;
+            workdaysLemburDaysElement.style.display = lemburText ? 'inline-block' : 'none';
+
+            // Info overtime jam (lama, untuk referensi - bisa dihilangkan atau tetap)
+            if (totalOvertime > 0) {
+                workdaysOvertimeElement.textContent = `(${formatJamMenit(totalOvertime)})`;
+                workdaysOvertimeElement.style.display = 'inline-block';
+            } else {
+                workdaysOvertimeElement.textContent = '';
+                workdaysOvertimeElement.style.display = 'none';
+            }
+            updateMonthlyEarnings();
+            updateSalaryReceivedSection();
         }
 
         function formatHariJam(hari, jam) {
@@ -854,9 +890,28 @@
 
             dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
 
-            // --- GANTI LABEL DAN LOGIKA OVERTIME ---
-            // totalLemburJam dikonversi ke hari/jam
+            // --- KHUSUS PENGHASILAN LEMBURAN YANG SUDAH DIKONVERSI HARI ---
+            // Konversi lembur total jam ke hari & jam
             const { hari: lemburHari, jam: lemburJam } = konversiLemburKeHari(totalLemburJam);
+            let lemburHarian = 0, lemburSisaJam = 0, lemburSisaUang = 0;
+
+            if (lemburHari > 0) {
+                lemburHarian = lemburHari * dailyEarnings;
+            }
+            if (lemburJam > 0) {
+                lemburSisaJam = lemburJam;
+                lemburSisaUang = lemburSisaJam * overtimeRatePerHalfHour * 2;
+            }
+
+            let overtimeHarianStr = '';
+            if (lemburHari > 0 || lemburJam > 0) {
+                overtimeHarianStr = `&middot;&gt; Total Penghasilan Lembur: <b>Rp ${lemburHarian.toLocaleString('id-ID')}${lemburJam > 0 ? ' + ' + lemburJam + ' jam' : ''}${lemburJam > 0 ? ' (Rp ' + lemburSisaUang.toLocaleString('id-ID') + ')' : ''}</b>`;
+            } else {
+                overtimeHarianStr = `&middot;&gt; Total Penghasilan Lembur: <b>Rp 0</b>`;
+            }
+            overtimeHarianTotalElement.innerHTML = overtimeHarianStr;
+
+            // --- LABEL DAN LOGIKA OVERTIME (JAM LEMBUR MURNI) ---
             let lamburString = '';
             if (lemburHari > 0 && lemburJam > 0) {
                 lamburString = `${lemburHari} hari + ${lemburJam} jam`;
@@ -873,8 +928,6 @@
             // Also update salary difference section
             updateSalaryReceivedSection();
         }
-
-        // Remove totalEarningsElement and updateTotalEarnings! (no longer needed)
 
         function updateSalaryReceivedSection() {
             const year = currentDate.getFullYear();
