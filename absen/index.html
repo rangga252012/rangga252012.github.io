@@ -810,22 +810,35 @@
                 }
             }
 
+            // === MODIFIKASI: tampilkan lembur dalam format harian ===
+            let totalJamLembur = lemburDays.reduce((acc, item) => acc + item.jam, 0);
+
+            // 1 hari = 5 jam (ubah sesuai kebutuhan, misal 6 jam per hari jika perlu)
+            const jamPerHariLembur = 5;
+
+            let hariLembur = Math.floor(totalJamLembur / jamPerHariLembur);
+            let sisaJam = +(totalJamLembur - hariLembur * jamPerHariLembur).toFixed(2);
+
+            let lemburText = "";
+            if (hariLembur > 0 && sisaJam > 0) {
+                lemburText = `${hariLembur} hari + ${sisaJam} jam`;
+            } else if (hariLembur > 0) {
+                lemburText = `${hariLembur} hari`;
+            } else if (sisaJam > 0) {
+                lemburText = `${sisaJam} jam`;
+            } else {
+                lemburText = "0 jam";
+            }
+
             lemburDaysList.innerHTML = "";
-            if (lemburDays.length > 0) {
-                lemburDays
-                    .sort((a, b) => a.tanggal - b.tanggal)
-                    .forEach(item => {
-                        const tgl = item.tanggal.getDate();
-                        const hari = dayNamesIndo[item.tanggal.getDay()];
-                        const jamStr = formatShortLembur(item.jam);
-                        const uang = item.jam * overtimeRatePerHalfHour * 2;
-                        lemburDaysList.innerHTML += `
-                            <li>
-                                <span class="lembur-hari">${hari}, ${tgl}</span>
-                                <span class="lembur-jam">${jamStr}j</span>
-                                <span class="lembur-uang">${uang.toLocaleString('id-ID')}</span>
-                            </li>`;
-                    });
+            if (totalJamLembur > 0) {
+                lemburDaysList.innerHTML = `
+                    <li>
+                        <span class="lembur-hari">Total</span>
+                        <span class="lembur-jam">${lemburText}</span>
+                        <span class="lembur-uang">${overtimeTotal.toLocaleString('id-ID')}</span>
+                    </li>
+                `;
             }
 
             dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
@@ -833,11 +846,9 @@
             const overallTotal = dailyTotal + overtimeTotal;
             monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
 
-            // Also update salary difference section
+            // update salary difference section
             updateSalaryReceivedSection();
         }
-
-        // Remove totalEarningsElement and updateTotalEarnings! (no longer needed)
 
         function updateSalaryReceivedSection() {
             const year = currentDate.getFullYear();
