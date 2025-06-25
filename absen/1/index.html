@@ -496,6 +496,96 @@
             color: #fff;
             border-color: #41d1ff;
         }
+        /* Tambahan untuk daftar kerja non-lembur */
+        .kerja-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 1em;
+            color: #41d1ff;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: #181c1bd8;
+            border-radius: 12px;
+            box-shadow: 0 2px 18px #0e101422;
+            padding: 7px 10px 7px 10px;
+        }
+        .kerja-list li {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            padding: 6px 13px;
+            border-radius: 11px;
+            background: linear-gradient(90deg, #293b39 10%, #2b4c7e 90%);
+            color: #7fff99;
+            font-size: 1.03em;
+            white-space: nowrap;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 6px #41d1ff12;
+            border: 1.5px solid #232c47;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+        }
+        .kerja-list li .kerja-hari {
+            font-weight: 700;
+            color: #ffe082;
+            font-size: 1.04em;
+            margin-right: 7px;
+            min-width: 65px;
+            text-align: left;
+        }
+        .kerja-list li .kerja-tgl {
+            font-weight: 600;
+            color: #41d1ff;
+            margin-left: 6px;
+        }
+        .kerja-list li .kerja-uang {
+            font-weight: 700;
+            color: #7fff99;
+            margin-left: 5px;
+            font-size: 1.01em;
+        }
+        .kerja-list li .kerja-uang:before {
+            content: 'Rp ';
+            color: #41d1ff;
+            font-weight: 600;
+            font-size: 0.96em;
+        }
+        .kerja-list li:hover {
+            background: linear-gradient(90deg, #2b4c7e 0%, #41d1ff 100%);
+            color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px #7fff9933;
+        }
+        #kerja-section {
+            margin-top: 10px;
+        }
+        #move-nonlembur-btn {
+            margin-top: 8px;
+            padding: 7px 16px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1em;
+            font-family: inherit;
+            font-weight: 600;
+            background: linear-gradient(90deg, #232c47 10%, #7fff99 90%);
+            color: #181c1b;
+            cursor: pointer;
+            box-shadow: 0 1.5px 7px #41d1ff12;
+            outline: none;
+            border: 1px solid #232c47;
+            transition: background 0.18s, color 0.18s, border-color 0.18s;
+            display: block;
+            width: 100%;
+        }
+        #move-nonlembur-btn:hover, #move-nonlembur-btn:focus {
+            background: linear-gradient(90deg, #41d1ff 0%, #232c47 100%);
+            color: #fff;
+            border-color: #41d1ff;
+        }
     </style>
 </head>
 <body>
@@ -535,6 +625,11 @@
                 <p id="overtime-earnings-total"></p>
                 <p id="monthly-earnings">Bulan ini: Rp 0</p>
             </div>
+            <!-- TAMBAHAN: Daftar kerja non-lembur -->
+            <div id="kerja-section" class="hidden-lembur">
+                <button id="move-nonlembur-btn">Pindah Semua Hari Kerja (Non-Lembur) ke Bulan Lain</button>
+                <ul id="kerja-days-list" class="kerja-list"></ul>
+            </div>
             <div id="salary-received-section">
                 <div>
                     <span id="salary-received-label">Penerimaan Gajian Bulan Ini:</span>
@@ -573,6 +668,10 @@
         const lemburDaysList = document.getElementById('lembur-days-list');
         const toggleLemburBtn = document.getElementById('toggle-lembur-btn');
         const lemburSection = document.getElementById('lembur-section');
+        // Tambahan: kerja nonlembur
+        const kerjaDaysList = document.getElementById('kerja-days-list');
+        const kerjaSection = document.getElementById('kerja-section');
+        const moveNonLemburBtn = document.getElementById('move-nonlembur-btn');
 
         // Salary input & comparison elements
         const salaryReceivedSection = document.getElementById('salary-received-section');
@@ -594,9 +693,11 @@
             isLemburShown = !isLemburShown;
             if (isLemburShown) {
                 lemburSection.classList.remove('hidden-lembur');
+                kerjaSection.classList.remove('hidden-lembur');
                 toggleLemburBtn.textContent = 'Sembunyikan Lembur & Total';
             } else {
                 lemburSection.classList.add('hidden-lembur');
+                kerjaSection.classList.add('hidden-lembur');
                 toggleLemburBtn.textContent = 'Tampilkan Lembur & Total';
             }
         });
@@ -745,6 +846,7 @@
             updateWorkdaysCount();
             updateMonthlyEarnings();
             updateSalaryReceivedSection();
+            renderKerjaNonLembur();
             saveCurrentDate();
         }
 
@@ -990,6 +1092,97 @@
         });
         nextMonthButton.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // ============================
+        // TAMBAHAN: Daftar kerja non-lembur & Pindah Semua
+        // ============================
+        function renderKerjaNonLembur() {
+            // Tampilkan daftar hari kerja (normal) bulan ini
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            let kerjaList = [];
+
+            for (const key in savedWorkdays) {
+                const [y, m, d] = key.split('-').map(Number);
+                if (y === year && m === month && savedWorkdays[key].type === 'normal') {
+                    const dateObj = new Date(year, month, d);
+                    kerjaList.push({
+                        tanggal: dateObj,
+                        tgl: d,
+                        hari: dayNamesIndo[dateObj.getDay()]
+                    });
+                }
+            }
+            kerjaList.sort((a, b) => a.tanggal - b.tanggal);
+
+            kerjaDaysList.innerHTML = "";
+            if (kerjaList.length > 0) {
+                kerjaList.forEach(item => {
+                    kerjaDaysList.innerHTML += `
+                        <li>
+                            <span class="kerja-hari">${item.hari},</span>
+                            <span class="kerja-tgl">${item.tgl}</span>
+                            <span class="kerja-uang">${dailyEarnings.toLocaleString('id-ID')}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                kerjaDaysList.innerHTML = `<li style="color:#ff4c6d;">Tidak ada data hari kerja biasa.</li>`;
+            }
+        }
+
+        moveNonLemburBtn.addEventListener('click', function() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            // Pilih bulan tujuan
+            let tujuanStr = prompt(
+                `Pindahkan SEMUA hari kerja (biasa/non-lembur) ke bulan lain!\nMasukkan bulan tujuan (1-12):`,
+                ((month + 1) % 12 + 1)
+            );
+            if (!tujuanStr) return;
+            let tujuanBulan = parseInt(tujuanStr, 10);
+            if (isNaN(tujuanBulan) || tujuanBulan < 1 || tujuanBulan > 12) {
+                alert("Bulan tidak valid!");
+                return;
+            }
+            let tujuanTahun = year;
+            if (tujuanBulan - 1 < month) tujuanTahun += 1; // Kalau bulan sudah lewat, ke tahun depan
+
+            // Cek ada tabrakan di bulan tujuan? (misal, tanggal sama sudah diisi lembur)
+            let tabrakan = false;
+            for (const key in savedWorkdays) {
+                const [y, m, d] = key.split('-').map(Number);
+                if (y === year && m === month && savedWorkdays[key].type === 'normal') {
+                    let targetKey = `${tujuanTahun}-${tujuanBulan - 1}-${d}`;
+                    if (savedWorkdays[targetKey] && savedWorkdays[targetKey].type === 'lembur') {
+                        tabrakan = true;
+                        break;
+                    }
+                }
+            }
+            if (tabrakan) {
+                alert("Gagal: Ada hari di bulan tujuan yang sudah terisi lembur!");
+                return;
+            }
+            // Konfirmasi
+            if (!confirm(`Yakin Pindahkan SEMUA hari kerja biasa ke ${monthNames[tujuanBulan - 1]} ${tujuanTahun}?`)) return;
+
+            // PROSES PINDAH
+            let moved = 0;
+            for (const key in savedWorkdays) {
+                const [y, m, d] = key.split('-').map(Number);
+                if (y === year && m === month && savedWorkdays[key].type === 'normal') {
+                    let targetKey = `${tujuanTahun}-${tujuanBulan - 1}-${d}`;
+                    // Hapus target kalau sudah ada (kecuali lembur! Sudah dicek di atas)
+                    delete savedWorkdays[key];
+                    savedWorkdays[targetKey] = { type: 'normal' };
+                    moved++;
+                }
+            }
+            localStorage.setItem('workdays', JSON.stringify(savedWorkdays));
+            alert(`Berhasil memindahkan ${moved} hari kerja biasa ke ${monthNames[tujuanBulan - 1]} ${tujuanTahun}!`);
             renderCalendar();
         });
 
