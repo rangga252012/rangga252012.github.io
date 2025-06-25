@@ -531,9 +531,8 @@
             <button id="toggle-lembur-btn">Tampilkan Lembur & Total</button>
             <div id="lembur-section" class="hidden-lembur">
                 <ul id="lembur-days-list" class="lembur-list"></ul>
-                <p id="overtime-harian-total"></p>
                 <p id="daily-earnings-total">Harian: Rp 0</p>
-                <p id="overtime-earnings-total">Lambur: Rp 0</p>
+                <p id="overtime-earnings-total"></p>
                 <p id="monthly-earnings">Bulan ini: Rp 0</p>
             </div>
             <div id="salary-received-section">
@@ -559,10 +558,8 @@
         const workdaysCountElement = document.getElementById('workdays-count');
         const workdaysOvertimeElement = document.getElementById('workdays-overtime');
         const workdaysLemburDaysElement = document.getElementById('workdays-lembur-days');
-        const totalEarningsElement = document.getElementById('total-earnings');
         const dailyEarningsTotalElement = document.getElementById('daily-earnings-total');
         const overtimeEarningsTotalElement = document.getElementById('overtime-earnings-total');
-        const overtimeHarianTotalElement = document.getElementById('overtime-harian-total');
         const monthlyEarningsElement = document.getElementById('monthly-earnings');
         const prevMonthButton = document.getElementById('prev-month');
         const nextMonthButton = document.getElementById('next-month');
@@ -890,11 +887,9 @@
 
             dailyEarningsTotalElement.innerHTML = `&middot;&gt; Harian: <b>Rp ${dailyTotal.toLocaleString('id-ID')}</b>`;
 
-            // --- KHUSUS PENGHASILAN LEMBURAN YANG SUDAH DIKONVERSI HARI ---
             // Konversi lembur total jam ke hari & jam
             const { hari: lemburHari, jam: lemburJam } = konversiLemburKeHari(totalLemburJam);
             let lemburHarian = 0, lemburSisaJam = 0, lemburSisaUang = 0;
-
             if (lemburHari > 0) {
                 lemburHarian = lemburHari * dailyEarnings;
             }
@@ -903,24 +898,19 @@
                 lemburSisaUang = lemburSisaJam * overtimeRatePerHalfHour * 2;
             }
 
-            let overtimeHarianStr = '';
-            if (lemburHari > 0 || lemburJam > 0) {
-                overtimeHarianStr = `&middot;&gt; Total Penghasilan Lembur: <b>Rp ${lemburHarian.toLocaleString('id-ID')}${lemburJam > 0 ? ' + ' + lemburJam + ' jam' : ''}${lemburJam > 0 ? ' (Rp ' + lemburSisaUang.toLocaleString('id-ID') + ')' : ''}</b>`;
-            } else {
-                overtimeHarianStr = `&middot;&gt; Total Penghasilan Lembur: <b>Rp 0</b>`;
-            }
-            overtimeHarianTotalElement.innerHTML = overtimeHarianStr;
-
-            // --- LABEL DAN LOGIKA OVERTIME (JAM LEMBUR MURNI) ---
-            let lamburString = '';
+            // HAPUS total penghasilan lembur/hari, dan GANTI overtimeEarningsTotalElement jadi hasil lembur doang
+            let lamburText = "";
+            let totalLemburUang = lemburHarian + lemburSisaUang;
             if (lemburHari > 0 && lemburJam > 0) {
-                lamburString = `${lemburHari} hari + ${lemburJam} jam`;
+                lamburText = `${lemburHari} hari + ${lemburJam} jam = <b>Rp ${totalLemburUang.toLocaleString('id-ID')}</b>`;
             } else if (lemburHari > 0) {
-                lamburString = `${lemburHari} hari`;
+                lamburText = `${lemburHari} hari = <b>Rp ${totalLemburUang.toLocaleString('id-ID')}</b>`;
+            } else if (lemburJam > 0) {
+                lamburText = `${lemburJam} jam = <b>Rp ${totalLemburUang.toLocaleString('id-ID')}</b>`;
             } else {
-                lamburString = `${lemburJam} jam`;
+                lamburText = `<b>Rp 0</b>`;
             }
-            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lambur: <b>${lamburString}</b>`;
+            overtimeEarningsTotalElement.innerHTML = `&middot;&gt; Lemburan: ${lamburText}`;
 
             const overallTotal = dailyTotal + overtimeTotal;
             monthlyEarningsElement.innerHTML = `&middot;&gt; Bulan ini: <b>Rp ${overallTotal.toLocaleString('id-ID')}</b>`;
@@ -998,15 +988,12 @@
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
         });
-
         nextMonthButton.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
             renderCalendar();
         });
 
-        lemburSection.classList.add('hidden-lembur');
-        toggleLemburBtn.textContent = 'Tampilkan Lembur & Total';
-
+        // Initial rendering
         renderCalendar();
     </script>
 </body>
