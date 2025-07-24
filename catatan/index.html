@@ -1,1 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catatan App</title>
+  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>Catatan</h1>
+      <button id="toggleTheme">Mode Gelap</button>
+    </div>
+    <div class="notes" id="noteList"></div>
+  </div>
+
+  <div id="contextMenu" class="context-menu hidden">
+    <button onclick="handleAction('edit')">Edit</button>
+    <button onclick="handleAction('delete')">Hapus</button>
+    <button onclick="handleAction('share')">Bagikan</button>
+  </div>
+</body>
+</html>
 
