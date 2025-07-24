@@ -1,1 +1,78 @@
+body {
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px #00000025;
+  padding: 32px;
+}
+
+h1 {
+  text-align: center;
+  color: #3566b6;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, textarea, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #b3b3b3;
+  font-size: 1em;
+}
+
+button {
+  background: #3566b6;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background .2s;
+}
+
+button:hover {
+  background: #274472;
+}
+
+#notes {
+  margin-top: 32px;
+}
+
+.note-card {
+  background: #f0f4f8;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px #00000010;
+  position: relative;
+}
+
+.note-card img, .note-card video {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+.note-card .remove-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: #ea3d3d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.note-card .remove-btn:hover {
+  background: #b80000;
+}
