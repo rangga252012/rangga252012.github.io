@@ -3,44 +3,213 @@
 <head>
   <meta charset="UTF-8" />
   <title>Catatan & Tugas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
   <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #dde6f7 0%, #f8fafc 100%);
+      color: #222;
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
     body.dark {
-      background: #222;
+      background: linear-gradient(135deg, #191c23 0%, #23272f 100%);
       color: #eee;
     }
-    .menu { display: flex; gap: 1em; margin-bottom: 1em; }
-    .section { display: none; }
-    .section.active { display: block; }
+    header {
+      background: #094067;
+      color: #fff;
+      padding: 2rem 0 1rem 0;
+      text-align: center;
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 4px 16px rgba(9, 64, 103, 0.12);
+      margin-bottom: 1.5rem;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      letter-spacing: 2px;
+    }
+    .menu {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      margin-bottom: 1.5em;
+      background: #e5efff;
+      border-radius: 12px;
+      padding: 0.7em 0;
+      box-shadow: 0 2px 12px rgba(61, 169, 252, 0.06);
+    }
+    body.dark .menu {
+      background: #22304a;
+    }
+    .menu button {
+      background: #3da9fc;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      padding: 0.7em 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(61,169,252,0.04);
+    }
+    .menu button:hover {
+      background: #094067;
+    }
+    main {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(9, 64, 103, 0.08);
+      padding: 2rem 1.2rem 1.5rem 1.2rem;
+    }
+    body.dark main {
+      background: #222b3a;
+      color: #eee;
+    }
+    h2 {
+      margin-top: 0;
+      color: #094067;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+    }
+    body.dark h2 {
+      color: #3da9fc;
+    }
+    textarea, input[type="text"], input[type="input"], input {
+      width: 100%;
+      padding: 0.7em;
+      border: 1px solid #c7d9f4;
+      border-radius: 8px;
+      margin-bottom: 1em;
+      font-size: 1em;
+      background: #f8fafc;
+      transition: border 0.2s;
+      font-family: inherit;
+      resize: vertical;
+    }
+    textarea:focus, input:focus {
+      border: 1.5px solid #3da9fc;
+      outline: none;
+    }
+    body.dark textarea, body.dark input {
+      background: #23272f;
+      border: 1px solid #3da9fc;
+      color: #eee;
+    }
+    .section {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    .section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(20px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      background: #f0f4fa;
+      margin-bottom: 0.8em;
+      padding: 0.8em 1em;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(61, 169, 252, 0.02);
+      font-size: 1em;
+      position: relative;
+      transition: box-shadow .2s;
+    }
+    li:hover {
+      box-shadow: 0 2px 12px rgba(61, 169, 252, 0.08);
+    }
+    body.dark li {
+      background: #273143;
+      color: #eee;
+    }
+    button {
+      font-family: inherit;
+    }
+    .section button:not(.menu button) {
+      background: #3da9fc;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 7px;
+      padding: 0.5em 1.2em;
+      font-size: 1em;
+      margin-bottom: 1em;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .section button:not(.menu button):hover {
+      background: #094067;
+    }
+    footer {
+      text-align: center;
+      margin: 2rem 0 0 0;
+      font-size: 0.95rem;
+      color: #7c8ba1;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 1em 0.5em;
+      }
+      header {
+        padding: 1.3rem 0 0.7rem 0;
+        border-radius: 0 0 18px 18px;
+      }
+      .menu {
+        gap: 0.5em;
+        font-size: 0.98em;
+      }
+    }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Catatan & Tugas</h1>
+    <div style="font-size:1.1em;color:#dbeafe;">Kelola catatan dan tugas harianmu dengan mudah!</div>
+  </header>
   <div class="menu">
     <button onclick="showSection('catatan')">Catatan</button>
     <button onclick="showSection('tugas')">Tugas</button>
     <button onclick="showSection('pengaturan')">Pengaturan</button>
   </div>
-
-  <div id="catatan" class="section active">
-    <h2>Catatan</h2>
-    <textarea id="noteInput" placeholder="Tulis catatan..."></textarea>
-    <button onclick="tambahCatatan()">Tambah</button>
-    <ul id="daftarCatatan"></ul>
-  </div>
-  <div id="tugas" class="section">
-    <h2>Tugas</h2>
-    <input id="tugasInput" placeholder="Tulis tugas..." />
-    <button onclick="tambahTugas()">Tambah</button>
-    <ul id="daftarTugas"></ul>
-  </div>
-  <div id="pengaturan" class="section">
-    <h2>Pengaturan</h2>
-    <button onclick="hapusSemuaCatatan()">Hapus Semua Catatan</button>
-    <button onclick="toggleMode()">Mode: <span id="modeText">Terang</span></button>
-    <div>
-      <em>[Pengaturan lain di sini]</em>
+  <main>
+    <div id="catatan" class="section active">
+      <h2>Catatan</h2>
+      <textarea id="noteInput" placeholder="Tulis catatan..."></textarea>
+      <button onclick="tambahCatatan()">Tambah</button>
+      <ul id="daftarCatatan"></ul>
     </div>
-  </div>
-
+    <div id="tugas" class="section">
+      <h2>Tugas</h2>
+      <input id="tugasInput" placeholder="Tulis tugas..." />
+      <button onclick="tambahTugas()">Tambah</button>
+      <ul id="daftarTugas"></ul>
+    </div>
+    <div id="pengaturan" class="section">
+      <h2>Pengaturan</h2>
+      <button onclick="hapusSemuaCatatan()">Hapus Semua Catatan</button>
+      <button onclick="toggleMode()">Mode: <span id="modeText">Terang</span></button>
+      <div style="margin-top:1em;">
+        <em>[Pengaturan lain di sini]</em>
+      </div>
+    </div>
+  </main>
+  <footer>
+    &copy; 2025 rangga252012 | Dibuat dengan ❤️ menggunakan GitHub Pages
+  </footer>
   <script>
     function showSection(id) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
