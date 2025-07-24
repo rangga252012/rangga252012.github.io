@@ -1,440 +1,133 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Catatan</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Catatan & Tugas</title>
   <style>
-    body {
-      margin: 0;
-      background: #111;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 28px 20px 8px 20px;
-      background: #111;
-    }
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin: 0;
-      letter-spacing: 1px;
-    }
-    .icon-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      margin-left: 16px;
-      font-size: 1.6em;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .icon-btn:hover {
-      color: #ffc107;
-    }
-    main {
-      padding: 0 20px;
-      min-height: 65vh;
-    }
-    .notes-list {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin-top: 10px;
-    }
-    .note-card {
-      background: rgba(30,30,30,0.95);
-      border-radius: 18px;
-      box-shadow: 0 2px 8px #0006;
-      padding: 20px 18px 16px 18px;
-      transition: background 0.2s;
-      cursor: pointer;
-    }
-    .note-card:hover {
-      background: #232323;
-    }
-    .note-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-    .note-content {
-      font-size: 0.95rem;
-      color: #bdbdbd;
-      margin-bottom: 6px;
-    }
-    .note-date {
-      font-size: 0.83rem;
-      color: #ffc107;
-      text-align: right;
-    }
-    .fab {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      background: #ffc107;
-      color: #111;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 2.8em;
-      box-shadow: 0 4px 16px #000a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
-      z-index: 100;
-    }
-    .fab:hover {
-      background: #ffb300;
-    }
-    /* Modal */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
-      background: #000a;
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      transition: 0.2s;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal {
-      background: #232323;
-      padding: 28px 22px 18px 22px;
-      border-radius: 20px;
-      min-width: 320px;
-      max-width: 98vw;
-      box-shadow: 0 2px 24px #000c;
-      color: #fff;
-      position: relative;
-    }
-    .modal h2 {
-      font-size: 1.25rem;
-      margin-bottom: 14px;
-      font-weight: 700;
-    }
-    .modal label {
-      font-size: 0.95rem;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 6px;
-    }
-    .modal input, .modal textarea {
-      width: 100%;
-      background: #181818;
-      border: none;
-      outline: none;
-      color: #fff;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 1rem;
-      margin-bottom: 12px;
-      box-sizing: border-box;
-      resize: vertical;
-    }
-    .modal .attachments {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .modal .attachments label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: #181818;
-      border-radius: 9px;
-      padding: 5px 10px;
-      cursor: pointer;
-      border: 1px solid #333;
-      font-size: 0.98em;
-      transition: background 0.2s;
-    }
-    .modal .attachments label:hover {
+    body.dark {
       background: #222;
+      color: #eee;
     }
-    .modal input[type="file"] {
-      display: none;
-    }
-    .modal .preview {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    .modal .preview img, .modal .preview video {
-      border-radius: 8px;
-      max-width: 70px;
-      max-height: 70px;
-      object-fit: cover;
-      border: 2px solid #333;
-    }
-    .modal .preview a {
-      color: #ffc107;
-      font-size: 0.95em;
-      word-break: break-all;
-    }
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 6px;
-    }
-    .modal-actions button {
-      border: none;
-      border-radius: 9px;
-      padding: 7px 18px;
-      font-size: 1em;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .modal-actions .cancel-btn {
-      background: #232323;
-      color: #fff;
-      border: 1px solid #444;
-    }
-    .modal-actions .save-btn {
-      background: #ffc107;
-      color: #232323;
-    }
-    @media (max-width: 600px) {
-      .modal { min-width: 98vw; }
-      .fab { right: 12px; bottom: 12px; width: 55px; height: 55px; font-size: 2.1em; }
-      .note-card { padding: 16px 10px 12px 10px; }
-    }
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; width: 100vw;
-      background: #181818;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #222;
-      padding: 7px 0;
-      z-index: 90;
-    }
-    .bottom-nav-btn {
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 1.3em;
-      text-decoration: none;
-      opacity: 0.85;
-      transition: color 0.2s, opacity 0.2s;
-    }
-    .bottom-nav-btn.active, .bottom-nav-btn:hover {
-      color: #ffc107;
-      opacity: 1;
-    }
-    .bottom-nav-btn span {
-      font-size: 0.7em;
-      font-weight: 600;
-      margin-top: 2px;
-    }
+    .menu { display: flex; gap: 1em; margin-bottom: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Catatan</h1>
-    <span>
-      <button class="icon-btn" title="Folder"><span>📁</span></button>
-      <button class="icon-btn" title="Pengaturan"><span>⚙️</span></button>
-    </span>
-  </header>
-  <main>
-    <div class="notes-list" id="notes-list">
-      <!-- Note cards will be rendered here -->
-    </div>
-  </main>
-  <button class="fab" id="add-note-btn" title="Tambah Catatan">+</button>
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-      <h2>Tambah Catatan Baru</h2>
-      <form id="note-form">
-        <label for="note-title">Judul</label>
-        <input type="text" id="note-title" required maxlength="32" placeholder="Judul catatan...">
-        <label for="note-content">Isi Catatan</label>
-        <textarea id="note-content" rows="3" maxlength="200" placeholder="Isi catatan..."></textarea>
-        <div class="attachments">
-          <label>
-            📷
-            <input type="file" accept="image/*" id="note-image" multiple>
-            Foto
-          </label>
-          <label>
-            🎥
-            <input type="file" accept="video/*" id="note-video" multiple>
-            Video
-          </label>
-          <label>
-            🔗
-            <input type="url" id="note-link" placeholder="Tambahkan link" style="display:none;">
-            <span id="link-btn">Link</span>
-          </label>
-        </div>
-        <div class="preview" id="preview"></div>
-        <div class="modal-actions">
-          <button type="button" class="cancel-btn" id="cancel-btn">Batal</button>
-          <button type="submit" class="save-btn">Simpan</button>
-        </div>
-      </form>
+  <div class="menu">
+    <button onclick="showSection('catatan')">Catatan</button>
+    <button onclick="showSection('tugas')">Tugas</button>
+    <button onclick="showSection('pengaturan')">Pengaturan</button>
+  </div>
+
+  <div id="catatan" class="section active">
+    <h2>Catatan</h2>
+    <textarea id="noteInput" placeholder="Tulis catatan..."></textarea>
+    <button onclick="tambahCatatan()">Tambah</button>
+    <ul id="daftarCatatan"></ul>
+  </div>
+  <div id="tugas" class="section">
+    <h2>Tugas</h2>
+    <input id="tugasInput" placeholder="Tulis tugas..." />
+    <button onclick="tambahTugas()">Tambah</button>
+    <ul id="daftarTugas"></ul>
+  </div>
+  <div id="pengaturan" class="section">
+    <h2>Pengaturan</h2>
+    <button onclick="hapusSemuaCatatan()">Hapus Semua Catatan</button>
+    <button onclick="toggleMode()">Mode: <span id="modeText">Terang</span></button>
+    <div>
+      <em>[Pengaturan lain di sini]</em>
     </div>
   </div>
-  <nav class="bottom-nav">
-    <a href="#" class="bottom-nav-btn active"><span>📝</span><span>Catatan</span></a>
-    <a href="#" class="bottom-nav-btn"><span>☑️</span><span>Tugas</span></a>
-  </nav>
+
   <script>
-    // State
-    let notes = JSON.parse(localStorage.getItem('catatan_notes') || '[]');
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-    // Render notes
-    function renderNotes() {
-      const list = document.getElementById('notes-list');
-      list.innerHTML = '';
-      if (notes.length === 0) {
-        list.innerHTML = `<div style="color:#aaa;text-align:center;margin:38px 0 0 0;">Belum ada catatan</div>`;
-        return;
-      }
-      for (const note of notes) {
-        const el = document.createElement('div');
-        el.className = "note-card";
-        el.innerHTML = `
-          <div class="note-title">${note.title || '(Tanpa judul)'}</div>
-          <div class="note-content">${note.content ? note.content.substring(0, 120) : '<span style="color:#444;">Tidak ada teks</span>'}</div>
-          <div class="note-date">${note.date}</div>
-        `;
-        el.onclick = () => showNoteDetail(note);
-        list.appendChild(el);
+    // Catatan
+    function tambahCatatan() {
+      const input = document.getElementById('noteInput');
+      const val = input.value.trim();
+      if(val) {
+        const li = document.createElement('li');
+        li.textContent = val;
+        document.getElementById('daftarCatatan').appendChild(li);
+        input.value = '';
+        simpanCatatan();
       }
     }
-
-    // Modal handling
-    const modal = document.getElementById('modal-overlay');
-    document.getElementById('add-note-btn').onclick = () => {
-      openModal();
-    };
-    document.getElementById('cancel-btn').onclick = closeModal;
-
-    function openModal() {
-      document.getElementById('note-title').value = '';
-      document.getElementById('note-content').value = '';
-      document.getElementById('preview').innerHTML = '';
-      images = []; videos = []; links = [];
-      modal.classList.add('active');
+    function simpanCatatan() {
+      const items = Array.from(document.getElementById('daftarCatatan').children).map(li => li.textContent);
+      localStorage.setItem('catatan', JSON.stringify(items));
     }
-    function closeModal() {
-      modal.classList.remove('active');
+    function loadCatatan() {
+      const items = JSON.parse(localStorage.getItem('catatan') || '[]');
+      const ul = document.getElementById('daftarCatatan');
+      ul.innerHTML = '';
+      items.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ul.appendChild(li);
+      });
     }
 
-    // Preview attachments
-    let images = [], videos = [], links = [];
-
-    document.getElementById('note-image').addEventListener('change', function(e){
-      Array.from(e.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          images.push(ev.target.result);
-          updatePreview();
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    document.getElementById('note-video').addEventListener('change', function(e){
-      Array.from(e.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          videos.push(ev.target.result);
-          updatePreview();
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    // Link input
-    document.getElementById('link-btn').onclick = function(e) {
-      e.preventDefault();
-      const url = prompt("Masukkan link (contoh: https://...):");
-      if (url && url.startsWith("http")) {
-        links.push(url);
-        updatePreview();
+    // Tugas
+    function tambahTugas() {
+      const input = document.getElementById('tugasInput');
+      const val = input.value.trim();
+      if(val) {
+        const li = document.createElement('li');
+        li.textContent = val;
+        document.getElementById('daftarTugas').appendChild(li);
+        input.value = '';
+        simpanTugas();
       }
-    };
-
-    function updatePreview() {
-      const preview = document.getElementById('preview');
-      preview.innerHTML = '';
-      images.forEach((src, i) => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.title = "Foto " + (i+1);
-        preview.appendChild(img);
-      });
-      videos.forEach((src, i) => {
-        const vid = document.createElement('video');
-        vid.src = src;
-        vid.controls = true;
-        vid.title = "Video " + (i+1);
-        preview.appendChild(vid);
-      });
-      links.forEach((url, i) => {
-        const a = document.createElement('a');
-        a.href = url; a.textContent = url; a.target = "_blank";
-        preview.appendChild(a);
+    }
+    function simpanTugas() {
+      const items = Array.from(document.getElementById('daftarTugas').children).map(li => li.textContent);
+      localStorage.setItem('tugas', JSON.stringify(items));
+    }
+    function loadTugas() {
+      const items = JSON.parse(localStorage.getItem('tugas') || '[]');
+      const ul = document.getElementById('daftarTugas');
+      ul.innerHTML = '';
+      items.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ul.appendChild(li);
       });
     }
 
-    // Form submit
-    document.getElementById('note-form').onsubmit = function(e) {
-      e.preventDefault();
-      const title = document.getElementById('note-title').value.trim();
-      const content = document.getElementById('note-content').value.trim();
-      const date = new Date();
-      const note = {
-        title,
-        content,
-        date: date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-        images: [...images],
-        videos: [...videos],
-        links: [...links]
-      };
-      notes.unshift(note);
-      localStorage.setItem('catatan_notes', JSON.stringify(notes));
-      closeModal();
-      renderNotes();
-    };
-
-    // Show note detail (simple)
-    function showNoteDetail(note) {
-      let html = `<h2>${note.title || '(Tanpa judul)'}</h2>
-      <div style="color:#ffc107;margin-bottom:8px;">${note.date}</div>
-      <div style="margin-bottom:12px;">${note.content || '<span style="color:#444;">Tidak ada teks</span>'}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">`;
-      (note.images||[]).forEach(src => html += `<img src="${src}" style="max-width:90px;max-height:90px;border-radius:6px;border:2px solid #232323;">`);
-      (note.videos||[]).forEach(src => html += `<video src="${src}" controls style="max-width:95px;max-height:95px;border-radius:6px;border:2px solid #232323;"></video>`);
-      html += `</div>`;
-      (note.links||[]).forEach(url => html += `<div><a href="${url}" target="_blank" style="color:#ffc107;">${url}</a></div>`);
-      html += `<div style="text-align:right;margin-top:18px;"><button onclick="document.getElementById('modal-overlay').classList.remove('active')" style="background:#ffc107;color:#232323;border:none;border-radius:8px;padding:6px 16px;font-size:1em;font-weight:600;cursor:pointer;">Tutup</button></div>`;
-      // Show as modal
-      modal.classList.add('active');
-      modal.querySelector('.modal').innerHTML = html;
+    // Pengaturan
+    function hapusSemuaCatatan() {
+      if(confirm('Yakin hapus semua catatan?')) {
+        document.getElementById('daftarCatatan').innerHTML = '';
+        simpanCatatan();
+      }
+    }
+    function toggleMode() {
+      const body = document.body;
+      body.classList.toggle('dark');
+      document.getElementById('modeText').textContent = body.classList.contains('dark') ? 'Gelap' : 'Terang';
+      localStorage.setItem('mode', body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    function loadMode() {
+      const mode = localStorage.getItem('mode');
+      if(mode === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('modeText').textContent = 'Gelap';
+      }
     }
 
-    // On load
-    renderNotes();
+    // Load semua saat halaman dibuka
+    window.onload = function() {
+      loadCatatan();
+      loadTugas();
+      loadMode();
+    };
   </script>
 </body>
-  </html>
+</html>
