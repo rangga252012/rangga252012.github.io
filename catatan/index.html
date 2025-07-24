@@ -1,302 +1,484 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Catatan & Tugas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #dde6f7 0%, #f8fafc 100%);
-      color: #222;
-      transition: background 0.3s, color 0.3s;
-      min-height: 100vh;
-    }
-    body.dark {
-      background: linear-gradient(135deg, #191c23 0%, #23272f 100%);
-      color: #eee;
-    }
-    header {
-      background: #094067;
-      color: #fff;
-      padding: 2rem 0 1rem 0;
-      text-align: center;
-      border-radius: 0 0 32px 32px;
-      box-shadow: 0 4px 16px rgba(9, 64, 103, 0.12);
-      margin-bottom: 1.5rem;
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0;
-      letter-spacing: 2px;
-    }
-    .menu {
-      display: flex;
-      gap: 1em;
-      justify-content: center;
-      margin-bottom: 1.5em;
-      background: #e5efff;
-      border-radius: 12px;
-      padding: 0.7em 0;
-      box-shadow: 0 2px 12px rgba(61, 169, 252, 0.06);
-    }
-    body.dark .menu {
-      background: #22304a;
-    }
-    .menu button {
-      background: #3da9fc;
-      border: none;
-      color: #fff;
-      font-weight: bold;
-      padding: 0.7em 1.2em;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background 0.2s, box-shadow 0.2s;
-      outline: none;
-      box-shadow: 0 2px 8px rgba(61,169,252,0.04);
-    }
-    .menu button:hover {
-      background: #094067;
-    }
-    main {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(9, 64, 103, 0.08);
-      padding: 2rem 1.2rem 1.5rem 1.2rem;
-    }
-    body.dark main {
-      background: #222b3a;
-      color: #eee;
-    }
-    h2 {
-      margin-top: 0;
-      color: #094067;
-      font-size: 1.5em;
-      letter-spacing: 1px;
-    }
-    body.dark h2 {
-      color: #3da9fc;
-    }
-    textarea, input[type="text"], input[type="input"], input {
-      width: 100%;
-      padding: 0.7em;
-      border: 1px solid #c7d9f4;
-      border-radius: 8px;
-      margin-bottom: 1em;
-      font-size: 1em;
-      background: #f8fafc;
-      transition: border 0.2s;
-      font-family: inherit;
-      resize: vertical;
-    }
-    textarea:focus, input:focus {
-      border: 1.5px solid #3da9fc;
-      outline: none;
-    }
-    body.dark textarea, body.dark input {
-      background: #23272f;
-      border: 1px solid #3da9fc;
-      color: #eee;
-    }
-    .section {
-      display: none;
-      animation: fadeIn 0.5s;
-    }
-    .section.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity:0; transform: translateY(20px);}
-      to { opacity:1; transform: translateY(0);}
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    li {
-      background: #f0f4fa;
-      margin-bottom: 0.8em;
-      padding: 0.8em 1em;
-      border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(61, 169, 252, 0.02);
-      font-size: 1em;
-      position: relative;
-      transition: box-shadow .2s;
-    }
-    li:hover {
-      box-shadow: 0 2px 12px rgba(61, 169, 252, 0.08);
-    }
-    body.dark li {
-      background: #273143;
-      color: #eee;
-    }
-    button {
-      font-family: inherit;
-    }
-    .section button:not(.menu button) {
-      background: #3da9fc;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 7px;
-      padding: 0.5em 1.2em;
-      font-size: 1em;
-      margin-bottom: 1em;
-      transition: background 0.2s;
-      cursor: pointer;
-    }
-    .section button:not(.menu button):hover {
-      background: #094067;
-    }
-    footer {
-      text-align: center;
-      margin: 2rem 0 0 0;
-      font-size: 0.95rem;
-      color: #7c8ba1;
-    }
-    @media (max-width: 600px) {
-      main {
-        padding: 1em 0.5em;
-      }
-      header {
-        padding: 1.3rem 0 0.7rem 0;
-        border-radius: 0 0 18px 18px;
-      }
-      .menu {
-        gap: 0.5em;
-        font-size: 0.98em;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Catatan & Tugas</h1>
-    <div style="font-size:1.1em;color:#dbeafe;">Kelola catatan dan tugas harianmu dengan mudah!</div>
-  </header>
-  <div class="menu">
-    <button onclick="showSection('catatan')">Catatan</button>
-    <button onclick="showSection('tugas')">Tugas</button>
-    <button onclick="showSection('pengaturan')">Pengaturan</button>
-  </div>
-  <main>
-    <div id="catatan" class="section active">
-      <h2>Catatan</h2>
-      <textarea id="noteInput" placeholder="Tulis catatan..."></textarea>
-      <button onclick="tambahCatatan()">Tambah</button>
-      <ul id="daftarCatatan"></ul>
-    </div>
-    <div id="tugas" class="section">
-      <h2>Tugas</h2>
-      <input id="tugasInput" placeholder="Tulis tugas..." />
-      <button onclick="tambahTugas()">Tambah</button>
-      <ul id="daftarTugas"></ul>
-    </div>
-    <div id="pengaturan" class="section">
-      <h2>Pengaturan</h2>
-      <button onclick="hapusSemuaCatatan()">Hapus Semua Catatan</button>
-      <button onclick="toggleMode()">Mode: <span id="modeText">Terang</span></button>
-      <div style="margin-top:1em;">
-        <em>[Pengaturan lain di sini]</em>
-      </div>
-    </div>
-  </main>
-  <footer>
-    &copy; 2025 rangga252012 | Dibuat dengan ❤️ menggunakan GitHub Pages
-  </footer>
-  <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
+App.tsximport React, { useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Switch,
+  FlatList,
+  StyleSheet,
+  Alert,
+  useColorScheme,
+  StatusBar,
+} from "react-native";
 
-    // Catatan
-    function tambahCatatan() {
-      const input = document.getElementById('noteInput');
-      const val = input.value.trim();
-      if(val) {
-        const li = document.createElement('li');
-        li.textContent = val;
-        document.getElementById('daftarCatatan').appendChild(li);
-        input.value = '';
-        simpanCatatan();
-      }
-    }
-    function simpanCatatan() {
-      const items = Array.from(document.getElementById('daftarCatatan').children).map(li => li.textContent);
-      localStorage.setItem('catatan', JSON.stringify(items));
-    }
-    function loadCatatan() {
-      const items = JSON.parse(localStorage.getItem('catatan') || '[]');
-      const ul = document.getElementById('daftarCatatan');
-      ul.innerHTML = '';
-      items.forEach(t => {
-        const li = document.createElement('li');
-        li.textContent = t;
-        ul.appendChild(li);
-      });
-    }
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+};
 
-    // Tugas
-    function tambahTugas() {
-      const input = document.getElementById('tugasInput');
-      const val = input.value.trim();
-      if(val) {
-        const li = document.createElement('li');
-        li.textContent = val;
-        document.getElementById('daftarTugas').appendChild(li);
-        input.value = '';
-        simpanTugas();
-      }
-    }
-    function simpanTugas() {
-      const items = Array.from(document.getElementById('daftarTugas').children).map(li => li.textContent);
-      localStorage.setItem('tugas', JSON.stringify(items));
-    }
-    function loadTugas() {
-      const items = JSON.parse(localStorage.getItem('tugas') || '[]');
-      const ul = document.getElementById('daftarTugas');
-      ul.innerHTML = '';
-      items.forEach(t => {
-        const li = document.createElement('li');
-        li.textContent = t;
-        ul.appendChild(li);
-      });
-    }
+type Task = {
+  id: string;
+  title: string;
+  completed: boolean;
+  date: string;
+};
 
-    // Pengaturan
-    function hapusSemuaCatatan() {
-      if(confirm('Yakin hapus semua catatan?')) {
-        document.getElementById('daftarCatatan').innerHTML = '';
-        simpanCatatan();
-      }
-    }
-    function toggleMode() {
-      const body = document.body;
-      body.classList.toggle('dark');
-      document.getElementById('modeText').textContent = body.classList.contains('dark') ? 'Gelap' : 'Terang';
-      localStorage.setItem('mode', body.classList.contains('dark') ? 'dark' : 'light');
-    }
-    function loadMode() {
-      const mode = localStorage.getItem('mode');
-      if(mode === 'dark') {
-        document.body.classList.add('dark');
-        document.getElementById('modeText').textContent = 'Gelap';
-      }
-    }
+const getToday = () => {
+  const d = new Date();
+  const month = d.toLocaleString("id", { month: "long" });
+  return `${d.getDate()} ${month}`;
+};
 
-    // Load semua saat halaman dibuka
-    window.onload = function() {
-      loadCatatan();
-      loadTugas();
-      loadMode();
-    };
-  </script>
-</body>
-</html>
+const STORAGE_KEY = "APP_DATA_V1";
+
+const defaultData = {
+  notes: [] as Note[],
+  tasks: [] as Task[],
+  darkMode: true,
+};
+
+export default function App() {
+  const [data, setData] = useState(defaultData);
+  const [tab, setTab] = useState<"notes" | "tasks">("notes");
+  const [showNoteModal, setShowNoteModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteContent, setNoteContent] = useState("");
+  const [taskTitle, setTaskTitle] = useState("");
+  const [isDark, setIsDark] = useState(defaultData.darkMode);
+
+  // Load from localStorage
+  useEffect(() => {
+    const d = localStorage.getItem(STORAGE_KEY);
+    if (d) {
+      const obj = JSON.parse(d);
+      setData(obj);
+      setIsDark(obj.darkMode);
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ ...data, darkMode: isDark })
+    );
+  }, [data, isDark]);
+
+  // Note CRUD
+  const addNote = () => {
+    if (!noteTitle) return;
+    setData((prev) => ({
+      ...prev,
+      notes: [
+        ...prev.notes,
+        {
+          id: Date.now().toString(),
+          title: noteTitle,
+          content: noteContent,
+          date: getToday(),
+        },
+      ],
+    }));
+    setNoteTitle("");
+    setNoteContent("");
+    setShowNoteModal(false);
+  };
+
+  const deleteAllNotes = () => {
+    Alert.alert("Konfirmasi", "Hapus semua catatan?", [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Hapus",
+        style: "destructive",
+        onPress: () =>
+          setData((prev) => ({
+            ...prev,
+            notes: [],
+          })),
+      },
+    ]);
+  };
+
+  // Task CRUD
+  const addTask = () => {
+    if (!taskTitle) return;
+    setData((prev) => ({
+      ...prev,
+      tasks: [
+        ...prev.tasks,
+        {
+          id: Date.now().toString(),
+          title: taskTitle,
+          completed: false,
+          date: getToday(),
+        },
+      ],
+    }));
+    setTaskTitle("");
+    setShowTaskModal(false);
+  };
+
+  const toggleTask = (id: string) => {
+    setData((prev) => ({
+      ...prev,
+      tasks: prev.tasks.map((t) =>
+        t.id === id ? { ...t, completed: !t.completed } : t
+      ),
+    }));
+  };
+
+  const deleteAllTasks = () => {
+    Alert.alert("Konfirmasi", "Hapus semua tugas?", [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Hapus",
+        style: "destructive",
+        onPress: () =>
+          setData((prev) => ({
+            ...prev,
+            tasks: [],
+          })),
+      },
+    ]);
+  };
+
+  // Settings
+  const toggleTheme = () => setIsDark((d) => !d);
+
+  // Saran pengaturan lain: Reset semua data
+  const resetAll = () => {
+    Alert.alert("Reset Data", "Hapus semua data aplikasi?", [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Reset",
+        style: "destructive",
+        onPress: () => {
+          setData(defaultData);
+          setIsDark(defaultData.darkMode);
+        },
+      },
+    ]);
+  };
+
+  // Styling
+  const theme = isDark
+    ? {
+        bg: "#000",
+        text: "#fff",
+        card: "#232323",
+        input: "#232323",
+        tabActive: "#fff",
+        tabInactive: "#999",
+        fab: "#FFA800",
+      }
+    : {
+        bg: "#fff",
+        text: "#000",
+        card: "#f3f3f3",
+        input: "#eaeaea",
+        tabActive: "#000",
+        tabInactive: "#bbb",
+        fab: "#FFA800",
+      };
+
+  return (
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.bg }]}>
+      <StatusBar
+        barStyle={isDark ? "light-content" : "dark-content"}
+        backgroundColor={theme.bg}
+      />
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={[styles.title, { color: theme.text }]}>
+          {tab === "notes" ? "Catatan" : "Tugas"}
+        </Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity
+            onPress={() => setTab(tab === "notes" ? "tasks" : "notes")}
+            style={styles.headerIconBtn}
+          >
+            <Text style={{ color: theme.text, fontSize: 22 }}>
+              {tab === "notes" ? "📁" : "📝"}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowSettings(true)}
+            style={styles.headerIconBtn}
+          >
+            <Text style={{ color: theme.text, fontSize: 22 }}>⚙️</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/* Body */}
+      <View style={{ flex: 1 }}>
+        {tab === "notes" ? (
+          <FlatList
+            data={data.notes}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <Text style={{ color: theme.text, textAlign: "center", marginTop: 30 }}>
+                Belum ada catatan
+              </Text>
+            }
+            renderItem={({ item }) => (
+              <View style={[styles.card, { backgroundColor: theme.card }]}>
+                <Text style={[styles.cardTitle, { color: theme.text }]}>{item.title}</Text>
+                <Text style={{ color: theme.text, opacity: 0.7 }}>
+                  {item.content || "Tidak ada teks"}
+                </Text>
+                <Text style={{ color: theme.text, opacity: 0.5, fontSize: 12 }}>
+                  {item.date}
+                </Text>
+              </View>
+            )}
+            contentContainerStyle={{ padding: 16 }}
+          />
+        ) : (
+          <FlatList
+            data={data.tasks}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <Text style={{ color: theme.text, textAlign: "center", marginTop: 30 }}>
+                Belum ada tugas
+              </Text>
+            }
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[
+                  styles.card,
+                  { backgroundColor: theme.card, flexDirection: "row", alignItems: "center" },
+                ]}
+                onPress={() => toggleTask(item.id)}
+              >
+                <Text
+                  style={{
+                    color: item.completed ? "#aaa" : theme.text,
+                    textDecorationLine: item.completed ? "line-through" : "none",
+                    flex: 1,
+                  }}
+                >
+                  {item.title}
+                </Text>
+                <Text style={{ color: "#FFA800", fontSize: 18 }}>
+                  {item.completed ? "✔️" : "⬜️"}
+                </Text>
+                <Text
+                  style={{
+                    color: theme.text,
+                    opacity: 0.5,
+                    fontSize: 12,
+                    marginLeft: 8,
+                  }}
+                >
+                  {item.date}
+                </Text>
+              </TouchableOpacity>
+            )}
+            contentContainerStyle={{ padding: 16 }}
+          />
+        )}
+      </View>
+      {/* FAB */}
+      <TouchableOpacity
+        style={[styles.fab, { backgroundColor: theme.fab }]}
+        onPress={() => (tab === "notes" ? setShowNoteModal(true) : setShowTaskModal(true))}
+      >
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
+      {/* Tab Bar */}
+      <View style={[styles.tabBar, { backgroundColor: theme.bg }]}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => setTab("notes")}>
+          <Text
+            style={{
+              color: tab === "notes" ? theme.tabActive : theme.tabInactive,
+              fontWeight: "bold",
+            }}
+          >
+            Catatan
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => setTab("tasks")}>
+          <Text
+            style={{
+              color: tab === "tasks" ? theme.tabActive : theme.tabInactive,
+              fontWeight: "bold",
+            }}
+          >
+            Tugas
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* Note Modal */}
+      <Modal visible={showNoteModal} animationType="slide" transparent>
+        <View style={styles.modalBg}>
+          <View style={[styles.modalContent, { backgroundColor: theme.bg }]}>
+            <Text style={{ color: theme.text, fontWeight: "bold", fontSize: 18 }}>
+              Tambah Catatan
+            </Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: theme.input, color: theme.text }]}
+              placeholder="Judul"
+              placeholderTextColor={isDark ? "#aaa" : "#555"}
+              value={noteTitle}
+              onChangeText={setNoteTitle}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                { backgroundColor: theme.input, color: theme.text, height: 80 },
+              ]}
+              placeholder="Isi Catatan"
+              placeholderTextColor={isDark ? "#aaa" : "#555"}
+              value={noteContent}
+              onChangeText={setNoteContent}
+              multiline
+            />
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+              <TouchableOpacity onPress={() => setShowNoteModal(false)}>
+                <Text style={{ color: "#FFA800", marginRight: 16 }}>Batal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={addNote}>
+                <Text style={{ color: "#FFA800" }}>Simpan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      {/* Task Modal */}
+      <Modal visible={showTaskModal} animationType="slide" transparent>
+        <View style={styles.modalBg}>
+          <View style={[styles.modalContent, { backgroundColor: theme.bg }]}>
+            <Text style={{ color: theme.text, fontWeight: "bold", fontSize: 18 }}>
+              Tambah Tugas
+            </Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: theme.input, color: theme.text }]}
+              placeholder="Judul Tugas"
+              placeholderTextColor={isDark ? "#aaa" : "#555"}
+              value={taskTitle}
+              onChangeText={setTaskTitle}
+            />
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+              <TouchableOpacity onPress={() => setShowTaskModal(false)}>
+                <Text style={{ color: "#FFA800", marginRight: 16 }}>Batal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={addTask}>
+                <Text style={{ color: "#FFA800" }}>Simpan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      {/* Settings Modal */}
+      <Modal visible={showSettings} animationType="slide" transparent>
+        <View style={styles.modalBg}>
+          <View style={[styles.modalContent, { backgroundColor: theme.bg }]}>
+            <Text style={{ color: theme.text, fontWeight: "bold", fontSize: 18, marginBottom: 16 }}>
+              Pengaturan
+            </Text>
+            <View style={styles.settingRow}>
+              <Text style={{ color: theme.text, flex: 1 }}>Mode Gelap</Text>
+              <Switch value={isDark} onValueChange={toggleTheme} />
+            </View>
+            <TouchableOpacity style={styles.settingRow} onPress={deleteAllNotes}>
+              <Text style={{ color: "#ff3333", flex: 1 }}>Hapus Semua Catatan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingRow} onPress={deleteAllTasks}>
+              <Text style={{ color: "#ff3333", flex: 1 }}>Hapus Semua Tugas</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingRow} onPress={resetAll}>
+              <Text style={{ color: "#ff3333", flex: 1 }}>Reset Semua Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignSelf: "flex-end", marginTop: 24 }}
+              onPress={() => setShowSettings(false)}
+            >
+              <Text style={{ color: "#FFA800" }}>Tutup</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    justifyContent: "space-between",
+  },
+  title: { fontSize: 32, fontWeight: "bold" },
+  headerIcons: { flexDirection: "row" },
+  headerIconBtn: { marginLeft: 16 },
+  card: {
+    borderRadius: 18,
+    padding: 20,
+    marginBottom: 18,
+    minHeight: 80,
+    elevation: 1,
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 70,
+    right: 24,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+  },
+  fabText: { color: "#fff", fontSize: 32, fontWeight: "bold" },
+  tabBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 8,
+    borderTopWidth: 0.5,
+    borderTopColor: "#222",
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  modalBg: {
+    flex: 1,
+    backgroundColor: "#0009",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: "90%",
+    borderRadius: 18,
+    padding: 24,
+    elevation: 5,
+  },
+  input: {
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 12,
+    fontSize: 16,
+  },
+  settingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#333",
+  },
+});
