@@ -1,7 +1,7 @@
 // Data gambar, F-1 ... F-10, keterangan "belum terisi"
 const galleryData = [
   {
-    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    img: "F-1.jpg",
     title: "F-1",
     desc: "belum terisi"
   },
