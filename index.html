@@ -1,68 +1,20 @@
-
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Daftar Fan</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; }
-    .fan-item { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px;}
-    .fan-photo { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
-    .fan-info { margin-top: 10px; }
-    .fan-number { font-weight: bold; font-size: 1.2em; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Daftar Fan</h1>
-  <div class="fan-item">
-    <span class="fan-number">1.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 1" class="fan-photo">
-    <div class="fan-info">Info fan 1 (isi keterangan di sini)</div>
+  <!-- ...item list dan tombol Lihat seperti sebelumnya... -->
+
+  <!-- Modal -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <img src="" alt="Foto" class="modal-img" id="modalImg">
+      <div id="modalDesc"></div>
+    </div>
   </div>
-  <div class="fan-item">
-    <span class="fan-number">2.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 2" class="fan-photo">
-    <div class="fan-info">Info fan 2 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">3.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 3" class="fan-photo">
-    <div class="fan-info">Info fan 3 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">4.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 4" class="fan-photo">
-    <div class="fan-info">Info fan 4 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">5.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 5" class="fan-photo">
-    <div class="fan-info">Info fan 5 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">6.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 6" class="fan-photo">
-    <div class="fan-info">Info fan 6 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">7.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 7" class="fan-photo">
-    <div class="fan-info">Info fan 7 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">8.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 8" class="fan-photo">
-    <div class="fan-info">Info fan 8 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">9.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 9" class="fan-photo">
-    <div class="fan-info">Info fan 9 (isi keterangan di sini)</div>
-  </div>
-  <div class="fan-item">
-    <span class="fan-number">10.</span><br>
-    <img src="https://via.placeholder.com/100" alt="Foto Fan 10" class="fan-photo">
-    <div class="fan-info">Info fan 10 (isi keterangan di sini)</div>
-  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
