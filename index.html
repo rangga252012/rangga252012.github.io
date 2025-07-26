@@ -1,20 +1,106 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- ...item list dan tombol Lihat seperti sebelumnya... -->
+<!-- Tambahkan di bagian <head> -->
+<style>
+  body {
+    background: #181818;
+    color: #f1f1f1;
+    font-family: Arial, sans-serif;
+  }
+  .item-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: #222;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  .item-desc {
+    flex: 1;
+    margin-right: 20px;
+  }
+  .lihat-btn {
+    background: #2a2a2a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .lihat-btn:hover {
+    background: #444;
+  }
+  /* Modal styles */
+  .modal-bg {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: #222;
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 0 20px #000;
+    text-align: center;
+    position: relative;
+  }
+  .modal-img {
+    max-width: 80vw;
+    max-height: 60vh;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .close-modal {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: #444;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+  }
+</style>
 
-  <!-- Modal -->
-  <div class="modal-bg" id="modalBg">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">&times;</button>
-      <img src="" alt="Foto" class="modal-img" id="modalImg">
-      <div id="modalDesc"></div>
-    </div>
+<!-- Tambahkan di bagian <body>, contoh item dan tombol -->
+<div class="item-container">
+  <div class="item-desc">
+    <strong>Keterangan 1:</strong> Contoh deskripsi item 1
   </div>
+  <button class="lihat-btn" onclick="showModal('img1.jpg','Contoh deskripsi item 1')">Lihat</button>
+</div>
+<div class="item-container">
+  <div class="item-desc">
+    <strong>Keterangan 2:</strong> Contoh deskripsi item 2
+  </div>
+  <button class="lihat-btn" onclick="showModal('img2.jpg','Contoh deskripsi item 2')">Lihat</button>
+</div>
+<!-- Tambahkan lebih banyak item sesuai kebutuhan -->
 
-  <script src="script.js"></script>
-</body>
-</html>
+<!-- Modal popup -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <img src="" alt="Foto" class="modal-img" id="modalImg">
+    <div id="modalDesc"></div>
+  </div>
+</div>
+
+<!-- Tambahkan script sebelum </body> -->
+<script>
+function showModal(imgSrc, desc) {
+  document.getElementById('modalBg').style.display = 'flex';
+  document.getElementById('modalImg').src = imgSrc;
+  document.getElementById('modalDesc').innerText = desc;
+}
+function closeModal() {
+  document.getElementById('modalBg').style.display = 'none';
+}
+</script>
