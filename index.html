@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Login Password</title>
+  <style>
+    body {
+      background: #181818;
+      color: #eaeaea;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #232323;
+      padding: 32px 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+      text-align: center;
+      min-width: 300px;
+    }
+    input[type="password"] {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #2e2e2e;
+      color: #eaeaea;
+      font-size: 1rem;
+      margin-top: 12px;
+      width: 85%;
+      outline: none;
+    }
+    button {
+      margin-top: 18px;
+      padding: 10px 28px;
+      background: #444;
+      color: #eaeaea;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #666;
+    }
+    .error {
+      color: #ff6868;
+      margin-top: 10px;
+      font-size: 0.96rem;
+    }
+    h2 {
+      margin-bottom: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Masukkan Password</h2>
+    <input type="password" id="pwd" placeholder="Password">
+    <br>
+    <button onclick="checkPassword()">lanjut</button>
+    <div id="error" class="error"></div>
+  </div>
+  <script>
+    function checkPassword() {
+      var pwd = document.getElementById('pwd').value;
+      var err = document.getElementById('error');
+      if (pwd === '251106') {
+        window.location.href = 'https://rangga252012.github.io/A1';
+      } else {
+        err.textContent = 'Password salah!';
+      }
+    }
+    document.getElementById('pwd').addEventListener('keypress', function(e){
+      if(e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+  </script>
+</body>
+</html>
