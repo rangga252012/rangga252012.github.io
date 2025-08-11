@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>kenangan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #18181c;
+      --bg-card: #23232b;
+      --text-main: #eaeaea;
+      --text-secondary: #b0b0b8;
+      --accent: #3a5ca4;
+      --button-bg: #23232b;
+      --button-bg-hover: #29304a;
+      --border-radius: 12px;
+      --shadow: 0 2px 12px 0 rgba(30,36,50,0.14);
+    }
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    h1 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 2.2em;
+      letter-spacing: 0.5px;
+      margin: 42px 0 28px;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 32px;
+    }
+    .item {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
+    .item:hover {
+      box-shadow: 0 8px 24px 0 rgba(30,36,50,0.21);
+      transform: translateY(-4px) scale(1.02);
+    }
+    .item-title {
+      font-size: 1.2em;
+      font-family: 'Montserrat', Arial, sans-serif;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .item-desc {
+      font-size: 0.97em;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .lihat-btn {
+      background: var(--button-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 11px 28px;
+      cursor: pointer;
+      margin-top: 8px;
+      border-radius: 6px;
+      font-size: 1em;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+      box-shadow: 0 2px 8px 0 rgba(30,36,50,0.08);
+    }
+    .lihat-btn:hover {
+      background: var(--button-bg-hover);
+      color: #fff;
+      border-color: #5478c7;
+    }
+    @media (max-width: 700px) {
+      .item {
+        width: 92vw;
+        min-width: 200px;
+        max-width: 340px;
+      }
+    }
+    footer {
+      margin-top: auto;
+      color: var(--text-secondary);
+      font-size: 0.93em;
+      padding: 16px 0 10px 0;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Halo, witaaaaaa!</h1>
+  <div class="container">
+    <div class="item">
+      <div class="item-title">Kenangan</div>
+      <div class="item-desc"Makasi terlalu memperbolehkan ku untuk menyimpan nya</div>
+      <button class="lihat-btn" onclick="window.open('https://photos.app.goo.gl/5NjJqBRk5W1ivzg17', '_blank')">Lihat</button>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 kenangan kita
+  </footer>
+</body>
+</html>
