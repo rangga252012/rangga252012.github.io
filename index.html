@@ -2,85 +2,140 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Login Password</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Buat Kenangan</title>
   <style>
     body {
-      background: #181818;
-      color: #eaeaea;
       font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background: #f9fbfc;
       margin: 0;
+      padding: 0;
     }
     .container {
-      background: #232323;
-      padding: 32px 28px;
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 6px 28px rgba(0,0,0,0.4);
-      text-align: center;
-      min-width: 300px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 28px 24px 24px 24px;
+      position: relative;
     }
-    input[type="password"] {
+    .logo {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+      border: 2px solid #eee;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.6em;
+      text-align: left;
+      font-weight: 700;
+      color: #2456a6;
+      letter-spacing: 1px;
+    }
+    .info {
+      background: #e7f3ff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      color: #2456a6;
+      font-size: 1em;
+      font-weight: 500;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1em;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
       padding: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #2e2e2e;
-      color: #eaeaea;
-      font-size: 1rem;
-      margin-top: 12px;
-      width: 85%;
-      outline: none;
+      border-radius: 7px;
+      border: 1px solid #b0c4d8;
+      margin-bottom: 18px;
+      font-size: 1em;
+      box-sizing: border-box;
     }
-    button {
-      margin-top: 18px;
-      padding: 10px 28px;
-      background: #444;
-      color: #eaeaea;
+    .btn {
+      display: block;
+      width: 100%;
+      background: #2456a6;
+      color: #fff;
       border: none;
-      border-radius: 6px;
-      font-size: 1rem;
+      border-radius: 7px;
+      padding: 12px;
+      font-size: 1em;
+      font-weight: 600;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: background 0.2s;
     }
-    button:hover {
-      background: #666;
+    .btn:hover {
+      background: #194282;
     }
-    .error {
-      color: #ff6868;
-      margin-top: 10px;
-      font-size: 0.96rem;
+    .btn-outline {
+      background: #fff;
+      color: #2456a6;
+      border: 2px solid #2456a6;
+      margin-bottom: 0;
     }
-    h2 {
-      margin-bottom: 18px;
-      font-weight: 600;
-      letter-spacing: 1px;
+    .btn-outline:hover {
+      background: #e7f3ff;
+    }
+    .cara {
+      display: none;
+      background: #fffbe7;
+      color: #7c5c17;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      font-size: 0.97em;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Masukkan Password..</h2>
-    <input type="password" id="pwd" placeholder="Password">
-    <br>
-    <button onclick="checkPassword()">lanjut</button>
-    <div id="error" class="error"></div>
+    <!-- Ganti src dengan foto kamu -->
+    <img src="logo.png" alt="Logo" class="logo" id="logo">
+    <h1>Buat Kenangan Spesial</h1>
+    <div class="info">Info: <b>RNG_SF</b></div>
+    <form id="kenanganForm" autocomplete="off">
+      <label for="nama">Nama Kamu</label>
+      <input type="text" id="nama" name="nama" placeholder="Isi nama kamu di sini..." required>
+      <button type="submit" class="btn">Masuk</button>
+    </form>
+    <button class="btn btn-outline" onclick="toggleCara()">Cara Pengisian</button>
+    <div class="cara" id="caraPengisian">
+      1. Isi nama kamu di kolom.<br>
+      2. Tekan tombol <b>Masuk</b>.<br>
+      3. Kamu akan diarahkan ke halaman kenangan sesuai nama.<br>
+      Contoh: Jika kamu isi <b>intan</b>, kamu akan masuk ke <b>wab-nama.com/intan</b>.<br>
+      4. Setelah itu, isi kenanganmu di sana!
+    </div>
   </div>
   <script>
-    function checkPassword() {
-      var pwd = document.getElementById('pwd').value;
-      var err = document.getElementById('error');
-      if (pwd === '251106') {
-        window.location.href = 'https://rangga252012.github.io/hal yang membuatku berubah';
-      } else {
-        err.textContent = 'Password salah!';
-      }
+    // Logo bisa diganti pakai foto user (misal lewat JavaScript)
+    // document.getElementById('logo').src = 'foto-user.jpg'; // ganti otomatis jika ada
+
+    function toggleCara() {
+      const cara = document.getElementById('caraPengisian');
+      cara.style.display = cara.style.display === 'block' ? 'none' : 'block';
     }
-    document.getElementById('pwd').addEventListener('keypress', function(e){
-      if(e.key === 'Enter') {
-        checkPassword();
+
+    document.getElementById('kenanganForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value.trim().toLowerCase();
+      if(nama) {
+        // Ganti domain sesuai kebutuhan, misal wab-nama.com
+        window.location.href = `https://wab-nama.com/${encodeURIComponent(nama)}`;
       }
     });
   </script>
