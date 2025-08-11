@@ -14,73 +14,74 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      font-size: 1.25em; /* Perbesar font dasar */
     }
     .circle {
       position: absolute;
       top: 32px;
       right: 32px;
-      width: 48px;
-      height: 48px;
+      width: 64px; /* Perbesar lingkaran */
+      height: 64px;
       background: #353535;
       border-radius: 50%;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
     .container {
       background: #222;
-      padding: 32px 28px 24px 28px;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.17);
-      max-width: 350px;
-      margin-top: 60px;
+      padding: 48px 38px 36px 38px; /* Perbesar padding */
+      border-radius: 24px; /* Perbesar radius */
+      box-shadow: 0 12px 40px rgba(0,0,0,0.17);
+      max-width: 440px; /* Perbesar lebar */
+      margin-top: 80px;
     }
     h1 {
-      font-size: 2.1em;
+      font-size: 2.7em; /* Perbesar font */
       letter-spacing: 1px;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       color: #ededed;
       font-weight: 700;
       text-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
     .brand {
-      font-size: 1.1em;
+      font-size: 1.5em; /* Perbesar font */
       color: #bcbcbc;
-      margin-bottom: 32px;
+      margin-bottom: 40px;
       font-weight: 600;
       letter-spacing: 2px;
     }
     label {
       color: #ededed;
-      font-size: 1em;
-      margin-bottom: 2px;
+      font-size: 1.15em; /* Perbesar font */
+      margin-bottom: 4px;
     }
     input[type="text"] {
-      margin: 12px 0 14px 0;
-      padding: 12px 10px;
-      width: 90%;
-      font-size: 1em;
+      margin: 16px 0 18px 0;
+      padding: 16px 14px;
+      width: 95%;
+      font-size: 1.15em; /* Perbesar font */
       background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 7px;
+      border: 1.5px solid #333;
+      border-radius: 10px;
       color: #fff;
       outline: none;
       transition: border 0.2s;
     }
     input[type="text"]:focus {
-      border: 1.5px solid #444;
+      border: 2px solid #444;
       background: #222;
     }
     button {
-      margin: 9px 0 0 0;
-      padding: 12px 0;
-      width: 92%;
-      font-size: 1em;
+      margin: 14px 0 0 0;
+      padding: 16px 0;
+      width: 96%;
+      font-size: 1.15em; /* Perbesar font */
       background: #252525;
       color: #ededed;
       border: none;
-      border-radius: 7px;
+      border-radius: 10px;
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
-      font-weight: 600;
+      font-weight: 700;
       box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     }
     button:hover {
@@ -88,12 +89,12 @@
       color: #fff;
     }
     .error {
-      margin-top: 18px;
+      margin-top: 28px;
       color: #fa5252;
-      font-size: 1em;
+      font-size: 1.15em; /* Perbesar font */
       background: #232323;
-      border-radius: 7px;
-      padding: 9px 0;
+      border-radius: 10px;
+      padding: 14px 0;
       letter-spacing: 1px;
       box-shadow: 0 2px 8px rgba(250,82,82,0.04);
       display: none;
@@ -104,10 +105,20 @@
       to { opacity: 1;}
     }
     .cara {
-      font-size: .93em;
+      font-size: 1.05em; /* Perbesar font */
       color: #a8a8a8;
-      margin-top: 12px;
+      margin-top: 18px;
       text-align: left;
+    }
+    @media (max-width: 500px) {
+      .container {
+        max-width: 95vw;
+        padding: 18vw 2vw;
+      }
+      .circle {
+        width: 48px;
+        height: 48px;
+      }
     }
   </style>
 </head>
@@ -164,4 +175,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
