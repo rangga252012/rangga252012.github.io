@@ -3,30 +3,165 @@
 <head>
   <title>Selamat Datang</title>
   <style>
-    body { background: #000; color: #fff; text-align: center; font-family: Arial, sans-serif;}
-    .circle { position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: #fff; border-radius: 50%; }
-    input, button { margin: 10px 0; padding: 10px; width: 300px; font-size: 16px; }
-    button { background: #fff; color: #000; border: none; cursor: pointer; }
+    body {
+      background: #181818;
+      color: #ededed;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .circle {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      background: #353535;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .container {
+      background: #222;
+      padding: 32px 28px 24px 28px;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.17);
+      max-width: 350px;
+      margin-top: 60px;
+    }
+    h1 {
+      font-size: 2.1em;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      color: #ededed;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .brand {
+      font-size: 1.1em;
+      color: #bcbcbc;
+      margin-bottom: 32px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+    label {
+      color: #ededed;
+      font-size: 1em;
+      margin-bottom: 2px;
+    }
+    input[type="text"] {
+      margin: 12px 0 14px 0;
+      padding: 12px 10px;
+      width: 90%;
+      font-size: 1em;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 7px;
+      color: #fff;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus {
+      border: 1.5px solid #444;
+      background: #222;
+    }
+    button {
+      margin: 9px 0 0 0;
+      padding: 12px 0;
+      width: 92%;
+      font-size: 1em;
+      background: #252525;
+      color: #ededed;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    button:hover {
+      background: #353535;
+      color: #fff;
+    }
+    .error {
+      margin-top: 18px;
+      color: #fa5252;
+      font-size: 1em;
+      background: #232323;
+      border-radius: 7px;
+      padding: 9px 0;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(250,82,82,0.04);
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    .cara {
+      font-size: .93em;
+      color: #a8a8a8;
+      margin-top: 12px;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
   <div class="circle"></div>
-  <h1>SELAMAT DATANG</h1>
-  <div>RNG_SF</div>
-  <div>
-    <label for="nama">nama kamu</label><br>
-    <input type="text" id="nama" placeholder="Masukkan nama">
+  <div class="container">
+    <h1>SELAMAT DATANG</h1>
+    <div class="brand">RNG_SF</div>
+    <div>
+      <label for="nama">Nama Kamu</label><br>
+      <input type="text" id="nama" placeholder="Masukkan nama">
+    </div>
+    <button onclick="masuk()">Masuk</button>
+    <button onclick="showCara()">Cara Pengisian</button>
+    <div class="error" id="errorMsg">Tidak ditemukan. Silakan isi nama yang benar!</div>
+    <div class="cara" id="caraPengisian" style="display:none;">
+      Masukkan nama sesuai petunjuk.<br>
+      Contoh: jika nama anda 'Budi', ketikkan <b>budi</b> lalu klik Masuk.<br>
+      Jika nama tidak ditemukan, periksa lagi cara penulisan.
+    </div>
   </div>
-  <button onclick="masuk()">Masuk</button>
-  <button onclick="alert('Isi sesuai petunjuk')">Cara pengisian</button>
-
   <script>
     function masuk() {
       var nama = document.getElementById('nama').value.trim().toLowerCase();
       if (nama) {
-        window.location.href = nama + '.html';
+        var cekLink = nama + '.html';
+        fetch(cekLink, { method: 'HEAD' })
+          .then(function(response) {
+            if (response.ok) {
+              window.location.href = cekLink;
+            } else {
+              tampilError();
+            }
+          })
+          .catch(tampilError);
+      } else {
+        tampilError();
       }
     }
+    function tampilError() {
+      var errorMsg = document.getElementById('errorMsg');
+      errorMsg.style.display = 'block';
+      setTimeout(function() {
+        errorMsg.style.display = 'none';
+      }, 2500);
+    }
+    function showCara() {
+      var cara = document.getElementById('caraPengisian');
+      cara.style.display = cara.style.display === 'none' ? 'block' : 'none';
+    }
+    // Optional: Enter key triggers Masuk
+    document.getElementById('nama').addEventListener('keyup', function(e){
+      if (e.key === 'Enter') masuk();
+    });
   </script>
 </body>
-</html>
+  </html>
