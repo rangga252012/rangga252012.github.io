@@ -16,7 +16,9 @@
       --shadow: 0 2px 12px 0 rgba(30,36,50,0.14);
     }
     body {
-      background: var(--bg-main);
+      /* Tambahkan background image */
+      background: url('') no-repeat center center fixed;
+      background-size: cover;
       color: var(--text-main);
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
@@ -25,6 +27,28 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      /* Overlay gelap agar teks tetap terbaca */
+      position: relative;
+    }
+    /* Overlay untuk membuat teks tetap jelas */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(24, 24, 28, 0.74);
+      z-index: 0;
+      pointer-events: none;
+    }
+    #main-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     h1 {
       font-family: 'Montserrat', Arial, sans-serif;
@@ -106,20 +130,24 @@
       padding: 16px 0 10px 0;
       letter-spacing: 0.5px;
       text-align: center;
+      z-index: 1;
+      position: relative;
     }
   </style>
 </head>
 <body>
-  <h1>Halo, witaaaaaa!</h1>
-  <div class="container">
-    <div class="item">
-      <div class="item-title">Kenangan</div>
-      <div class="item-desc"Makasi terlalu memperbolehkan ku untuk menyimpan nya</div>
-      <button class="lihat-btn" onclick="window.open('https://photos.app.goo.gl/5NjJqBRk5W1ivzg17', '_blank')">Lihat</button>
+  <div id="main-content">
+    <h1>Halo, witaaaaaa!</h1>
+    <div class="container">
+      <div class="item">
+        <div class="item-title">Kenangan</div>
+        <div class="item-desc">Makasi terlalu memperbolehkan ku untuk menyimpan nya</div>
+        <button class="lihat-btn" onclick="window.open('https://photos.app.goo.gl/5NjJqBRk5W1ivzg17', '_blank')">Lihat</button>
+      </div>
     </div>
+    <footer>
+      &copy; 2025 kenangan kita
+    </footer>
   </div>
-  <footer>
-    &copy; 2025 kenangan kita
-  </footer>
 </body>
 </html>
