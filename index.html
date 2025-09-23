@@ -1,0 +1,184 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UI Mockups — Sosial & Game</title>
+  <!-- Tailwind CDN for quick styling (works offline if you prefer to compile yourself) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Small custom styles for HUD overlays and mock behaviors */
+    .screen { height: calc(100vh - 64px); overflow: auto; }
+    .mock-card { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.04); }
+    .video-tile { background: #111827; height: 72vh; display:flex; align-items:center; justify-content:center; color: #fff; font-weight:700; font-size:2rem }
+    .hud { position: absolute; pointer-events:none; }
+    .hud * { pointer-events:auto; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+  <!-- Top navigation -->
+  <header class="flex items-center justify-between px-4 py-3 bg-gray-800/60 backdrop-blur-md">
+    <h1 class="text-lg font-bold">Multi UI Mockups</h1>
+    <nav class="flex gap-2">
+      <button data-view="home" class="view-btn px-3 py-1 rounded bg-gray-700">Home</button>
+      <button data-view="tiktok" class="view-btn px-3 py-1 rounded">TikTok</button>
+      <button data-view="instagram" class="view-btn px-3 py-1 rounded">Instagram</button>
+      <button data-view="whatsapp" class="view-btn px-3 py-1 rounded">WhatsApp</button>
+      <button data-view="freefire" class="view-btn px-3 py-1 rounded">Free Fire</button>
+      <button data-view="ml" class="view-btn px-3 py-1 rounded">Mobile Legends</button>
+      <button data-view="coc" class="view-btn px-3 py-1 rounded">COC</button>
+      <button data-view="genshin" class="view-btn px-3 py-1 rounded">Genshin</button>
+    </nav>
+  </header>  <!-- Main container with views -->  <main class="p-4"><!-- Home / Overview -->
+<section id="home" class="screen">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="mock-card p-4 rounded-lg">
+      <h2 class="text-xl font-semibold mb-2">Sosial Media</h2>
+      <p class="text-sm text-gray-300">Klik tombol di atas untuk melihat tampilan vertical (TikTok), grid (Instagram), atau chat (WhatsApp).</p>
+    </div>
+    <div class="mock-card p-4 rounded-lg">
+      <h2 class="text-xl font-semibold mb-2">Game HUD</h2>
+      <p class="text-sm text-gray-300">Contoh HUD dan layout untuk Free Fire, Mobile Legends, COC, Genshin Impact — interaktif ringan untuk demo.</p>
+    </div>
+    <div class="mock-card p-4 rounded-lg">
+      <h2 class="text-xl font-semibold mb-2">Export</h2>
+      <p class="text-sm text-gray-300">File ini adalah single-page demo. Kalau mau, aku bisa pisah jadi index.html + css + js terpisah.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TikTok-like feed -->
+<section id="tiktok" class="hidden screen">
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="video-tile rounded-lg mock-card">Video 1 (vertical)</div>
+    <div class="video-tile rounded-lg mock-card">Video 2 (vertical)</div>
+    <div class="video-tile rounded-lg mock-card">Video 3 (vertical)</div>
+    <div class="video-tile rounded-lg mock-card">Video 4 (vertical)</div>
+  </div>
+</section>
+
+<!-- Instagram-like profile + grid -->
+<section id="instagram" class="hidden screen">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500 to-yellow-400 flex items-center justify-center">A</div>
+      <div>
+        <h3 class="text-2xl font-bold">nama_pengguna</h3>
+        <p class="text-sm text-gray-300">123 posts • 1.2K followers • 250 following</p>
+        <p class="mt-2 text-gray-300">Bio singkat — contoh tampilan profil Instagram.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+      <!-- placeholder grid images -->
+      <div class="h-40 bg-gray-700 rounded"></div>
+      <div class="h-40 bg-gray-700 rounded"></div>
+      <div class="h-40 bg-gray-700 rounded"></div>
+      <div class="h-40 bg-gray-700 rounded"></div>
+      <div class="h-40 bg-gray-700 rounded"></div>
+      <div class="h-40 bg-gray-700 rounded"></div>
+    </div>
+  </div>
+</section>
+
+<!-- WhatsApp-like chat -->
+<section id="whatsapp" class="hidden screen">
+  <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-4">
+    <!-- contact list -->
+    <div class="col-span-1 bg-gray-800 p-3 rounded">
+      <input class="w-full p-2 rounded bg-gray-900/60" placeholder="Cari atau mulai chat" />
+      <ul class="mt-3 space-y-2">
+        <li class="p-2 rounded hover:bg-gray-700">Sofi — Hai!</li>
+        <li class="p-2 rounded hover:bg-gray-700">Rangga — Siap</li>
+        <li class="p-2 rounded hover:bg-gray-700">Teman — Nanti ya</li>
+      </ul>
+    </div>
+    <!-- chat area -->
+    <div class="col-span-2 bg-gray-800 p-4 rounded flex flex-col">
+      <div class="flex-1 overflow-auto mb-3">
+        <div class="mb-2 text-sm text-gray-300">Kemarin</div>
+        <div class="mb-2 self-start bg-gray-700 p-2 rounded max-w-xs">Halo, ada kabar?</div>
+        <div class="mb-2 self-end bg-green-600 p-2 rounded max-w-xs">Ada! Siap main?</div>
+        <div class="mb-2 self-start bg-gray-700 p-2 rounded max-w-xs">Kapan?</div>
+      </div>
+      <div class="flex gap-2">
+        <input class="flex-1 p-2 rounded bg-gray-900/60" placeholder="Tulis pesan" />
+        <button class="px-4 py-2 rounded bg-green-600">Kirim</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Free Fire HUD mock -->
+<section id="freefire" class="hidden screen relative bg-black/30 rounded-lg p-4">
+  <div class="max-w-3xl mx-auto relative h-[70vh] bg-gradient-to-b from-black/40 to-transparent rounded-lg overflow-hidden">
+    <div class="absolute top-4 left-4 text-sm text-gray-300">Map • Bermuda</div>
+    <!-- minimap -->
+    <div class="absolute top-4 right-4 w-28 h-28 bg-gray-800/60 rounded p-2">Minimap</div>
+    <!-- health + armor -->
+    <div class="absolute bottom-24 left-6 w-64 p-2 bg-gray-900/50 rounded flex gap-4 items-center">
+      <div class="w-40 bg-red-600 h-3 rounded"></div>
+      <div class="text-sm">HP 82%</div>
+    </div>
+    <!-- weapon icons -->
+    <div class="absolute bottom-6 left-6 flex gap-2">
+      <div class="w-14 h-10 bg-gray-700 rounded">AK</div>
+      <div class="w-14 h-10 bg-gray-700 rounded">Pistol</div>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile Legends HUD mock -->
+<section id="ml" class="hidden screen relative">
+  <div class="max-w-3xl mx-auto relative h-[70vh] bg-gradient-to-b from-slate-800 to-transparent rounded-lg overflow-hidden">
+    <div class="absolute top-4 left-4 text-sm text-gray-300">Lane • Gold</div>
+    <div class="absolute bottom-6 right-6 flex flex-col gap-2">
+      <button class="w-20 h-20 rounded-full bg-gray-700 p-2">Skill 1</button>
+      <button class="w-20 h-20 rounded-full bg-gray-700 p-2">Skill 2</button>
+      <button class="w-20 h-20 rounded-full bg-yellow-600 p-2">Ultimate</button>
+    </div>
+    <div class="absolute bottom-6 left-6 flex items-center gap-3">
+      <div class="w-32 h-10 bg-gray-700 rounded flex items-center justify-center">Joystick</div>
+    </div>
+  </div>
+</section>
+
+<!-- COC (Clash of Clans) base overview mock -->
+<section id="coc" class="hidden screen bg-gradient-to-b from-gray-800 to-gray-900 p-4 rounded-lg">
+  <div class="max-w-4xl mx-auto grid grid-cols-3 gap-4">
+    <div class="col-span-3 text-center mb-4">COC Base — contoh layout (placeholder)</div>
+    <div class="col-span-1 bg-gray-800 h-64 rounded"></div>
+    <div class="col-span-1 bg-gray-800 h-64 rounded"></div>
+    <div class="col-span-1 bg-gray-800 h-64 rounded"></div>
+  </div>
+</section>
+
+<!-- Genshin Impact overlay mock -->
+<section id="genshin" class="hidden screen relative">
+  <div class="max-w-3xl mx-auto relative h-[70vh] bg-gradient-to-b from-indigo-900 to-transparent rounded-lg overflow-hidden">
+    <div class="absolute top-4 left-4 text-sm text-gray-200">World • Dragonspine</div>
+    <div class="absolute top-4 right-4 text-sm text-gray-200">Paimon • Menu</div>
+    <div class="absolute bottom-6 left-6 flex items-center gap-3">
+      <div class="w-40 h-12 bg-gray-800/60 rounded flex items-center justify-center">Party: Diluc, Fischl, Barbara</div>
+    </div>
+    <div class="absolute bottom-6 right-6 flex gap-2">
+      <div class="w-24 h-10 bg-gray-700 rounded flex items-center justify-center">Map</div>
+      <div class="w-24 h-10 bg-gray-700 rounded flex items-center justify-center">Inventory</div>
+    </div>
+  </div>
+</section>
+
+  </main>  <script>
+    // Simple view switcher
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const sections = document.querySelectorAll('main section');
+    function showView(id) {
+      sections.forEach(s => s.id === id ? s.classList.remove('hidden') : s.classList.add('hidden'));
+      window.scrollTo(0,0);
+    }
+    viewButtons.forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+    // default home view
+    showView('home');
+  </script></body>
+  </html>
