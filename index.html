@@ -56,10 +56,37 @@
         <p>ID Game: <span id="game-id"></span></p>
       </div>
     </div>
+    <!-- Tombol Kick Section -->
+    <div class="kick-section" style="margin-top: 32px; text-align:center;">
+      <p style="font-weight: 700; font-size: 18px; margin-bottom: 12px;">Apakah Anda memiliki kepentingan lain?</p>
+      <button id="kickBtn" style="padding: 14px 40px; border-radius: 6px; background-color: #333; color: #fff; font-size: 16px; border: none; cursor: pointer;">Kick jika ya</button>
+    </div>
+    <!-- Modal Peringatan Kick -->
+    <div id="kick-modal-bg" class="modal-bg" style="display:none;">
+      <div class="modal">
+        <span class="close" onclick="closeKickModal()">&times;</span>
+        <h3>⚠️ PERINGATAN ⚠️</h3>
+        <p>Link ini bersifat pribadi. Jangan masuk sembarangan dan jangan coba-coba mengisi. Link ini hanya khusus untuk orang-orang terdekat saya</p>
+        <button id="kick-confirm" style="margin-top:16px; padding:10px 32px; border-radius:5px; background:#007bff; color:#fff; border:none; cursor:pointer;">Setuju</button>
+        <button onclick="closeKickModal()" style="margin-top:16px; margin-left:12px; padding:10px 32px; border-radius:5px; background:#ccc; color:#333; border:none; cursor:pointer;">Batal</button>
+      </div>
+    </div>
     <footer>
-      <p>&copy; 2025 Rangga252012. All rights reserved.</p>
+      <p>&copy; 2025 RNG_SF. All rights reserved.</p>
     </footer>
   </div>
   <script src="script.js"></script>
+  <script>
+    // Tombol Kick logic
+    document.getElementById("kickBtn").onclick = function() {
+      document.getElementById("kick-modal-bg").style.display = "flex";
+    };
+    document.getElementById("kick-confirm").onclick = function() {
+      window.location.href = "https://rangga252012.github.io/halo";
+    };
+    function closeKickModal() {
+      document.getElementById("kick-modal-bg").style.display = "none";
+    }
+  </script>
 </body>
 </html>
