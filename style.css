@@ -1,119 +1,224 @@
-body {
-  font-family: 'Montserrat', sans-serif;
-  background: #f8f9fa;
+/* Full-screen layout and enlarged elements for all devices */
+
+body, html {
+  height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 22px; /* Memperbesar font dasar */
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #f9f9f9;
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
 }
 
 .container {
-  max-width: 700px;
-  margin: 40px auto;
+  width: 100vw;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
   background: #fff;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.12);
-  border-radius: 18px;
-  padding: 40px;
+}
+
+header {
+  width: 100vw;
+  padding: 48px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #e3f2fd;
 }
 
 .profile-img {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  margin-top: 30px;
-  margin-bottom: 25px;
   object-fit: cover;
+  margin-bottom: 32px;
+  border: 6px solid #1976d2;
 }
 
 h1 {
-  font-size: 2.8em;
-  margin-bottom: 0.2em;
+  font-size: 3.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1976d2;
 }
 
 .subtitle {
-  font-size: 1.4em;
+  font-size: 2.2rem;
+  color: #555;
+  font-weight: 500;
+  margin-top: 20px;
 }
 
 .section-title {
-  font-size: 2em;
-  margin-top: 40px;
-  margin-bottom: 18px;
+  font-size: 2.8rem;
+  margin: 56px 0 36px 0;
+  font-weight: 700;
+  color: #1976d2;
+  text-align: center;
 }
 
 .card-list {
   display: flex;
-  gap: 36px;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  gap: 48px;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
 .card {
-  background: #eaf2fb;
-  border-radius: 14px;
-  padding: 26px 34px;
+  background: #e3f2fd;
+  border-radius: 32px;
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.12);
+  padding: 48px 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: box-shadow 0.2s, border 0.2s, transform 0.2s;
   cursor: pointer;
-  font-size: 1.25em;
-  border: 2px solid transparent;
-  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 2.4rem;
+  min-width: 300px;
+  min-height: 220px;
 }
 
-.card .icon {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 12px;
-}
-
-.card:hover, .card:focus {
-  box-shadow: 0 0 0 4px #3498db80;
-  border: 2px solid #3498db;
+.card:hover {
   transform: scale(1.08);
+  box-shadow: 0 16px 32px rgba(33, 150, 243, 0.20);
 }
 
-.card:after {
-  content: "Klik!";
-  color: #fff;
-  background: #3498db;
-  font-size: 0.7em;
-  border-radius: 7px;
-  padding: 2px 10px;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  opacity: 0.8;
-  pointer-events: none;
+.icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 36px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid #1976d2;
+}
+
+.card span {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #1976d2;
+  text-align: center;
 }
 
 footer {
+  width: 100vw;
   text-align: center;
-  margin-top: 36px;
-  font-size: 1.1em;
+  padding: 36px 0;
+  font-size: 2rem;
+  background: #1976d2;
+  color: #fff;
+  margin-top: auto;
 }
 
 .modal-bg {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
   display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(33, 150, 243, 0.35);
   align-items: center;
   justify-content: center;
-  z-index: 99;
+}
+
+.modal-bg.active {
+  display: flex;
 }
 
 .modal {
   background: #fff;
-  padding: 38px 48px;
-  border-radius: 16px;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+  border-radius: 28px;
+  padding: 60px 80px;
+  box-shadow: 0 12px 40px rgba(33, 150, 243, 0.25);
   text-align: center;
-  font-size: 1.4em;
+  min-width: 400px;
+  min-height: 220px;
+  position: relative;
+  font-size: 2.2rem;
 }
 
 .close {
   position: absolute;
-  top: 14px;
+  top: 36px;
+  right: 56px;
+  font-size: 3rem;
+  color: #1976d2;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#game-title {
+  font-size: 2.6rem;
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+#game-id {
+  font-size: 2.3rem;
+  color: #333;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .profile-img {
+    width: 140px;
+    height: 140px;
+  }
+  h1 {
+    font-size: 2.4rem;
+  }
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .card {
+    padding: 24px 16px;
+    font-size: 1.2rem;
+    min-width: 140px;
+    min-height: 120px;
+  }
+  .icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 18px;
+  }
+  .card span {
+    font-size: 1.3rem;
+  }
+  .modal {
+    padding: 18px 16px;
+    min-width: 160px;
+    min-height: 80px;
+    font-size: 1.1rem;
+  }
+  .close {
+    top: 10px;
+    right: 20px;
+    font-size: 1.6rem;
+  }
+  #game-title {
+    font-size: 1.3rem;
+  }
+  #game-id {
+    font-size: 1.2rem;
+  }
+  footer {
+    font-size: 1.1rem;
+    padding: 18px 0;
+  }
+}
+
   right: 20px;
   font-size: 2.2em;
   color: #3498db;
