@@ -133,7 +133,7 @@ footer {
   text-align: center;
   padding: 16px 0;
   background: transparent;   /* biar ga kotak hitam */
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #777;
   letter-spacing: 0.5px;
   position: fixed;           /* 👉 selalu di bawah */
