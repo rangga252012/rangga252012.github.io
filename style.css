@@ -8,13 +8,14 @@ body {
 }
 
 .container {
-  max-width: 510px;
-  margin: 40px auto 0;
-  background: rgba(15, 15, 15, 0.92);
-  border-radius: 28px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  overflow: hidden;
-  animation: fadein 1.5s cubic-bezier(.68,-.55,.27,1.55);
+    max-width: 500px;       /* opsional, biar agak lebar */
+    margin: 40px auto 0;
+    background: rgba(15, 15, 15, 0.92);
+    border-radius: 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    overflow: hidden;
+    padding: 20px;          /* 👉 tambahin ini */
+    animation: fadein 1.5s cubic-bezier(.68,-.55,.27,1.55);
 }
 
 @keyframes fadein {
