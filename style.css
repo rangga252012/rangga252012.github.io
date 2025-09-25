@@ -8,14 +8,13 @@ body {
 }
 
 .container {
-    max-width: 500px;       /* opsional, biar agak lebar */
-    margin: 40px auto 0;
-    background: rgba(15, 15, 15, 0.92);
-    border-radius: 28px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    overflow: hidden;
-    padding: 20px;          /* 👉 tambahin ini */
-    animation: fadein 1.5s cubic-bezier(.68,-.55,.27,1.55);
+  max-width: 380px;   /* dikurangi biar pas */
+  margin: 40px auto 0;
+  background: rgba(15, 15, 15, 0.92);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  overflow: hidden;
+  animation: fadein 1.5s cubic-bezier(.68,-.55,.27,1.55);
 }
 
 @keyframes fadein {
@@ -132,11 +131,15 @@ h1 {
 
 footer {
   text-align: center;
-  padding: 24px 0 20px 0;
-  background: #111;
-  font-size: 0.98rem;
-  color: #aaa;
+  padding: 16px 0;
+  background: transparent;   /* biar ga kotak hitam */
+  font-size: 0.85rem;
+  color: #777;
   letter-spacing: 0.5px;
+  position: fixed;           /* 👉 selalu di bawah */
+  bottom: 10px;
+  left: 0;
+  width: 100%;
 }
 
 /* Modal Styles */
