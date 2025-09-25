@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profile Media Sosial & Game ID</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts for cool typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="IC1.jpg" alt="Profile" class="profile-img">
+      <h1>RNG_SF</h1>
+      <p class="subtitle">Temukan media sosial & ID game saya di bawah ini</p>
+    </header>
+    <section>
+      <h2 class="section-title">Media Sosial</h2>
+      <div class="card-list">
+        <div class="card social" onclick="window.open('https://www.tiktok.com/@rng_sf?_t=ZS-901MtzanKn1&_r=1','_blank')">
+          <img src="IC2.jpg" alt="TikTok" class="icon">
+          <span>TikTok</span>
+        </div>
+        <div class="card social" onclick="window.open('https://www.instagram.com/rng_sf?igsh=MXV4MXE1cHc2bWIz')">
+          <img src="IC3.jpg" alt="Instagram" class="icon">
+          <span>Instagram</span>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2 class="section-title">Game ID</h2>
+      <div class="card-list">
+        <div class="card game" onclick="showGameID('Genshin Impact', '819234512')">
+          <img src="IC4.jpg" alt="Genshin Impact" class="icon">
+          <span>Genshin Impact</span>
+        </div>
+        <div class="card game" onclick="showGameID('Mobile Legend', '23567892')">
+          <img src="IC5.jpg" alt="Mobile Legend" class="icon">
+          <span>Mobile Legend</span>
+        </div>
+        <div class="card game" onclick="showGameID('Free Fire', 'FFID99281')">
+          <img src="IC6.jpg" alt="Free Fire" class="icon">
+          <span>Free Fire</span>
+        </div>
+        <div class="card game" onclick="showGameID('COC', 'COC-99281')">
+          <img src="IC7.jpg" alt="COC" class="icon">
+          <span>Clash of Clans</span>
+        </div>
+      </div>
+    </section>
+    <div id="modal-bg" class="modal-bg">
+      <div class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="game-title"></h3>
+        <p>ID Game: <span id="game-id"></span></p>
+      </div>
+    </div>
+    <footer>
+      <p>&copy; 2025 Rangga252012. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
