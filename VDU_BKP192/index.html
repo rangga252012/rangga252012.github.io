@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi Link Lanjutkan</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+        button { font-size: 2rem; padding: 20px 40px; }
+    </style>
+</head>
+<body>
+    <button id="lanjutBtn">Lanjut 1</button>
 
+    <script>
+        // Ganti array ini dengan 600 link Anda
+        const links = [
+            "https://link1.com",
+            "https://link2.com",
+            "https://link3.com",
+            // ... (sampai 600 link)
+        ];
+
+        let step = 0;
+        const btn = document.getElementById("lanjutBtn");
+
+        btn.onclick = function() {
+            window.open(links[step], "_blank");
+            step++;
+            if (step < links.length) {
+                btn.textContent = "Lanjut " + (step + 1);
+            } else {
+                btn.textContent = "Selesai";
+                btn.disabled = true;
+            }
+        };
+    </script>
+</body>
+</html>
