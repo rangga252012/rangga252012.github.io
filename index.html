@@ -1,159 +1,198 @@
 <!DOCTYPE html>
-<html lang="id">
+<!--[if lt IE 7]> <html class="ie lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="ie lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="ie lt-ie9"> <![endif]-->
+<!--[if gt IE 8]> <html> <![endif]-->
+<!--[if !IE]><!--><html lang="en"><!-- <![endif]-->
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Profile Media Sosial & Game ID</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts for cool typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+	<title>Happy Birthday</title>
+	<meta charset="UTF-8" />
+	<meta name="description" content="Happy Birthday Xola">
+	<meta name="robots" content="index, follow" />
+	<link rel="author" href="https://plus.google.com/u/1/+AyushSharma1/" /> 
+    <meta name="keywords" content="Birthday, Happy">
+    <!-- Strat of Facebook Meta -->
+    <meta property="og:type" content="E-Greeting" />
+    <meta property="og:image" content="favicon.ico" />
+    <meta property="og:description" content="Wish you a very Happy Birthday">
+    <!-- End of Facebook Meta Tags -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="loading.css">
+	<link href='http://fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'> -->
+	<link rel="stylesheet/less" href="cake.less">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.1.0/less.min.js"></script>
 </head>
+
 <body>
-  <div class="container">
-    <header>
-      <img src="IC1.jpg" alt="Profile" class="profile-img">
-      <h1>RNG_SF</h1>
-      <p class="subtitle">Temukan media sosial & ID game saya di bawah ini</p>
-    </header>
-    <section>
-      <h2 class="section-title">Media Sosial</h2>
-      <div class="card-list">
-        <div class="card social" onclick="window.open('https://www.tiktok.com/@rng_sf?_t=ZS-901MtzanKn1&_r=1','_blank')">
-          <img src="IC2.jpg" alt="TikTok" class="icon">
-          <span>TikTok</span>
-        </div>
-        <div class="card social" onclick="window.open('https://www.instagram.com/rng_sf?igsh=MXV4MXE1cHc2bWIz')">
-          <img src="IC3.jpg" alt="Instagram" class="icon">
-          <span>Instagram</span>
-        </div>
-      </div>
-    </section>
-    <section>
-      <h2 class="section-title">Game ID</h2>
-      <div class="card-list">
-        <div class="card game" onclick="showGameID('Genshin Impact', '819234512')">
-          <img src="IC4.jpg" alt="Genshin Impact" class="icon">
-          <span>Genshin Impact</span>
-        </div>
-        <div class="card game" onclick="showGameID('Mobile Legend', '23567892')">
-          <img src="IC5.jpg" alt="Mobile Legend" class="icon">
-          <span>Mobile Legend</span>
-        </div>
-        <div class="card game" onclick="showGameID('Free Fire', 'FFID99281')">
-          <img src="IC6.jpg" alt="Free Fire" class="icon">
-          <span>Free Fire</span>
-        </div>
-        <div class="card game" onclick="showGameID('COC', 'COC-99281')">
-          <img src="IC7.jpg" alt="COC" class="icon">
-          <span>Clash of Clans</span>
-        </div>
-      </div>
-    </section>
-    <div id="modal-bg" class="modal-bg">
-      <div class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="game-title"></h3>
-        <p>ID Game: <span id="game-id"></span></p>
-      </div>
+	<div class="loading"></div>
+	<audio class="song" controls loop>
+        <source src="hbd.mp3"></source>
+	   Your browser isn't invited for super fun audio time.
+    </audio>
+    <div class="balloons text-center" id="b1">
+    	<h2 style="color:#F2B300;">H</h2>
     </div>
-    <!-- Tombol Kick Section -->
-    <div class="kick-section" style="margin-top: 32px; text-align:center;">
-      <p style="font-weight: 700; font-size: 18px; margin-bottom: 12px;">Apakah Anda memiliki kepentingan lain?</p>
-      <button id="kickBtn" style="padding: 14px 40px; border-radius: 6px; background-color: #333; color: #fff; font-size: 16px; border: none; cursor: pointer;">Kick jika ya</button>
+    <div class="balloons text-center" id="b2">
+    	<h2 style="color:#0719D4;">B</h2>
     </div>
-    <!-- Modal Peringatan Kick -->
-    <div id="kick-modal-bg" class="modal-bg" style="display:none;">
-      <div class="modal">
-        <span class="close" onclick="closeKickModal()">&times;</span>
-        <h3>⚠️ PERINGATAN ⚠️</h3>
-        <p>Link ini bersifat pribadi. Jangan masuk sembarangan dan jangan coba-coba mengisi. Link ini hanya khusus untuk orang-orang terdekat saya</p>
-        <button id="kick-confirm" style="margin-top:16px; padding:10px 32px; border-radius:5px; background:#007bff; color:#fff; border:none; cursor:pointer;">Setuju</button>
-        <button onclick="closeKickModal()" style="margin-top:16px; margin-left:12px; padding:10px 32px; border-radius:5px; background:#ccc; color:#333; border:none; cursor:pointer;">Batal</button>
-      </div>
+	<div class="balloons text-center" id="b3">
+    	<h2 style="color:#D14D39;">D</h2>
     </div>
-    <!-- Modal Password Kick -->
-    <div id="kick-password-bg" class="modal-bg" style="display:none;">
-      <div class="modal">
-        <span class="close" onclick="closeKickPasswordModal()">&times;</span>
-        <h3>Konfirmasi Orang Terdekat</h3>
-        <p>Masukkan password dari RNG_SF untuk melanjutkan:</p>
-        <input type="password" id="kick-password-input" style="width:80%;padding:10px;margin-bottom:10px;" placeholder="Masukkan password">
-        <p id="kick-password-error" style="color:red;min-height:21px;"></p>
-        <button id="kick-password-submit" style="margin-top:8px; padding:10px 32px; border-radius:5px; background:#007bff; color:#fff; border:none; cursor:pointer;">Submit</button>
-        <p id="kick-password-timer" style="color:#ff9900; margin-top:10px;display:none;"></p>
-      </div>
+	<div class="balloons text-center" id="b4">
+    	<h2 style="color:#8FAD00;">X</h2>
     </div>
-    <footer>
-      <p>&copy; 2025 RNG_SF. All rights reserved.</p>
-    </footer>
-  </div>
-  <script src="script.js"></script>
-  <script>
-    // Tombol Kick logic
-    document.getElementById("kickBtn").onclick = function() {
-      document.getElementById("kick-modal-bg").style.display = "flex";
-    };
-    document.getElementById("kick-confirm").onclick = function() {
-      document.getElementById("kick-modal-bg").style.display = "none";
-      document.getElementById("kick-password-bg").style.display = "flex";
-    };
-    function closeKickModal() {
-      document.getElementById("kick-modal-bg").style.display = "none";
-    }
-    function closeKickPasswordModal() {
-      document.getElementById("kick-password-bg").style.display = "none";
-      document.getElementById("kick-password-input").value = "";
-      document.getElementById("kick-password-error").textContent = "";
-      document.getElementById("kick-password-timer").style.display = "none";
-    }
+	<div class="balloons text-center" id="b5">
+    	<h2 style="color:#8377E4;">O</h2>
+    </div>
+    <div class="balloons text-center" id="b6">
+    	<h2 style="color:#99C96A;">L</h2>
+    </div>
+    <div class="balloons text-center" id="b7">
+    	<h2 style="color:#20CFB4;">A</h2>
+    </div>
 
-    // Password logic
-    const PASSWORD = "R252012";
-    let attemptCount = 0;
-    let lockTimeout = null;
-    let lockUntil = null;
+    <img src="Balloon-Border.png" width="100%" class="balloon-border">
+ 
 
-    function updateTimer() {
-      if (lockUntil) {
-        const now = Date.now();
-        const remaining = lockUntil - now;
-        if (remaining > 0) {
-          const minutes = Math.floor((remaining / 1000) / 60);
-          const seconds = Math.floor((remaining / 1000) % 60);
-          document.getElementById("kick-password-timer").textContent = 
-            `Terlalu banyak percobaan gagal. Silakan coba lagi dalam ${minutes} menit ${seconds} detik.`;
-          document.getElementById("kick-password-timer").style.display = "block";
-          document.getElementById("kick-password-submit").disabled = true;
-          setTimeout(updateTimer, 1000);
-        } else {
-          // Unlock
-          attemptCount = 0;
-          lockUntil = null;
-          document.getElementById("kick-password-timer").style.display = "none";
-          document.getElementById("kick-password-submit").disabled = false;
-        }
-      }
-    }
+	<div class="container">
+		
+		<div class="row">
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_yellow"></div>
+			</div>
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_red"></div>
+			</div>
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_blue"></div>
+			</div>
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_green"></div>
+			</div>
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_pink"></div>
+			</div>
+			<div class="col-md-2 col-xs-2 bulb-holder">
+				<div class="bulb" id="bulb_orange"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<img src="banner.png" class="bannar">
+			</div>
+		</div>
+		<div class="row cake-cover">
+			<div class="col-md-12 texr-center">
+				<div class="cake">
+				  <div class="velas">
+				    <div class="fuego"></div>
+				    <div class="fuego"></div>
+				    <div class="fuego"></div>
+				    <div class="fuego"></div>
+				    <div class="fuego"></div>
+				  </div>
+				  <div class="cobertura"></div>
+				  <div class="bizcocho"></div>
+				</div>
+			</div>
+		</div>
+		<div class="row message">
+			<div class="col-md-12">
+				<p>Today is...</p>
+				<p>as beautiful as other days</p>
+				<p>but you realize</p>
+				<p>another year has gone</p>
+				<p>in a blink of the eyes</p>
+				<p><strong>however</strong></p>
+				<p>Do you know..?</p>
+				<p>today is just special</p>
+				<p>so special to you</p>
+				<p>that's why</p>
+				<p>Let's make it...</p>
+				<p>the best celebration ever</p>
+				<p>and let me share...</p>
+				<p>a piece of happiness to you</p>
+				<p>I made all this...</p>
+				<p>as a birthday present to you</p>
+				<p>thanks for being there</p>
+				<p>thanks for the friendship we made</p>
+				<p>thanks for everything</p>
+				<p>I wish you all the best</p>
+				<p>May your life be at ease</p>
+				<p>May all your wishes come true</p>
+				<p>Remember</p>
+				<p>your ambitions</p>
+				<p>you live as a free bird...</p>
+				<p>flying in the blue sky</p>
+				<p>Now things are different...</p>
+				<p>real story of your life</p>
+				<p>is just about to begin</p>
+				<p>indeed..</p>
+				<p>but...</p>
+				<p>don't worry</p>
+				<p>because...</p>
+				<p>God has your back</p>
+				<p>and</p>
+				<p>this year will be better</p>
+				<p>and I hope</p>
+				<p>you'll find...</p>
+				<p>happiness along the way</p>
+				<p>keep your spirit up</p>
+				<p>enjoy every single moment...</p>
+				<p>that you experience today</p>
+				<p>fill it with your most beautiful smile</p>
+				<p>and make it the best memory..</p>
+				<p>lastly...</p>
+				<p>I'd like to wish you one more time</p>
+				<p>a very happy birthday Xola Mathembisa</p>
+			</div>
+		</div>
+		<div class="navbar navbar-fixed-bottom">
+			<div class="row">
+				<div class="col-md-6 text-center col-md-offset-3">
+					<button class="btn btn-primary" id="turn_on">Turn On Lights</button>
+					<button class="btn btn-primary" id="play">Play Music</button>
+					<button class="btn btn-primary" id="bannar_coming">Let's Decorate</button>
+					<button class="btn btn-primary" id="balloons_flying">Fly With Balloons</button>
+					<button class="btn btn-primary" id="cake_fadein">Most Delicious Cake Ever</button>
+					<button class="btn btn-primary" id="light_candle"> Light Candle</button>
+					<button class="btn btn-primary" id="wish_message">Happy Birthday</button>
+					<button class="btn btn-primary" id="story">A mesage for you</button>
+					<!-- <button class="btn btn-primary" id="cake_cut">Lrt's Cut the Cake</button> -->
+				</div>
+			</div>
+			<!-- <div class="col-md-2">
+			</div>
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-2">
+			</div> -->
+		</div>
 
-    document.getElementById("kick-password-submit").onclick = function() {
-      if (lockUntil && Date.now() < lockUntil) {
-        updateTimer();
-        return;
-      }
-      const input = document.getElementById("kick-password-input").value;
-      if (input === PASSWORD) {
-        attemptCount = 0;
-        document.getElementById("kick-password-error").textContent = "";
-        window.location.href = "https://rangga252012.github.io/halo";
-      } else {
-        attemptCount++;
-        document.getElementById("kick-password-error").textContent = `Password salah! Percobaan ${attemptCount} dari 3.`;
-        if (attemptCount >= 3) {
-          lockUntil = Date.now() + 60 * 60 * 1000; // 1 jam
-          updateTimer();
-        }
-      }
-    };
-  </script>
+
+	</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="effect.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58229732-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </html>
