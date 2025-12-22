@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profile Media Sosial & Game ID</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts for cool typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      /* Tambahkan background image L1.jpg */
+      background-image: url('L1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    /* Optional: agar container tetap readable di atas background */
+    .container {
+      background: rgba(255,255,255,0.85);
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+      padding: 24px;
+      max-width: 720px;
+      margin: 32px auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .profile-img {
+      width: 96px;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid rgba(0,0,0,0.06);
+      display: block;
+      margin: 0 auto 12px;
+    }
+    h1 { margin: 0 0 6px; font-size: 1.6rem; }
+    .subtitle { margin: 0; color: #555; }
+
+    /* Tombol WhatsApp di atas menu media sosial */
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.18);
+      transition: transform .12s ease, box-shadow .12s ease;
+      margin-bottom: 14px;
+    }
+    .whatsapp-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(37,211,102,0.22); }
+    .whatsapp-emoji { font-size: 1.05rem; }
+
+    /* Panel gelap transparan untuk area menu (background kedua) */
+    .menu-panel {
+      background: rgba(0,0,0,0.55); /* hitam transparan */
+      color: #fff;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+    .section-title {
+      margin: 6px 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .card-list {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      min-width: 150px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      transition: transform .12s ease, box-shadow .12s ease;
+      text-decoration: none;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.28); }
+    .card .icon {
+      width: 34px;
+      height: 34px;
+      object-fit: cover;
+      border-radius: 6px;
+      /* Jika icon terang, bisa ditambahkan border: 1px solid rgba(255,255,255,0.08); */
+    }
+
+    /* Modal tetap seperti semula, sedikit penyesuaian warna */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      color: #111;
+      padding: 18px;
+      border-radius: 12px;
+      min-width: 260px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    }
+    .close { float: right; cursor: pointer; font-size: 1.2rem; }
+
+    footer { text-align: center; font-size: 0.85rem; color: #666; margin-top: 10px; }
+
+    /* Responsive adjustments */
+    @media (max-width: 520px) {
+      .card-list { gap: 8px; }
+      .card { min-width: 120px; padding: 8px 10px; }
+      .container { padding: 18px; margin: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="IC1.jpg" alt="Profile" class="profile-img">
+      <h1>Rangga252012</h1>
+      <p class="subtitle">Temukan media sosial & ID game saya di bawah ini</p>
+    </header>
+
+    <!-- Tombol WhatsApp (letakkan di atas menu Media Sosial) -->
+    <div style="text-align:center; margin-bottom:8px;">
+      <!-- Ganti URL berikut dengan link invite grup WhatsApp Anda -->
+      <button class="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/DJZJoxTPftp1K3Yz74sorf?mode=wwt','_blank')" aria-label="Gabung Grup WhatsApp">
+        <span class="whatsapp-emoji">🟢</span>
+        <span>Gabung Grup WhatsApp</span>
+      </button>
+    </div>
+
+    <!-- Menu-panel: background hitam transparan kedua -->
+    <div class="menu-panel">
+      <section>
+        <h2 class="section-title">Media Sosial</h2>
+        <div class="card-list">
+          <div class="card social" onclick="window.open('https://www.tiktok.com/@rng_sf','_blank')">
+            <img src="IC2.jpg" alt="TikTok" class="icon">
+            <span>TikTok</span>
+          </div>
+          <div class="card social" onclick="window.open('https://www.instagram.com/rangga252012','_blank')">
+            <img src="IC3.jpg" alt="Instagram" class="icon">
+            <span>Instagram</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:14px;">
+        <h2 class="section-title">Game ID</h2>
+        <div class="card-list">
+          <div class="card game" onclick="showGameID('Genshin Impact', '819234512')">
+            <img src="IC4.jpg" alt="Genshin Impact" class="icon">
+            <span>Genshin Impact</span>
+          </div>
+          <div class="card game" onclick="showGameID('Mobile Legend', '23567892')">
+            <img src="IC5.jpg" alt="Mobile Legend" class="icon">
+            <span>Mobile Legend</span>
+          </div>
+          <div class="card game" onclick="showGameID('Free Fire', 'FFID99281')">
+            <img src="IC6.jpg" alt="Free Fire" class="icon">
+            <span>Free Fire</span>
+          </div>
+          <div class="card game" onclick="showGameID('COC', 'COC-99281')">
+            <img src="IC7.jpg" alt="COC" class="icon">
+            <span>Clash of Clans</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="modal-bg" class="modal-bg">
+      <div class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="game-title"></h3>
+        <p>ID Game: <span id="game-id"></span></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Rangga252012. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
