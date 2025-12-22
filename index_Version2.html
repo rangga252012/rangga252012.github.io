@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profile Media Sosial & Game ID</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts for cool typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Dark theme colors and adjustments */
+    :root{
+      --bg-dark: #0b0f14;
+      --panel: rgba(15,20,25,0.72);
+      --panel-strong: rgba(18,24,30,0.88);
+      --muted: #98a3b3;
+      --accent: #00d08b;
+      --card-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.04);
+      --text: #e6eef8;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      background-color: var(--bg-dark);
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: var(--text);
+      background-image: linear-gradient(180deg, rgba(3,6,9,0.65), rgba(6,9,12,0.72)), url('L1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .container {
+      background: linear-gradient(180deg, rgba(10,14,18,0.8), rgba(6,10,14,0.6));
+      border-radius: 16px;
+      box-shadow: 0 8px 36px rgba(2,6,12,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+      padding: 28px;
+      max-width: 760px;
+      margin: 36px auto;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .profile-img {
+      width: 96px;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.06);
+      display: block;
+      margin: 0 auto 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--text); }
+    .subtitle { margin: 0; color: var(--muted); }
+
+    /* Menu-panel */
+    .menu-panel {
+      background: var(--panel);
+      color: var(--text);
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 30px rgba(2,6,12,0.6);
+      backdrop-filter: blur(6px);
+    }
+    .section-title {
+      margin: 6px 0 12px;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    /* General card styles (meningkatkan tinggi & padding) */
+    .card-list {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .card {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      min-width: 150px;
+      min-height: 64px; /* lebih tinggi */
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      background: var(--card-bg);
+      color: var(--text);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.03);
+      flex: 0 0 auto;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.7); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .card .icon {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+    }
+    .card span { color: var(--text); font-weight:600; }
+
+    /* WA box (dimasukkan ke dalam kotak) - dibuat full width, lebih panjang, hitam transparan */
+    .wa-box {
+      margin-bottom: 14px;
+    }
+    .wa-card {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background: rgba(0,0,0,0.45); /* hitam transparan */
+      width: 100%;             /* diperlebar */
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 72px;        /* sedikit lebih tinggi */
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.6);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .wa-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(0,0,0,0.75); background: rgba(0,0,0,0.5); }
+    .wa-card .wa-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+      flex: 0 0 48px;
+    }
+    .wa-card .wa-text {
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .wa-card .wa-text .title { font-weight: 700; color: var(--text); font-size: 1rem; }
+    .wa-card .wa-text .sub { color: var(--muted); font-size: 0.88rem; margin-top:4px; }
+
+    /* Buat section card-list lebih 'tinggi' agar kotakan media sosial & game terlihat lebih besar */
+    .menu-panel section {
+      padding: 10px 0 6px;
+    }
+    .menu-panel .card-list .card { min-height: 72px; padding: 16px 14px; }
+
+    /* Modal tetap seperti semula, warna disesuaikan */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      align-items: center;
+      justify-content: center;
+      z-index: 80;
+    }
+    .modal {
+      background: linear-gradient(180deg,#0f1620,#0b1016);
+      color: var(--text);
+      padding: 18px;
+      border-radius: 12px;
+      min-width: 260px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .close { float: right; cursor: pointer; font-size: 1.2rem; color: var(--muted); }
+
+    footer { text-align: center; font-size: 0.85rem; color: var(--muted); margin-top: 10px; }
+
+    /* Responsive adjustments */
+    @media (max-width: 520px) {
+      .card-list { gap: 8px; }
+      .card { min-width: 120px; padding: 10px 12px; min-height: 64px; }
+      .container { padding: 18px; margin: 18px; }
+      .wa-card { padding: 12px; min-height: 64px; }
+      .wa-card .wa-icon { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="IC1.jpg" alt="Profile" class="profile-img">
+      <h1>Rangga252012</h1>
+      <p class="subtitle">Temukan media sosial & ID game saya di bawah ini</p>
+    </header>
+
+    <!-- Menu-panel: WhatsApp kini dimasukkan dalam kotak di atas section -->
+    <div class="menu-panel">
+      <!-- Kotak WA (full-width, hitam transparan, diperlebar & dipanjangkan) -->
+      <div class="wa-box">
+        <div class="wa-card" onclick="window.open('https://chat.whatsapp.com/DJZJoxTPftp1K3Yz74sorf?mode=wwt','_blank')" role="button" aria-label="Gabung Grup WhatsApp">
+          <!-- Ganti WA.jpg dengan foto logo grup WA Anda -->
+          <img src="WA.jpg" alt="Logo Grup WhatsApp" class="wa-icon" onerror="this.style.display='none'">
+          <div class="wa-text">
+            <div class="title">Gabung Grup WhatsApp</div>
+            <div class="sub">Klik untuk bergabung — ketuk untuk masuk ke grup</div>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h2 class="section-title">Media Sosial</h2>
+        <div class="card-list">
+          <div class="card social" onclick="window.open('https://www.tiktok.com/@rng_sf','_blank')">
+            <img src="IC2.jpg" alt="TikTok" class="icon">
+            <span>TikTok</span>
+          </div>
+          <div class="card social" onclick="window.open('https://www.instagram.com/rangga252012','_blank')">
+            <img src="IC3.jpg" alt="Instagram" class="icon">
+            <span>Instagram</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:14px;">
+        <h2 class="section-title">Game ID</h2>
+        <div class="card-list">
+          <div class="card game" onclick="showGameID('Genshin Impact', '819234512')">
+            <img src="IC4.jpg" alt="Genshin Impact" class="icon">
+            <span>Genshin Impact</span>
+          </div>
+          <div class="card game" onclick="showGameID('Mobile Legend', '23567892')">
+            <img src="IC5.jpg" alt="Mobile Legend" class="icon">
+            <span>Mobile Legend</span>
+          </div>
+          <div class="card game" onclick="showGameID('Free Fire', 'FFID99281')">
+            <img src="IC6.jpg" alt="Free Fire" class="icon">
+            <span>Free Fire</span>
+          </div>
+          <div class="card game" onclick="showGameID('COC', 'COC-99281')">
+            <img src="IC7.jpg" alt="COC" class="icon">
+            <span>Clash of Clans</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="modal-bg" class="modal-bg">
+      <div class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="game-title"></h3>
+        <p>ID Game: <span id="game-id"></span></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Rangga252012. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
