@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Portal RNG | Link Hub</title>
+    <style>
+        /* =========================================
+           FONDASI SISTEM & VARIABEL TEMA (DARK-TECH)
+           ========================================= */
+        :root {
+            --bg-base: #050505;
+            --glass-bg: rgba(20, 22, 28, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --primary-glow: #00f0ff;
+            --secondary-glow: #7000ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --btn-bg: rgba(255, 255, 255, 0.03);
+            --btn-hover: rgba(255, 255, 255, 0.08);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --trans-fast: 0.2s ease;
+            --trans-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* =========================================
+           ANIMASI BACKGROUND TINGKAT LANJUT
+           ========================================= */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Ambient Glow di belakang container */
+        .ambient-light {
+            position: fixed;
+            width: 60vw;
+            height: 60vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,240,255,0.05) 0%, rgba(112,0,255,0.05) 50%, rgba(0,0,0,0) 80%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+            filter: blur(60px);
+        }
+
+        /* =========================================
+           WADAH UTAMA (GLASSMORPHISM)
+           ========================================= */
+        .hub-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            margin: 2rem 1rem;
+            padding: 2.5rem 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           HEADER & PROFIL
+           ========================================= */
+        .header-profile {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-box {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #111, #222);
+            border-radius: 25%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-box::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--primary-glow), transparent 30%);
+            animation: rotateGlow 4s linear infinite;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .logo-box span {
+            position: relative;
+            z-index: 2;
+            background: #111;
+            width: 86px;
+            height: 86px;
+            border-radius: 22%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes rotateGlow {
+            100% { transform: rotate(360deg); }
+        }
+
+        .username {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .bio {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* =========================================
+           SEKSI GAME ID (GRID COMPACT)
+           ========================================= */
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-glow);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--glass-border), transparent);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .game-card {
+            background: var(--btn-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--trans-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            background: var(--btn-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .game-card:active {
+            transform: scale(0.96);
+        }
+
+        .game-name {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .game-id {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        /* =========================================
+           SEKSI SOSIAL MEDIA (LIST BARIS)
+           ========================================= */
+        .social-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.2rem;
+            background: var(--btn-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: var(--trans-smooth);
+        }
+
+        .social-btn:hover {
+            background: var(--btn-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .social-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            opacity: 0.8;
+            transition: var(--trans-fast);
+        }
+
+        .social-btn:hover .icon {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+            opacity: 0.5;
+            transition: var(--trans-fast);
+        }
+
+        .social-btn:hover .arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* Spesifik Warna Ikon */
+        .btn-wa:hover .icon { fill: #25D366; }
+        .btn-ig:hover .icon { fill: #E1306C; }
+        .btn-tk:hover .icon { fill: #ff0050; }
+
+        /* =========================================
+           MODAL / POPUP WA (SISTEM ANTI-SEPI & RAPI)
+           ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--trans-smooth);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--glass-bg);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: var(--trans-smooth);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 40px; height: 40px;
+            fill: #25D366;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .modal-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #25D366;
+            color: #000;
+            border: none;
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--trans-fast);
+        }
+
+        .btn-primary:hover {
+            background: #1eb356;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--trans-fast);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        /* Notifikasi Salin */
+        #toast {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-glow);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--trans-smooth);
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+        }
+
+        #toast.show {
+            bottom: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+    <canvas id="network-canvas"></canvas>
+
+    <div id="toast">ID Disalin!</div>
+
+    <main class="hub-container">
+        
+        <header class="header-profile">
+            <div class="logo-box">
+                <span>RNG</span>
+            </div>
+            <h1 class="username">Rangga</h1>
+            <p class="bio">Hubungkan Data. Eksekusi Perintah.</p>
+        </header>
+
+        <section>
+            <h2 class="section-title">Database ID</h2>
+            <div class="game-grid">
+                <div class="game-card" onclick="copyText('881923019', 'Genshin Impact ID')">
+                    <div class="game-name">Genshin Impact</div>
+                    <div class="game-id">881923019</div>
+                </div>
+                <div class="game-card" onclick="copyText('12345678', 'Mobile Legends ID')">
+                    <div class="game-name">Mobile Legends</div>
+                    <div class="game-id">12345678</div>
+                </div>
+                <div class="game-card" onclick="copyText('RNG_XYZ', 'PUBG Mobile ID')">
+                    <div class="game-name">PUBG Mobile</div>
+                    <div class="game-id">RNG_XYZ</div>
+                </div>
+                <div class="game-card" onclick="copyText('RanggaSof', 'Free Fire ID')">
+                    <div class="game-name">Free Fire</div>
+                    <div class="game-id">RanggaSof</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Jalur Transmisi</h2>
+            <div class="social-list">
+                
+                <a href="https://instagram.com/username_lu" target="_blank" class="social-btn btn-ig">
+                    <div class="social-info">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        <span>Instagram</span>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="https://tiktok.com/@username_lu" target="_blank" class="social-btn btn-tk">
+                    <div class="social-info">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                        <span>TikTok</span>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+
+                <a href="#" class="social-btn btn-wa" id="btn-open-wa">
+                    <div class="social-info">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.64.846 5.093 2.277 7.098L.555 24l5.012-1.696A11.96 11.96 0 0012.031 24c6.645 0 12.03-5.385 12.03-12.031S18.676 0 12.031 0zm5.666 17.185c-.266.75-1.547 1.444-2.148 1.503-.6.059-1.378.147-4.469-1.121-3.722-1.527-6.143-5.328-6.326-5.572-.184-.244-1.512-2.01-1.512-3.834 0-1.825.952-2.721 1.288-3.084.336-.363.731-.453.975-.453.244 0 .488.004.703.014.225.011.526-.089.824.629.308.746 1.003 2.451 1.095 2.635.091.184.153.4.031.644-.122.244-.183.396-.367.61-.183.214-.383.473-.549.658-.184.204-.38.423-.153.812.227.389 1.01 1.666 2.164 2.694 1.488 1.325 2.735 1.734 3.13 1.918.396.184.627.153.86-.112.233-.266 1.002-1.168 1.272-1.568.27-.4.542-.332.906-.194.364.138 2.302 1.085 2.697 1.283.396.198.66.297.752.463.092.166.092.96-.174 1.71z"/></svg>
+                        <span>WhatsApp</span>
+                    </div>
+                    <span class="arrow">→</span>
+                </a>
+                
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="wa-modal">
+        <div class="modal-box">
+            <svg class="modal-icon" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.64.846 5.093 2.277 7.098L.555 24l5.012-1.696A11.96 11.96 0 0012.031 24c6.645 0 12.03-5.385 12.03-12.031S18.676 0 12.031 0zm5.666 17.185c-.266.75-1.547 1.444-2.148 1.503-.6.059-1.378.147-4.469-1.121-3.722-1.527-6.143-5.328-6.326-5.572-.184-.244-1.512-2.01-1.512-3.834 0-1.825.952-2.721 1.288-3.084.336-.363.731-.453.975-.453.244 0 .488.004.703.014.225.011.526-.089.824.629.308.746 1.003 2.451 1.095 2.635.091.184.153.4.031.644-.122.244-.183.396-.367.61-.183.214-.383.473-.549.658-.184.204-.38.423-.153.812.227.389 1.01 1.666 2.164 2.694 1.488 1.325 2.735 1.734 3.13 1.918.396.184.627.153.86-.112.233-.266 1.002-1.168 1.272-1.568.27-.4.542-.332.906-.194.364.138 2.302 1.085 2.697 1.283.396.198.66.297.752.463.092.166.092.96-.174 1.71z"/></svg>
+            <h3 class="modal-title">Info Penting</h3>
+            <p class="modal-desc">Jika lu diarahkan untuk mendownload WhatsApp lagi (padahal udah punya aplikasinya), abaikan saja pesan itu atau buka link via Browser Eksternal (Chrome/Safari).</p>
+            
+            <div class="modal-actions">
+                <a href="https://wa.me/6281234567890" target="_blank" class="btn-primary" id="btn-lanjut-wa">Lanjut ke WhatsApp</a>
+                <button class="btn-secondary" id="btn-close-modal">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("[Sistem Aktif] Modul dimuat dengan stabil.");
+
+            /* --- 1. SISTEM MODAL / POPUP WA --- */
+            const btnOpenWA = document.getElementById('btn-open-wa');
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            const btnLanjutWA = document.getElementById('btn-lanjut-wa');
+            const waModal = document.getElementById('wa-modal');
+
+            // Buka Modal
+            btnOpenWA.addEventListener('click', (e) => {
+                e.preventDefault(); // Mencegah pindah halaman langsung
+                waModal.classList.add('active');
+            });
+
+            // Tutup Modal via Tombol Batal
+            btnCloseModal.addEventListener('click', () => {
+                waModal.classList.remove('active');
+            });
+
+            // Tutup Modal via Klik Diluar Box
+            waModal.addEventListener('click', (e) => {
+                if(e.target === waModal) {
+                    waModal.classList.remove('active');
+                }
+            });
+
+            // Tutup Modal saat klik lanjut (biar ga nyangkut)
+            btnLanjutWA.addEventListener('click', () => {
+                setTimeout(() => {
+                    waModal.classList.remove('active');
+                }, 500);
+            });
+
+            /* --- 2. FITUR COPY TEXT (GAME ID) --- */
+            window.copyText = function(text, type) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(`${type} berhasil disalin!`);
+                }).catch(() => {
+                    // Fallback
+                    const tempInput = document.
