@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#030303">
+    <title>Portal RNG | Link Hub</title>
+    
+    <style>
+        :root {
+            /* Warna Dasar & Transparansi */
+            --bg-base: #030303; 
+            /* Wadah dibuat lebih transparan dari versi sebelumnya */
+            --glass-bg: rgba(8, 8, 10, 0.4); 
+            --glass-modal: rgba(5, 5, 5, 0.85); 
+            --glass-border: rgba(255, 255, 255, 0.05);
+            
+            /* Warna Cahaya Penanda (Glow) */
+            --glow-main: #00f0ff;
+            --glow-tk: #ff0050;
+            --glow-ig: #E1306C;
+            --glow-wa: #25D366;
+            --glow-wa-group: #128C7E;
+            --glow-wa-channel: #075E54;
+            
+            /* Warna Teks */
+            --text-main: #f8fafc;
+            --text-muted: #8b9bb4;
+            
+            /* Properti Fisik */
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            
+            /* Transisi GPU Accelerated */
+            --trans-fast: 0.3s ease;
+            --trans-smooth: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =========================================
+           ANIMASI RINGAN (MENGGUNAKAN TRANSFORM/OPACITY)
+           ========================================= */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Mengganti animasi box-shadow dengan opacity scale biar anti lag */
+        @keyframes breatheOpacity {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* =========================================
+           LAYER BACKGROUND (PARTIKEL & AMBIENCE)
+           ========================================= */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 1; /* Dibikin full terlihat */
+        }
+
+        /* Ambience light di belakang dioptimasi */
+        .ambient-light {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at center, rgba(0,240,255,0.08) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+            /* Kita pake will-change buat ngasi tau HP biar ini di-render secara khusus (mengurangi lag) */
+            will-change: opacity, transform;
+            animation: breatheOpacity 6s infinite alternate;
+        }
+
+        /* =========================================
+           WADAH UTAMA (TRANSPARAN)
+           ========================================= */
+        .hub-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            margin: 2rem 1rem;
+            padding: 3rem 1.5rem 2rem 1.5rem;
+            background: var(--glass-bg);
+            /* Blur dikurangin dikit biar partikel nembus dengan jelas */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            animation: float 6s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        /* =========================================
+           HEADER & PROFIL
+           ========================================= */
+        .header-profile {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .logo-box {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.2rem;
+            background: #000;
+            border-radius: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--trans-smooth);
+        }
+
+        .logo-box:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        /* Putaran cahaya logo RNG (Menjadi patokan desain tombol) */
+        .logo-box::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--glow-main), transparent 40%);
+            animation: rotateGlow 5s linear infinite;
+            z-index: 1;
+            opacity: 0.8;
+            will-change: transform;
+        }
+
+        .logo-box span {
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 10, 12, 0.95);
+            width: 96px;
+            height: 96px;
+            border-radius: 28%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .username {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .bio {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* =========================================
+           LIST SOSIAL MEDIA (EFEK CAHAYA TIPIS & RINGAN)
+           ========================================= */
+        .social-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px; /* Jarak dirapatkan sedikit */
+        }
+
+        /* Struktur Luar: Mengatur ketebalan cahaya border */
+        .social-btn-wrapper {
+            position: relative;
+            border-radius: var(--radius-lg);
+            /* Padding 1px ini yang akan menjadi ketebalan garis cahaya border */
+            padding: 1px;
+            overflow: hidden;
+            opacity: 0; 
+            background: rgba(255, 255, 255, 0.05); /* Border default pas ga ada cahaya */
+            transition: transform var(--trans-smooth);
+            will-change: transform;
+        }
+
+        .social-btn-wrapper:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .social-btn-wrapper:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Cahaya Berputar yang sama dengan logo RNG */
+        .btn-glow-border {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 250%; height: 250%;
+            z-index: 1;
+            /* Dibuat tipis & transparan biar ga norak */
+            opacity: 0.4; 
+            animation: rotateGlow 4s linear infinite;
+            pointer-events: none;
+            transition: opacity var(--trans-smooth);
+            will-change: transform, opacity;
+        }
+
+        .social-btn-wrapper:hover .btn-glow-border {
+            opacity: 1; /* Menyala lebih terang pas disentuh */
+            animation-duration: 2s; /* Putaran dipercepat */
+        }
+
+        /* Set Warna Khusus Per Kotak */
+        .wrapper-tk .btn-glow-border { background: conic-gradient(transparent, var(--glow-tk), transparent 25%); }
+        .wrapper-ig .btn-glow-border { background: conic-gradient(transparent, var(--glow-ig), transparent 25%); }
+        .wrapper-wa .btn-glow-border { background: conic-gradient(transparent, var(--glow-wa), transparent 25%); }
+        .wrapper-wa-group .btn-glow-border { background: conic-gradient(transparent, var(--glow-wa-group), transparent 25%); }
+        .wrapper-wa-channel .btn-glow-border { background: conic-gradient(transparent, var(--glow-wa-channel), transparent 25%); }
+
+        /* Isi Kotak: Bagian Hitam Transparan yang bisa di-klik */
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            /* Background kotak hitam yang sedikit transparan */
+            background: rgba(12, 12, 15, 0.7); 
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: calc(var(--radius-lg) - 1px);
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2; /* Berada di atas cahaya border */
+            transition: background var(--trans-fast);
+        }
+
+        .social-btn-wrapper:hover .social-btn {
+            background: rgba(20, 20, 24, 0.85); /* Sedikit memutih pas di-hover */
+        }
+
+        .social-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            opacity: 0.7;
+            transition: transform var(--trans-fast), opacity var(--trans-fast), filter var(--trans-fast);
+        }
+
+        .social-btn-wrapper:hover .icon {
+            opacity: 1;
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        /* Warna Ikon pas disentuh (Ringan pake drop-shadow CSS) */
+        .wrapper-tk:hover .icon { fill: var(--glow-tk); filter: drop-shadow(0 0 5px rgba(255,0,80,0.5)); }
+        .wrapper-ig:hover .icon { fill: var(--glow-ig); filter: drop-shadow(0 0 5px rgba(225,48,108,0.5)); }
+        .wrapper-wa:hover .icon { fill: var(--glow-wa); filter: drop-shadow(0 0 5px rgba(37,211,102,0.5)); }
+        .wrapper-wa-group:hover .icon { fill: var(--glow-wa-group); filter: drop-shadow(0 0 5px rgba(18,140,126,0.5)); }
+        .wrapper-wa-channel:hover .icon { fill: var(--glow-wa-channel); filter: drop-shadow(0 0 5px rgba(7,94,84,0.5)); }
+
+        .arrow {
+            font-size: 1.2rem;
+            opacity: 0.3;
+            transition: transform var(--trans-fast), color var(--trans-fast);
+        }
+
+        .social-btn-wrapper:hover .arrow {
+            opacity: 1;
+            transform: translateX(5px);
+            color: #fff;
+        }
+
+        /* =========================================
+           FOOTER / TOMBOL RAHASIA (Didekatkan)
+           ========================================= */
+        .footer-secret {
+            display: block;
+            text-align: center;
+            /* Jarak ke atas dikurangin biar ga terlalu jauh */
+            margin-top: 1.5rem; 
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: color var(--trans-fast), text-shadow var(--trans-fast);
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .footer-secret:hover {
+            color: var(--text-main);
+            text-shadow: 0 0 10px var(--glow-main);
+        }
+
+        /* =========================================
+           MODAL / POPUP WA (ANTI LAG)
+           ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--trans-smooth), visibility var(--trans-smooth);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--glass-modal);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2rem;
+            width: 90%;
+            max-width: 340px;
+            text-align: center;
+            transform: scale(0.9) translateY(20px);
+            transition: transform var(--trans-smooth);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-icon {
+            width: 48px; height: 48px;
+            fill: var(--glow-wa);
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .modal-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: var(--glow-wa);
+            color: #000;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background var(--trans-fast), transform var(--trans-fast);
+        }
+
+        .btn-primary:hover {
+            background: #1eb356;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--trans-fast), color var(--trans-fast);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+    <canvas id="network-canvas"></canvas>
+
+    <main class="hub-container">
+        
+        <header class="header-profile">
+            <div class="logo-box">
+                <span>RNG</span>
+            </div>
+            <h1 class="username">Rangga</h1>
+            <p class="bio">Secure Portal. Jaringan Tersinkronisasi.</p>
+        </header>
+
+        <section>
+            <div class="social-list">
+                
+                <div class="social-btn-wrapper wrapper-tk animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="https://tiktok.com/@username_lu" target="_blank" class="social-btn">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                            <span>TikTok</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+                <div class="social-btn-wrapper wrapper-ig animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="https://instagram.com/username_lu" target="_blank" class="social-btn">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            <span>Instagram</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+                <div class="social-btn-wrapper wrapper-wa animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="#" class="social-btn" id="btn-open-wa">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.64.846 5.093 2.277 7.098L.555 24l5.012-1.696A11.96 11.96 0 0012.031 24c6.645 0 12.03-5.385 12.03-12.031S18.676 0 12.031 0zm5.666 17.185c-.266.75-1.547 1.444-2.148 1.503-.6.059-1.378.147-4.469-1.121-3.722-1.527-6.143-5.328-6.326-5.572-.184-.244-1.512-2.01-1.512-3.834 0-1.825.952-2.721 1.288-3.084.336-.363.731-.453.975-.453.244 0 .488.004.703.014.225.011.526-.089.824.629.308.746 1.003 2.451 1.095 2.635.091.184.153.4.031.644-.122.244-.183.396-.367.61-.183.214-.383.473-.549.658-.184.204-.38.423-.153.812.227.389 1.01 1.666 2.164 2.694 1.488 1.325 2.735 1.734 3.13 1.918.396.184.627.153.86-.112.233-.266 1.002-1.168 1.272-1.568.27-.4.542-.332.906-.194.364.138 2.302 1.085 2.697 1.283.396.198.66.297.752.463.092.166.092.96-.174 1.71z"/></svg>
+                            <span>WhatsApp</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+                <div class="social-btn-wrapper wrapper-wa-group animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="https://chat.whatsapp.com/LINK_GRUP_LU" target="_blank" class="social-btn">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>Grup WhatsApp</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+                <div class="social-btn-wrapper wrapper-wa-channel animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="https://whatsapp.com/channel/LINK_CHANNEL_LU" target="_blank" class="social-btn">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                            <span>Saluran WhatsApp</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+        
+        <a href="halaman_rahasia.html" target="_blank" class="footer-secret animate-item">
+            RNG NETWORK v3.0
+        </a>
+    </main>
+
+    <div class="modal-overlay" id="wa-modal">
+        <div class="modal-box">
+            <svg class="modal-icon" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.64.846 5.093 2.277 7.098L.555 24l5.012-1.696A11.96 11.96 0 0012.031 24c6.645 0 12.03-5.385 12.03-12.031S18.676 0 12.031 0zm5.666 17.185c-.266.75-1.547 1.444-2.148 1.503-.6.059-1.378.147-4.469-1.121-3.722-1.527-6.143-5.328-6.326-5.572-.184-.244-1.512-2.01-1.512-3.834 0-1.825.952-2.721 1.288-3.084.336-.363.731-.453.975-.453.244 0 .488.004.703.014.225.011.526-.089.824.629.308.746 1.003 2.451 1.095 2.635.091.184.153.4.031.644-.122.244-.183.396-.367.61-.183.214-.383.473-.549.658-.184.204-.38.423-.153.812.227.389 1.01 1.666 2.164 2.694 1.488 1.325 2.735 1.734 3.13 1.918.396.184.627.153.86-.112.233-.266 1.002-1.168 1.272-1.568.27-.4.542-.332.906-.194.364.138 2.302 1.085 2.697 1.283.396.198.66.297.752.463.092.166.092.96-.174 1.71z"/></svg>
+            <h3 class="modal-title">Info Jaringan</h3>
+            <p class="modal-desc">Jika lu diarahkan untuk mendownload aplikasi lagi padahal udah punya, abaikan saja. Silakan buka lewat Browser bawaan (Chrome/Safari).</p>
+            
+            <div class="modal-actions">
+                <a href="https://wa.me/6281234567890" target="_blank" class="btn-primary" id="btn-lanjut-wa">Eksekusi Lanjut</a>
+                <button class="btn-secondary" id="btn-close-modal">Batalkan Transmisi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("[Portal RNG] Sistem UI Stabil & Ringan dimuat.");
+
+            /* --- Animasi Masuk Stagger --- */
+            const items = document.querySelectorAll('.animate-item');
+            items.forEach((item, index) => {
+                item.style.animation = `slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
+                item.style.animationDelay = `${0.3 + (index * 0.12)}s`; 
+            });
+
+            /* --- Kontrol Popup WA --- */
+            const btnOpenWA = document.getElementById('btn-open-wa');
+            const btnCloseModal = document.getElementById('btn-close-modal');
+            const btnLanjutWA = document.getElementById('btn-lanjut-wa');
+            const waModal = document.getElementById('wa-modal');
+
+            btnOpenWA.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                waModal.classList.add('active');
+            });
+            btnCloseModal.addEventListener('click', () => waModal.classList.remove('active'));
+            waModal.addEventListener('click', (e) => {
+                if(e.target === waModal) waModal.classList.remove('active');
+            });
+            btnLanjutWA.addEventListener('click', () => {
+                setTimeout(() => waModal.classList.remove('active'), 500);
+            });
+
+            /* --- Sistem Canvas Partikel (Dioptimasi) --- */
+            const canvas = document.getElementById('network-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, particles = [];
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    // Kecepatan dipertahankan pelan
+                    this.vx = (Math.random() - 0.5) * 0.4;
+                    this.vy = (Math.random() - 0.5) * 0.4;
+                    // Ukuran partikel dibuat lebih besar (1 - 3.5 px) biar lebih kelihatan
+                    this.radius = Math.random() * 2.5 + 1; 
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    // Warna partikel sedikit lebih solid biar gampang terlihat
+                    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                // Jumlah partikel dikurangin sedikit biar GPU HP ga kerja keras, 
+                // tapi karena ukurannya lebih besar, tetep kelihatan rame.
+                const particleCount = Math.min(Math.floor((width * height) / 12000), 60);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            initParticles();
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Variabel bantuan untuk efisiensi loop
+                const pLen = particles.length;
+                for (let i = 0; i < pLen; i++) {
+                    const p1 = particles[i];
+                    p1.update();
+                    p1.draw();
+
+                    for (let j = i + 1; j < pLen; j++) {
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distanceSq = dx * dx + dy * dy;
+
+                        // Perhitungan akar kuadrat agak berat, kita pake kuadrat jarak (120*120 = 14400)
+                        if (distanceSq < 14400) {
+                            const distance = Math.sqrt(distanceSq);
+                            ctx.beginPath();
+                            // Garis lebih tipis tapi warnanya sedikit diterangkan
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 - distance / 1000})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        });
+    </script>
+</body>
+</html>
