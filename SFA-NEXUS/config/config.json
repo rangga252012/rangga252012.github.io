@@ -1,0 +1,42 @@
+{
+  "botInfo": {
+    "botName": "SFA-NEXUS",
+    "botVersion": "1.0.0",
+    "prefix": "!"
+  },
+  "ownerInfo": {
+    "ownerName": "RNG_SF",
+    "ownerNumber": "6285745596459",
+    "organization": "SFA-NEXUS Network"
+  },
+  "dashboard": {
+    "adminUser": "RNG_SF",
+    "adminPass": "R252012",
+    "adminEmail": "sofyantorangga028@gmail.com",
+    "port": 3000,
+    "sessionSecret": "SFA-NEXUS-ULTIMATE-SECRET-KEY"
+  },
+  "security": {
+    "autoLeaveTimer": 300000,
+    "maxSpamLimit": 5,
+    "bannedNumbers": []
+  },
+  "apiKeys": {
+    "openAiKey": "",
+    "geminiKey": "",
+    "removeBgKey": ""
+  },
+  "database": {
+    "useMongoDB": false,
+    "mongoURI": ""
+  },
+  "messages": {
+    "wait": "⏳ Tunggu sebentar, mesin SFA-NEXUS sedang memproses permintaanmu...",
+    "success": "✅ Proses berhasil dieksekusi!",
+    "error": "❌ [FATAL ERROR] Terjadi kegagalan sistem pada server pusat.",
+    "ownerOnly": "⚠️ AKSES DITOLAK! Perintah ini dikunci eksklusif untuk Owner (RNG_SF).",
+    "adminOnly": "⚠️ AKSES DITOLAK! Hanya Admin Grup yang diizinkan memakai fitur ini.",
+    "groupOnly": "⚠️ PERINGATAN! Fitur ini didesain khusus untuk beroperasi di dalam Grup.",
+    "unregisteredGroup": "⚠️ AKSES DITOLAK! Grup ini berstatus ILEGAL dan belum terdaftar di database SFA-NEXUS.\n\nSistem keamanan diaktifkan. Bot akan keluar secara otomatis dalam 5 menit jika tidak mendapat persetujuan dari Owner."
+  }
+}
