@@ -1,0 +1,43 @@
+{
+  "name": "sfa-nexus",
+  "version": "1.0.0",
+  "description": "SFA-NEXUS - Ultimate WhatsApp Bot Engine & SaaS Platform",
+  "main": "app.js",
+  "directories": {
+    "lib": "controllers"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --trace-warnings app.js",
+    "clean": "rm -rf node_modules package-lock.json && npm cache clean --force",
+    "repair": "npm run clean && npm install",
+    "update-wa": "npm install @whiskeysockets/baileys@latest"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "baileys",
+    "sfa-nexus",
+    "saas",
+    "auto-leave",
+    "dashboard"
+  ],
+  "author": "Rangga Sofyanto <sofyantorangga028@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0",
+    "@hapi/boom": "^10.0.1",
+    "pino": "^8.14.1",
+    "node-cache": "^5.1.2",
+    "qrcode-terminal": "^0.12.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "nodemailer": "^6.9.4",
+    "fs-extra": "^11.1.1",
+    "axios": "^1.4.0",
+    "moment-timezone": "^0.5.43"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
