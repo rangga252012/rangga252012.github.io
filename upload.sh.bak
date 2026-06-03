@@ -48,7 +48,7 @@ setup_git_config() {
     # DATA ANDA
     local USERNAME="rangga252012"
     local EMAIL="sofyantorangga028@gmail.com"
-    local REPO="https://rangga252012:ghp_vTHK1Jxom9kYAgmM4UCoPoEptd1yeQ3miT9g@github.com/rangga252012/rangga252012.github.io.git"
+    local REPO="https://github.com/rangga252012/rangga252012.github.io.git"
 
     git config --global user.name "$USERNAME"
     git config --global user.email "$EMAIL"
