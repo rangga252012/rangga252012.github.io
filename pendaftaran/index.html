@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Bot WhatsApp Grup</title>
+    <style>
+        /* =========================================
+           CSS START: VARIABEL & RESET DASAR
+           ========================================= */
+        :root {
+            --bg-color: #0d0f12;
+            --container-bg: #15191e;
+            --primary-glow: #00f0ff;
+            --secondary-glow: #7000ff;
+            --text-main: #e0e6ed;
+            --text-muted: #8a99a8;
+            --danger: #ff3366;
+            --success: #00ff66;
+            --input-bg: #0a0c0f;
+            --border-color: #2a313b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Latar Belakang Cahaya Ambient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, rgba(0, 0, 0, 0) 60%);
+            z-index: -1;
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        /* =========================================
+           ANIMASI KEYFRAMES
+           ========================================= */
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes borderGlow {
+            0% { box-shadow: 0 0 5px var(--primary-glow), 0 0 10px var(--primary-glow); }
+            50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 30px var(--secondary-glow); }
+            100% { box-shadow: 0 0 5px var(--primary-glow), 0 0 10px var(--primary-glow); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* =========================================
+           KOTAK KONTINER UTAMA
+           ========================================= */
+        .container {
+            background-color: var(--container-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 10;
+            margin: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 18px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            z-index: -1;
+            opacity: 0.3;
+            animation: borderGlow 4s linear infinite;
+        }
+
+        /* =========================================
+           TYPOGRAPHY & PENGUMUMAN
+           ========================================= */
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-glow), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .announcement {
+            background: rgba(255, 51, 102, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .announcement strong {
+            color: var(--danger);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* =========================================
+           FORM ELEMENTS
+           ========================================= */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: #4a5568;
+        }
+
+        /* =========================================
+           TOMBOL (BUTTON)
+           ========================================= */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* =========================================
+           SCREEN LOGIC (PASSWORD VS MAIN FORM)
+           ========================================= */
+        #mainFormScreen {
+            display: none;
+        }
+
+        .screen-active {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* Khusus Layar Sandi */
+        .lock-icon {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-glow);
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+        
+        /* Responsive tweaks */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 15px;
+            }
+            h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: Kunci Sandi -->
+    <div class="container screen-active" id="passwordScreen">
+        <div class="lock-icon">🔒</div>
+        <h2>Akses Terkunci</h2>
+        <p class="subtitle">Masukkan kata sandi untuk mengakses form bot.</p>
+        
+        <div class="form-group">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Ketik kata sandi di sini...">
+            <div id="passError" class="error-msg">Kata sandi salah! Coba lagi.</div>
+        </div>
+        
+        <button class="btn-submit" onclick="checkPassword()">Buka Akses</button>
+    </div>
+
+    <!-- SCREEN 2: Formulir Utama -->
+    <div class="container" id="mainFormScreen">
+        <h2>Request Bot Grup</h2>
+        <p class="subtitle">Isi data dengan jujur dan valid.</p>
+
+        <!-- Kotak Pengumuman Sesuai Permintaan -->
+        <div class="announcement">
+            <strong>⚠️ PENGUMUMAN PENTING</strong>
+            Bot ini digratiskan khusus untuk grup WhatsApp. Namun, <b>TIDAK SEMUA</b> permintaan akan di-ACC. Hanya grup yang jelas dan memenuhi syarat yang akan disetujui oleh Admin. Jangan spam!
+        </div>
+
+        <div class="form-group">
+            <label for="namaPemohon">Nama Kamu</label>
+            <input type="text" id="namaPemohon" class="form-control" placeholder="Contoh: Budi Santoso" required>
+            <div class="error-msg" id="errNama">Nama tidak boleh kosong.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="noWA">Nomor WhatsApp Aktif</label>
+            <input type="number" id="noWA" class="form-control" placeholder="Contoh: 628123456xxx" required>
+            <div class="error-msg" id="errNo">Nomor WA harus diisi.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="alasanGrup">Alasan Mengundang Bot</label>
+            <textarea id="alasanGrup" class="form-control" placeholder="Jelaskan kenapa grup kamu butuh bot ini..." required></textarea>
+            <div class="error-msg" id="errAlasan">Alasan harus jelas.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="linkGrup">Link Grup WhatsApp</label>
+            <input type="url" id="linkGrup" class="form-control" placeholder="https://chat.whatsapp.com/xxxxxx" required>
+            <div class="error-msg" id="errLink">Link grup wajib diisi.</div>
+        </div>
+
+        <button class="btn-submit" onclick="kirimKeWhatsApp()">Kirim Pengajuan</button>
+    </div>
+
+    <!-- =========================================
+         JAVASCRIPT START: LOGIKA & STABILITAS KODE
+         ========================================= -->
+    <script>
+        // --- KONFIGURASI UTAMA ---
+        const KATA_SANDI_BENAR = "RNG028"; // <-- UBAH KATA SANDI DI SINI
+        const NOMOR_WA_TUJUAN = "6285745596459"; // Nomor kamu sudah otomatis diset
+
+        // Elemen DOM
+        const screenPass = document.getElementById('passwordScreen');
+        const screenForm = document.getElementById('mainFormScreen');
+        const inputPass = document.getElementById('inputPassword');
+        const passError = document.getElementById('passError');
+
+        // Fitur tekan Enter untuk submit password
+        inputPass.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                checkPassword();
+            }
+        });
+
+        // Fungsi Cek Sandi
+        function checkPassword() {
+            const val = inputPass.value.trim();
+            if(val === "") {
+                passError.innerText = "Kata sandi tidak boleh kosong!";
+                passError.style.display = "block";
+                return;
+            }
+
+            if(val === KATA_SANDI_BENAR) {
+                // Sembunyikan error jika benar
+                passError.style.display = "none";
+                
+                // Transisi pindah layar
+                screenPass.style.display = "none";
+                screenForm.style.display = "block";
+                screenForm.classList.add("screen-active");
+            } else {
+                passError.innerText = "Kata sandi salah! Hubungi admin jika lupa.";
+                passError.style.display = "block";
+            }
+        }
+
+        // Fungsi Validasi & Kirim ke WA
+        function kirimKeWhatsApp() {
+            // Ambil semua nilai
+            const nama = document.getElementById('namaPemohon').value.trim();
+            const nomor = document.getElementById('noWA').value.trim();
+            const alasan = document.getElementById('alasanGrup').value.trim();
+            const link = document.getElementById('linkGrup').value.trim();
+
+            // Reset pesan error
+            document.getElementById('errNama').style.display = "none";
+            document.getElementById('errNo').style.display = "none";
+            document.getElementById('errAlasan').style.display = "none";
+            document.getElementById('errLink').style.display = "none";
+
+            // Pengecekan stabilitas form (mencegah dikirim kosong)
+            let isValid = true;
+
+            if (nama === "") {
+                document.getElementById('errNama').style.display = "block";
+                isValid = false;
+            }
+            if (nomor === "") {
+                document.getElementById('errNo').style.display = "block";
+                isValid = false;
+            }
+            if (alasan === "") {
+                document.getElementById('errAlasan').style.display = "block";
+                isValid = false;
+            }
+            if (link === "") {
+                document.getElementById('errLink').style.display = "block";
+                isValid = false;
+            }
+
+            // Jika ada yang kosong, hentikan proses
+            if (!isValid) return;
+
+            // Merakit Format Pesan WhatsApp
+            // Menggunakan encodeURIComponent agar simbol dan spasi aman tidak putus di link
+            let textWA = "*===== REQUEST BOT GRUP =====*\n\n";
+            textWA += "Halo Admin, saya ingin mengajukan bot untuk grup saya.\n\n";
+            textWA += "*Nama:* " + nama + "\n";
+            textWA += "*No WA:* " + nomor + "\n";
+            textWA += "*Alasan:* " + alasan + "\n";
+            textWA += "*Link Grup:* " + link + "\n\n";
+            textWA += "_Saya setuju bahwa tidak semua pengajuan akan di-ACC._";
+
+            // Membuat URL WhatsApp
+            const finalURL = "https://wa.me/" + NOMOR_WA_TUJUAN + "?text=" + encodeURIComponent(textWA);
+
+            // Eksekusi buka tab WA
+            window.open(finalURL, '_blank');
+        }
+    </script>
+</body>
+</html>
