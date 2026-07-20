@@ -307,6 +307,70 @@
         }
 
         /* =========================================
+           TOMBOL ID SERVER MINECRAFT (DIPERBESAR)
+           ========================================= */
+        .mc-server-btn-wrapper {
+            position: relative;
+            border-radius: var(--radius-lg);
+            padding: 1px;
+            overflow: hidden;
+            opacity: 0; 
+            background: rgba(255, 255, 255, 0.05);
+            transition: transform var(--trans-smooth);
+            margin-top: 16px;
+            cursor: pointer;
+            will-change: transform;
+        }
+
+        .mc-server-btn-wrapper:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .mc-server-btn-wrapper:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .mc-server-btn-wrapper .btn-glow-border {
+            background: conic-gradient(transparent 75%, var(--glow-main) 100%);
+        }
+
+        .mc-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            background: #08080a; 
+            border-radius: calc(var(--radius-lg) - 1px);
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background var(--trans-fast);
+        }
+
+        .mc-server-btn-wrapper:hover .mc-server-btn {
+            background: #0e0e12; 
+        }
+
+        .mc-server-btn-wrapper:hover .icon {
+            opacity: 1;
+            transform: scale(1.15) rotate(-5deg);
+            fill: var(--glow-main);
+            filter: drop-shadow(0 0 5px rgba(0,240,255,0.5));
+        }
+
+        .mc-server-btn-wrapper:hover .arrow {
+            opacity: 1;
+            transform: translateX(5px);
+            color: #fff;
+        }
+
+        /* =========================================
            TOMBOL RAHASIA (HITBOX KETAT & SAMAR)
            ========================================= */
         .footer-container {
@@ -331,7 +395,7 @@
         }
 
         /* =========================================
-           MODAL / POPUP WA
+           MODAL / POPUP WA & MINECRAFT
            ========================================= */
         .modal-overlay {
             position: fixed;
@@ -484,12 +548,25 @@
                     </a>
                 </div>
 
+                <!-- Grup Bot WA -->
                 <div class="social-btn-wrapper wrapper-wa-group animate-item">
                     <div class="btn-glow-border"></div>
                     <a href="https://chat.whatsapp.com/L4QJdNTLtAWBjYK7fKEgnG" target="_blank" class="social-btn">
                         <div class="social-info">
                             <svg class="icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                            <span>Grup WhatsApp</span>
+                            <span>Grup Bot WA</span>
+                        </div>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+
+                <!-- Grup MC (Minecraft) -->
+                <div class="social-btn-wrapper wrapper-wa-group animate-item">
+                    <div class="btn-glow-border"></div>
+                    <a href="https://chat.whatsapp.com/E619pGDvVjO6FOTE9XMPdp?s=cl&p=a&ilr=0" target="_blank" class="social-btn">
+                        <div class="social-info">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                            <span>Grup MC (Minecraft)</span>
                         </div>
                         <span class="arrow">→</span>
                     </a>
@@ -507,6 +584,19 @@
                 </div>
 
             </div>
+
+            <!-- Tombol ID Server Minecraft (Diperbesar Seukuran Tombol Utama) -->
+            <div class="mc-server-btn-wrapper animate-item" id="btn-open-mc">
+                <div class="btn-glow-border"></div>
+                <button class="mc-server-btn">
+                    <div class="social-info">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span>ID Server Minecraft</span>
+                    </div>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+
         </section>
         
         <div class="footer-container">
@@ -516,6 +606,7 @@
         </div>
     </main>
 
+    <!-- Modal WhatsApp -->
     <div class="modal-overlay" id="wa-modal">
         <div class="modal-box">
             <svg class="modal-icon" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.64.846 5.093 2.277 7.098L.555 24l5.012-1.696A11.96 11.96 0 0012.031 24c6.645 0 12.03-5.385 12.03-12.031S18.676 0 12.031 0zm5.666 17.185c-.266.75-1.547 1.444-2.148 1.503-.6.059-1.378.147-4.469-1.121-3.722-1.527-6.143-5.328-6.326-5.572-.184-.244-1.512-2.01-1.512-3.834 0-1.825.952-2.721 1.288-3.084.336-.363.731-.453.975-.453.244 0 .488.004.703.014.225.011.526-.089.824.629.308.746 1.003 2.451 1.095 2.635.091.184.153.4.031.644-.122.244-.183.396-.367.61-.183.214-.383.473-.549.658-.184.204-.38.423-.153.812.227.389 1.01 1.666 2.164 2.694 1.488 1.325 2.735 1.734 3.13 1.918.396.184.627.153.86-.112.233-.266 1.002-1.168 1.272-1.568.27-.4.542-.332.906-.194.364.138 2.302 1.085 2.697 1.283.396.198.66.297.752.463.092.166.092.96-.174 1.71z"/></svg>
@@ -523,8 +614,26 @@
             <p class="modal-desc">Jika lu diarahkan untuk mendownload aplikasi lagi padahal udah punya, abaikan saja. Silakan buka lewat Browser bawaan (Chrome/Safari).</p>
             
             <div class="modal-actions">
-                <a href="https://wa.me/6281234567890" target="_blank" class="btn-primary" id="btn-lanjut-wa">Eksekusi Lanjut</a>
+                <a href="https://wa.me/6285745596459" target="_blank" class="btn-primary" id="btn-lanjut-wa">Eksekusi Lanjut</a>
                 <button class="btn-secondary" id="btn-close-modal">Batalkan Transmisi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ID Server Minecraft -->
+    <div class="modal-overlay" id="mc-modal">
+        <div class="modal-box" style="border-color: rgba(0, 240, 255, 0.3);">
+            <svg class="modal-icon" style="fill: var(--glow-main); filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3));" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <h3 class="modal-title">RNG_SF Minecraft Server</h3>
+            <p class="modal-desc" style="text-align: left; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #fff;">
+                Server Name: RNG_SF<br>
+                IP: 103.190.0.15<br>
+                Port: 25621
+            </p>
+            
+            <div class="modal-actions">
+                <button class="btn-primary" style="background: var(--glow-main); color: #000;" id="btn-copy-mc">Salin Detail Server</button>
+                <button class="btn-secondary" id="btn-close-mc-modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -539,6 +648,7 @@
                 item.style.animationDelay = `${0.3 + (index * 0.12)}s`; 
             });
 
+            // Modal WA Handler
             const btnOpenWA = document.getElementById('btn-open-wa');
             const btnCloseModal = document.getElementById('btn-close-modal');
             const btnLanjutWA = document.getElementById('btn-lanjut-wa');
@@ -556,6 +666,30 @@
                 setTimeout(() => waModal.classList.remove('active'), 500);
             });
 
+            // Modal Minecraft Handler
+            const btnOpenMC = document.getElementById('btn-open-mc');
+            const btnCloseMCMock = document.getElementById('btn-close-mc-modal');
+            const btnCopyMC = document.getElementById('btn-copy-mc');
+            const mcModal = document.getElementById('mc-modal');
+
+            btnOpenMC.addEventListener('click', () => {
+                mcModal.classList.add('active');
+            });
+            btnCloseMCMock.addEventListener('click', () => mcModal.classList.remove('active'));
+            mcModal.addEventListener('click', (e) => {
+                if(e.target === mcModal) mcModal.classList.remove('active');
+            });
+            btnCopyMC.addEventListener('click', () => {
+                const textToCopy = "Server: RNG_SF\nIP: 103.190.0.15\nPort: 25621";
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    btnCopyMC.textContent = "Berhasil Disalin!";
+                    setTimeout(() => {
+                        btnCopyMC.textContent = "Salin Detail Server";
+                    }, 2000);
+                });
+            });
+
+            // Canvas Background Particles
             const canvas = document.getElementById('network-canvas');
             const ctx = canvas.getContext('2d');
             let width, height, particles = [];
